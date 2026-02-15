@@ -33,21 +33,37 @@
   }
 
   .container-tight {
-    @apply max-w-6xl mx-auto;
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-600 to-accent-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-accent-400;
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-large hover:border-accent-200 hover:-translate-y-0.5;
+    @apply transition-all duration-300 hover:shadow-medium hover:border-accent-200 hover:-translate-y-0.5;
   }
 
   .input-base {
     @apply w-full rounded-xl border border-border bg-white px-4 py-3 text-sm transition-colors
     placeholder:text-text-tertiary
-    focus:outline-none focus:ring-2 focus:ring-accent-500/20 focus:border-accent-400;
+    focus:outline-none focus:ring-2 focus:ring-indigo-300/20 focus:border-indigo-300;
+  }
+
+  /* Firecrawl-style dotted grid background */
+  .dot-pattern {
+    background-image: radial-gradient(circle, #d2dbe7 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Firecrawl-style dashed border cards */
+  .dashed-card {
+    @apply border border-dashed border-border/60 rounded-2xl;
+  }
+
+  /* Section number indicator like Firecrawl's [ 01 / 07 ] */
+  .section-indicator {
+    @apply text-sm font-mono tracking-wider text-text-tertiary;
   }
 }
 
@@ -68,16 +84,16 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #a5b8ce;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #7894b6;
 }
 
 /* Selection */
 ::selection {
-  background: rgb(99 102 241 / 0.15);
-  color: #0F172A;
+  background: rgb(28 37 65 / 0.15);
+  color: #0b132b;
 }

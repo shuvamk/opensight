@@ -41,18 +41,18 @@ export default function ForgotPasswordPage() {
       <div className="space-y-8">
         <div className="space-y-4 text-center">
           <div className="flex justify-center">
-            <div className="rounded-2xl bg-accent-50 p-3.5">
-              <Mail className="h-6 w-6 text-accent-600" />
+            <div className="rounded-2xl bg-indigo-50 p-3.5">
+              <Mail className="h-6 w-6 text-indigo-400" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-primary-900">Check your email</h1>
+          <h1 className="text-2xl font-bold text-primary-500">Check your email</h1>
           <p className="text-sm text-text-secondary">
             We&apos;ve sent a password reset link to {email}
           </p>
         </div>
 
-        <div className="rounded-xl border border-accent-200 bg-accent-50 p-4">
-          <p className="text-sm text-accent-800">
+        <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4">
+          <p className="text-sm text-indigo-700">
             The link will expire in 24 hours. If you don&apos;t see the email, check your spam folder.
           </p>
         </div>
@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
           Didn&apos;t receive the email?{" "}
           <button
             onClick={() => setIsSubmitted(false)}
-            className="text-accent-600 hover:text-accent-700 font-medium"
+            className="text-indigo-400 hover:text-indigo-500 font-medium"
           >
             Try again
           </button>
@@ -82,15 +82,15 @@ export default function ForgotPasswordPage() {
       {/* Header - mobile logo */}
       <div className="lg:hidden flex items-center gap-2.5 mb-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary-900 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center">
             <span className="text-white font-bold text-xs tracking-wider">OS</span>
           </div>
-          <span className="font-semibold text-primary-900 text-lg">OpenSight</span>
+          <span className="font-semibold text-primary-500 text-lg">OpenSight</span>
         </Link>
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-primary-900">Reset password</h1>
+        <h1 className="text-2xl font-bold text-primary-500">Reset password</h1>
         <p className="text-sm text-text-secondary">
           Enter your email address and we&apos;ll send you a link to reset your password
         </p>
@@ -98,7 +98,7 @@ export default function ForgotPasswordPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-primary-800">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-indigo-500">Email</Label>
           <Input
             id="email"
             type="email"

@@ -20,7 +20,7 @@ export default function DashboardPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-primary-900">Dashboard</h2>
+          <h2 className="text-2xl font-bold text-primary-500">Dashboard</h2>
           <p className="text-text-secondary text-sm mt-1">Your AI visibility overview</p>
         </div>
         <div className="flex items-center justify-center h-96 rounded-2xl border border-dashed border-border bg-white">
@@ -28,7 +28,7 @@ export default function DashboardPage() {
             <div className="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center mx-auto">
               <BarChart3 className="w-6 h-6 text-text-tertiary" />
             </div>
-            <h3 className="text-base font-semibold text-primary-900">No brand selected</h3>
+            <h3 className="text-base font-semibold text-primary-500">No brand selected</h3>
             <p className="text-sm text-text-secondary max-w-sm">
               Select or create a brand to start tracking your AI visibility.
             </p>
@@ -48,7 +48,7 @@ export default function DashboardPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-primary-900">Dashboard</h2>
+          <h2 className="text-2xl font-bold text-primary-500">Dashboard</h2>
           <p className="text-text-secondary text-sm mt-1">Your AI visibility overview</p>
         </div>
 
@@ -80,7 +80,7 @@ export default function DashboardPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-primary-900">Dashboard</h2>
+          <h2 className="text-2xl font-bold text-primary-500">Dashboard</h2>
           <p className="text-text-secondary text-sm mt-1">Your AI visibility overview</p>
         </div>
         <div className="flex items-center justify-center h-96 rounded-2xl border border-dashed border-border bg-white">
@@ -88,7 +88,7 @@ export default function DashboardPage() {
             <div className="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center mx-auto">
               <BarChart3 className="w-6 h-6 text-text-tertiary" />
             </div>
-            <h3 className="text-base font-semibold text-primary-900">No data yet</h3>
+            <h3 className="text-base font-semibold text-primary-500">No data yet</h3>
             <p className="text-sm text-text-secondary">
               Setting up your first analysis...
             </p>
@@ -103,7 +103,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-primary-900">Dashboard</h2>
+        <h2 className="text-2xl font-bold text-primary-500">Dashboard</h2>
         <p className="text-text-secondary text-sm mt-1">Your AI visibility overview</p>
       </div>
 
@@ -136,7 +136,7 @@ export default function DashboardPage() {
 
       {/* Engine Breakdown */}
       <div>
-        <h3 className="text-base font-semibold text-primary-900 mb-4">Engine Performance</h3>
+        <h3 className="text-base font-semibold text-primary-500 mb-4">Engine Performance</h3>
         <EngineBreakdown />
       </div>
 

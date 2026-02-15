@@ -26,7 +26,7 @@ export default function AppLayout({
     return (
       <div className="flex h-screen items-center justify-center bg-surface">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-primary-900 flex items-center justify-center animate-pulse">
+          <div className="w-10 h-10 rounded-lg bg-primary-500 flex items-center justify-center animate-pulse">
             <span className="text-white font-bold text-xs tracking-wider">OS</span>
           </div>
           <div className="text-sm text-text-secondary">Loading...</div>

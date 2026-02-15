@@ -24,7 +24,7 @@ export default function UserMenu() {
   };
 
   if (isLoading || !user) {
-    return <div className="h-9 w-9 animate-pulse rounded-full bg-primary-100" />;
+    return <div className="h-9 w-9 animate-pulse rounded-full bg-indigo-100" />;
   }
 
   const initials = user.name
@@ -36,10 +36,10 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="relative rounded-full ring-2 ring-transparent hover:ring-primary-200 transition-all">
+        <button className="relative rounded-full ring-2 ring-transparent hover:ring-indigo-200 transition-all">
           <Avatar className="h-9 w-9">
             <AvatarImage src="" alt={user.name} />
-            <AvatarFallback className="bg-primary-100 text-primary-700 text-xs font-semibold">
+            <AvatarFallback className="bg-indigo-100 text-accent-500 text-xs font-semibold">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -48,7 +48,7 @@ export default function UserMenu() {
       <DropdownMenuContent align="end" className="w-56 rounded-xl">
         <DropdownMenuLabel>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-primary-900">{user.name}</span>
+            <span className="text-sm font-semibold text-primary-500">{user.name}</span>
             <span className="text-xs text-text-secondary">{user.email}</span>
           </div>
         </DropdownMenuLabel>

@@ -29,17 +29,33 @@ export default function HomePage() {
       {/* Hero Section */}
       <Hero />
 
-      {/* Problem/Solution Section */}
-      <section className="section-padding bg-surface">
-        <div className="container-tight">
+      {/* Problem/Solution Section — Firecrawl-style clean layout */}
+      <section className="relative">
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.2]"
+          style={{
+            backgroundImage: `radial-gradient(circle, #d2dbe7 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          {/* Section indicator */}
+          <div className="flex items-center gap-3 mb-16">
+            <div className="w-0.5 h-5 bg-indigo-300 rounded-full" />
+            <span className="section-indicator">
+              <span className="text-indigo-300">00</span> / 06
+            </span>
+            <span className="text-xs font-medium uppercase tracking-widest text-text-tertiary">
+              The Problem
+            </span>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Problem description */}
             <div className="space-y-6">
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-xs font-medium">
-                The Problem
-              </div>
-              <h2 className="text-4xl font-bold text-primary-900 text-balance">
-                AI search is the new front door. Are you invisible?
+              <h2 className="text-4xl font-bold text-primary-500 text-balance">
+                AI search is the new front door.{" "}
+                <span className="text-gradient">Are you invisible?</span>
               </h2>
               <div className="space-y-4">
                 <p className="text-text-secondary leading-relaxed">
@@ -54,28 +70,28 @@ export default function HomePage() {
                 </p>
               </div>
               <Link href="/register">
-                <Button className="mt-2">
+                <Button className="mt-2 rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-8">
                   Start tracking for free
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
             </div>
 
-            {/* Right: Stats cards */}
-            <div className="grid grid-cols-1 gap-4">
+            {/* Right: Stats cards — Firecrawl-style bordered grid */}
+            <div className="grid grid-cols-1 gap-px bg-border/50 border border-border rounded-2xl overflow-hidden">
               {stats.map((stat, index) => {
                 const Icon = stat.icon;
                 return (
                   <div
                     key={index}
-                    className="bg-white rounded-2xl p-6 border border-border card-hover"
+                    className="bg-white p-6 hover:bg-surface/50 transition-colors"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-accent-50 flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-accent-600" />
+                      <div className="flex-shrink-0">
+                        <Icon className="w-5 h-5 text-indigo-300" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-primary-900 mb-1">
+                        <h3 className="font-semibold text-primary-500 mb-1">
                           {stat.label}
                         </h3>
                         <p className="text-sm text-text-secondary">
@@ -94,49 +110,62 @@ export default function HomePage() {
       {/* Features Section */}
       <Features />
 
-      {/* Open Source Banner */}
-      <section className="section-padding bg-primary-900">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white text-balance">
-            Built in the open. No vendor lock-in.
-          </h2>
-          <p className="text-lg text-primary-300 max-w-2xl mx-auto leading-relaxed">
-            OpenSight is open-source and community-driven. Deploy it yourself,
-            contribute improvements, and maintain full control of your data.
-          </p>
-          <a
-            href="https://github.com/yourusername/opensight"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary-700 text-white hover:bg-primary-800 transition-colors font-medium"
-          >
-            <Github className="w-5 h-5" />
-            View on GitHub
-          </a>
+      {/* Open Source Banner — Firecrawl "Get Started" CTA style */}
+      <section className="relative">
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.3]"
+          style={{
+            backgroundImage: `radial-gradient(circle, #d2dbe7 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        {/* Decorative dashed boxes */}
+        <div className="absolute top-12 left-[8%] w-40 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
+        <div className="absolute bottom-12 right-[6%] w-36 h-28 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          {/* Section indicator */}
+          <div className="flex items-center gap-3 mb-8 justify-center">
+            <div className="w-7 h-7 rounded-lg bg-primary-500 flex items-center justify-center">
+              <span className="text-white font-bold text-[10px] tracking-wider">OS</span>
+            </div>
+            <span className="text-xs font-medium uppercase tracking-widest text-text-tertiary">
+              Get started
+            </span>
+          </div>
+
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <h2 className="text-3xl sm:text-5xl font-bold text-primary-500 text-balance">
+              Ready to{" "}
+              <span className="text-gradient">build?</span>
+            </h2>
+            <p className="text-lg text-text-secondary leading-relaxed">
+              OpenSight is open-source and community-driven. Start tracking for free
+              and scale seamlessly as your project expands.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
+              <Link href="/register">
+                <Button className="rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-8" size="lg">
+                  Start for free
+                </Button>
+              </Link>
+              <a
+                href="https://github.com/yourusername/opensight"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" size="lg" className="rounded-full px-8">
+                  <Github className="w-4 h-4 mr-2" />
+                  View on GitHub
+                </Button>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Pricing Preview */}
       <PricingTable />
-
-      {/* Final CTA Section */}
-      <section className="section-padding bg-white">
-        <div className="max-w-2xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl sm:text-5xl font-bold text-primary-900 text-balance">
-            Stop guessing. Start tracking.
-          </h2>
-          <p className="text-lg text-text-secondary leading-relaxed">
-            Join teams that are already monitoring their AI visibility across
-            every major platform.
-          </p>
-          <Link href="/register">
-            <Button size="xl">
-              Get Started Free
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </Link>
-        </div>
-      </section>
     </>
   );
 }

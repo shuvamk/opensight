@@ -50,7 +50,7 @@ export function MetricCard({
           )}
         </div>
 
-        <div className="text-3xl font-bold text-primary-900">
+        <div className="text-3xl font-bold text-primary-500">
           {displayValue}
           {suffix && <span className="text-lg ml-0.5 text-text-secondary">{suffix}</span>}
         </div>
@@ -64,7 +64,7 @@ export function MetricCard({
               return (
                 <div
                   key={i}
-                  className="flex-1 bg-accent-200 rounded-sm hover:bg-accent-400 transition-colors"
+                  className="flex-1 bg-indigo-200 rounded-sm hover:bg-indigo-300 transition-colors"
                   style={{ height: `${height}%`, minHeight: "2px" }}
                 />
               );

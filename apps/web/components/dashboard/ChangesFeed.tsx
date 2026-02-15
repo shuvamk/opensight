@@ -71,7 +71,7 @@ export function ChangesFeed() {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-primary-900">
+              <p className="text-sm font-medium text-primary-500">
                 {change.description}
               </p>
               <p className="text-xs text-text-tertiary mt-0.5">

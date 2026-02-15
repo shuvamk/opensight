@@ -22,7 +22,7 @@ export default function NotificationBell() {
         <Button variant="ghost" size="sm" className="relative h-9 w-9 p-0 rounded-full">
           <Bell className="h-[18px] w-[18px]" />
           {unreadCount > 0 && (
-            <span className="absolute -right-0.5 -top-0.5 h-4 w-4 flex items-center justify-center rounded-full bg-accent-500 text-[10px] font-bold text-white">
+            <span className="absolute -right-0.5 -top-0.5 h-4 w-4 flex items-center justify-center rounded-full bg-indigo-300 text-[10px] font-bold text-white">
               {unreadCount}
             </span>
           )}
@@ -44,7 +44,7 @@ export default function NotificationBell() {
               key={notification.id}
               className="flex flex-col items-start py-3 cursor-pointer"
             >
-              <span className="text-sm text-primary-900">{notification.message}</span>
+              <span className="text-sm text-primary-500">{notification.message}</span>
               <span className="text-xs text-text-tertiary mt-0.5">
                 {new Date(notification.createdAt).toLocaleDateString()}
               </span>

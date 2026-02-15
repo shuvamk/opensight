@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Github, Twitter, Linkedin } from "lucide-react";
 
 const footerSections = [
   {
@@ -10,6 +9,16 @@ const footerSections = [
       { label: "Docs", href: "https://docs.opensight.ai" },
       { label: "API Reference", href: "https://docs.opensight.ai/api" },
       { label: "Changelog", href: "/changelog" },
+    ],
+  },
+  {
+    title: "Use Cases",
+    links: [
+      { label: "Brand Monitoring", href: "/use-cases/brand-monitoring" },
+      { label: "Competitor Analysis", href: "/use-cases/competitor-analysis" },
+      { label: "Content Optimization", href: "/use-cases/content-optimization" },
+      { label: "Agency Reporting", href: "/use-cases/agency-reporting" },
+      { label: "Enterprise", href: "/use-cases/enterprise" },
     ],
   },
   {
@@ -32,15 +41,9 @@ const footerSections = [
   },
 ];
 
-const socialLinks = [
-  { icon: Github, href: "https://github.com/yourusername/opensight", label: "GitHub" },
-  { icon: Twitter, href: "https://twitter.com/opensight", label: "Twitter" },
-  { icon: Linkedin, href: "https://linkedin.com/company/opensight", label: "LinkedIn" },
-];
-
 const legalLinks = [
-  { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
   { label: "Security", href: "/security" },
 ];
 
@@ -49,47 +52,15 @@ export default function Footer() {
 
   return (
     <footer className="bg-white border-t border-border">
-      {/* Main footer content */}
-      <div className="container-tight section-padding pb-12">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 lg:gap-16">
-          {/* Logo and description */}
-          <div className="col-span-2 space-y-5">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-primary-900 flex items-center justify-center">
-                <span className="text-white font-bold text-xs tracking-wider">OS</span>
-              </div>
-              <span className="font-semibold text-primary-900 text-lg">OpenSight</span>
-            </Link>
-            <p className="text-sm text-text-secondary leading-relaxed max-w-xs">
-              Open-source AI visibility analytics. Track how AI search engines talk about your brand.
-            </p>
-            {/* Social links */}
-            <div className="flex items-center gap-3">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-lg border border-border flex items-center justify-center text-text-secondary hover:text-primary-900 hover:border-primary-300 transition-colors"
-                    aria-label={social.label}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Link sections */}
+      {/* Main footer content — Firecrawl-style 4-column grid with dividers */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
           {footerSections.map((section) => (
             <div key={section.title}>
-              <h3 className="text-sm font-semibold text-primary-900 mb-4">
+              <h3 className="text-sm font-semibold text-primary-500 mb-5">
                 {section.title}
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-3.5">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     {link.href.startsWith("http") || link.href.startsWith("mailto") ? (
@@ -97,14 +68,14 @@ export default function Footer() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-text-secondary hover:text-primary-900 transition-colors"
+                        className="text-sm text-text-secondary hover:text-primary-500 transition-colors"
                       >
                         {link.label}
                       </a>
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-sm text-text-secondary hover:text-primary-900 transition-colors"
+                        className="text-sm text-text-secondary hover:text-primary-500 transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -117,13 +88,13 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — Firecrawl style */}
       <div className="border-t border-border">
-        <div className="container-tight py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-text-tertiary">
-            &copy; {currentYear} OpenSight. All rights reserved.
+            &copy; {currentYear} OpenSight
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             {legalLinks.map((link) => (
               <Link
                 key={link.label}
@@ -133,6 +104,16 @@ export default function Footer() {
                 {link.label}
               </Link>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Status indicator like Firecrawl */}
+      <div className="border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="text-sm text-emerald-600 font-medium">All systems normal</span>
           </div>
         </div>
       </div>

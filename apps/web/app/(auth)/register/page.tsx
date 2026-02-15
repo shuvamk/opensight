@@ -61,15 +61,15 @@ export default function RegisterPage() {
       {/* Header - mobile logo */}
       <div className="lg:hidden flex items-center gap-2.5 mb-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary-900 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center">
             <span className="text-white font-bold text-xs tracking-wider">OS</span>
           </div>
-          <span className="font-semibold text-primary-900 text-lg">OpenSight</span>
+          <span className="font-semibold text-primary-500 text-lg">OpenSight</span>
         </Link>
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-primary-900">Create your account</h1>
+        <h1 className="text-2xl font-bold text-primary-500">Create your account</h1>
         <p className="text-sm text-text-secondary">Start tracking your AI visibility today</p>
       </div>
 
@@ -112,7 +112,7 @@ export default function RegisterPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-sm font-medium text-primary-800">Full Name</Label>
+          <Label htmlFor="name" className="text-sm font-medium text-indigo-500">Full Name</Label>
           <Input
             id="name"
             type="text"
@@ -126,7 +126,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-primary-800">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-indigo-500">Email</Label>
           <Input
             id="email"
             type="email"
@@ -140,7 +140,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-sm font-medium text-primary-800">Password</Label>
+          <Label htmlFor="password" className="text-sm font-medium text-indigo-500">Password</Label>
           <Input
             id="password"
             type="password"
@@ -154,7 +154,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword" className="text-sm font-medium text-primary-800">Confirm Password</Label>
+          <Label htmlFor="confirmPassword" className="text-sm font-medium text-indigo-500">Confirm Password</Label>
           <Input
             id="confirmPassword"
             type="password"
@@ -179,7 +179,7 @@ export default function RegisterPage() {
 
       <p className="text-center text-sm text-text-secondary">
         Already have an account?{" "}
-        <Link href="/login" className="text-accent-600 hover:text-accent-700 font-medium">
+        <Link href="/login" className="text-indigo-400 hover:text-indigo-500 font-medium">
           Sign in
         </Link>
       </p>

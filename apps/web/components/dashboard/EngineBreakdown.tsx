@@ -70,7 +70,7 @@ export function EngineBreakdown() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="text-3xl font-bold text-primary-900">{metric.score}%</div>
+            <div className="text-3xl font-bold text-primary-500">{metric.score}%</div>
 
             {metric.sparklineData && metric.sparklineData.length > 0 && (
               <div className="h-6 flex items-end gap-0.5">
@@ -83,7 +83,7 @@ export function EngineBreakdown() {
                   return (
                     <div
                       key={i}
-                      className="flex-1 bg-accent-200 rounded-sm hover:bg-accent-400 transition-colors"
+                      className="flex-1 bg-indigo-200 rounded-sm hover:bg-indigo-300 transition-colors"
                       style={{ height: `${height}%`, minHeight: "2px" }}
                     />
                   );
@@ -93,7 +93,7 @@ export function EngineBreakdown() {
 
             <div>
               <p className="text-xs text-text-tertiary mb-1.5 font-medium">Top Prompt</p>
-              <p className="text-sm font-medium text-primary-800 line-clamp-2">
+              <p className="text-sm font-medium text-indigo-500 line-clamp-2">
                 {metric.topPrompt}
               </p>
             </div>

@@ -8,8 +8,15 @@ export default function AuthLayout({
   return (
     <div className="flex min-h-screen">
       {/* Left panel - branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-primary-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(99,102,241,0.3),transparent)]" />
+      <div className="hidden lg:flex lg:w-1/2 bg-primary-500 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(79,104,180,0.3),transparent)]" />
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage: `radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
         <div className="relative z-10 flex flex-col justify-between p-12 text-white">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur">
@@ -22,13 +29,13 @@ export default function AuthLayout({
             <h2 className="text-4xl font-bold leading-tight text-balance">
               Track your brand&apos;s AI visibility across every engine.
             </h2>
-            <p className="text-primary-300 text-lg leading-relaxed max-w-md">
-              Monitor ChatGPT, Perplexity, and Google AI Overviews. 
+            <p className="text-indigo-100 text-lg leading-relaxed max-w-md">
+              Monitor ChatGPT, Perplexity, and Google AI Overviews.
               Know exactly how AI talks about your brand.
             </p>
           </div>
 
-          <p className="text-primary-400 text-sm">
+          <p className="text-indigo-200 text-sm">
             &copy; {new Date().getFullYear()} OpenSight. All rights reserved.
           </p>
         </div>

@@ -59,12 +59,12 @@ function FAQItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border border-border rounded-2xl overflow-hidden hover:border-accent-200 transition-colors bg-white">
+    <div className="border-b border-border last:border-b-0">
       <button
         onClick={onToggle}
-        className="w-full px-6 py-5 flex items-center justify-between hover:bg-surface/50 transition-colors"
+        className="w-full px-0 py-5 flex items-center justify-between hover:opacity-80 transition-opacity"
       >
-        <span className="text-left font-semibold text-primary-900 text-sm">
+        <span className="text-left font-semibold text-primary-500 text-sm">
           {question}
         </span>
         <ChevronDown
@@ -74,7 +74,7 @@ function FAQItem({
         />
       </button>
       {isOpen && (
-        <div className="px-6 pb-5">
+        <div className="pb-5">
           <p className="text-sm text-text-secondary leading-relaxed">{answer}</p>
         </div>
       )}
@@ -102,16 +102,21 @@ export default function PricingPage() {
         <PricingTable />
       </div>
 
-      {/* FAQ Section */}
-      <section className="section-padding bg-white">
-        <div className="max-w-3xl mx-auto">
+      {/* FAQ Section — Firecrawl-style clean list */}
+      <section className="relative">
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.2]"
+          style={{
+            backgroundImage: `radial-gradient(circle, #d2dbe7 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           {/* Section heading */}
           <div className="text-center mb-16 max-w-2xl mx-auto">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-xs font-medium mb-6">
-              FAQ
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-bold text-primary-900 mb-5 text-balance">
-              Frequently asked questions
+            <h2 className="text-4xl sm:text-5xl font-bold text-primary-500 mb-5 text-balance">
+              Frequently asked{" "}
+              <span className="text-gradient">questions</span>
             </h2>
             <p className="text-lg text-text-secondary">
               Can&apos;t find the answer you&apos;re looking for? Feel free to reach out
@@ -119,8 +124,8 @@ export default function PricingPage() {
             </p>
           </div>
 
-          {/* FAQ items */}
-          <div className="space-y-3">
+          {/* FAQ items — Firecrawl clean divider style */}
+          <div className="border-t border-border">
             {faqItems.map((item, index) => (
               <FAQItem
                 key={index}
@@ -133,15 +138,15 @@ export default function PricingPage() {
           </div>
 
           {/* Contact CTA */}
-          <div className="mt-16 text-center space-y-4 p-8 rounded-2xl bg-surface border border-border">
-            <h3 className="text-lg font-semibold text-primary-900">
+          <div className="mt-16 text-center space-y-4 p-8 rounded-2xl border border-border bg-white">
+            <h3 className="text-lg font-semibold text-primary-500">
               Still have questions?
             </h3>
             <p className="text-sm text-text-secondary">
               Our team is happy to help. Reach out to us at{" "}
               <a
                 href="mailto:support@opensight.ai"
-                className="text-accent-600 hover:text-accent-700 font-medium"
+                className="text-indigo-300 hover:text-indigo-400 font-medium"
               >
                 support@opensight.ai
               </a>

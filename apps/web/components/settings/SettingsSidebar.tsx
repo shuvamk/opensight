@@ -44,8 +44,8 @@ export function SettingsSidebar() {
             className={cn(
               "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
               isActive
-                ? "bg-primary-900 text-white shadow-soft"
-                : "text-text-secondary hover:bg-surface hover:text-primary-900"
+                ? "bg-primary-500 text-white shadow-soft"
+                : "text-text-secondary hover:bg-surface hover:text-primary-500"
             )}
           >
             <Icon className="h-4 w-4" />

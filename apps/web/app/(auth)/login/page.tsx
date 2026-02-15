@@ -47,15 +47,15 @@ export default function LoginPage() {
       {/* Header - mobile logo */}
       <div className="lg:hidden flex items-center gap-2.5 mb-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary-900 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center">
             <span className="text-white font-bold text-xs tracking-wider">OS</span>
           </div>
-          <span className="font-semibold text-primary-900 text-lg">OpenSight</span>
+          <span className="font-semibold text-primary-500 text-lg">OpenSight</span>
         </Link>
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-primary-900">Welcome back</h1>
+        <h1 className="text-2xl font-bold text-primary-500">Welcome back</h1>
         <p className="text-sm text-text-secondary">Sign in to your account to continue</p>
       </div>
 
@@ -98,7 +98,7 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-primary-800">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-indigo-500">Email</Label>
           <Input
             id="email"
             type="email"
@@ -113,10 +113,10 @@ export default function LoginPage() {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password" className="text-sm font-medium text-primary-800">Password</Label>
+            <Label htmlFor="password" className="text-sm font-medium text-indigo-500">Password</Label>
             <Link
               href="/forgot-password"
-              className="text-xs text-accent-600 hover:text-accent-700 font-medium"
+              className="text-xs text-indigo-400 hover:text-indigo-500 font-medium"
             >
               Forgot password?
             </Link>
@@ -145,7 +145,7 @@ export default function LoginPage() {
 
       <p className="text-center text-sm text-text-secondary">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-accent-600 hover:text-accent-700 font-medium">
+        <Link href="/register" className="text-indigo-400 hover:text-indigo-500 font-medium">
           Sign up
         </Link>
       </p>

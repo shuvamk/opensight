@@ -41,21 +41,21 @@ export default function Sidebar() {
         <div className="flex items-center justify-between border-b border-border px-4 h-16">
           {!collapsed && (
             <Link href="/dashboard" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-primary-900 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center">
                 <span className="text-white font-bold text-xs tracking-wider">OS</span>
               </div>
-              <span className="font-semibold text-primary-900">OpenSight</span>
+              <span className="font-semibold text-primary-500">OpenSight</span>
             </Link>
           )}
           {collapsed && (
-            <div className="w-8 h-8 rounded-lg bg-primary-900 flex items-center justify-center mx-auto">
+            <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center mx-auto">
               <span className="text-white font-bold text-xs tracking-wider">OS</span>
             </div>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              "rounded-lg p-1.5 hover:bg-surface text-text-secondary hover:text-primary-900 transition-colors",
+              "rounded-lg p-1.5 hover:bg-surface text-text-secondary hover:text-primary-500 transition-colors",
               collapsed && "hidden"
             )}
           >
@@ -81,8 +81,8 @@ export default function Sidebar() {
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-primary-900 text-white shadow-soft"
-                    : "text-text-secondary hover:bg-surface hover:text-primary-900"
+                    ? "bg-primary-500 text-white shadow-soft"
+                    : "text-text-secondary hover:bg-surface hover:text-primary-500"
                 )}
                 title={collapsed ? item.label : undefined}
               >
@@ -98,7 +98,7 @@ export default function Sidebar() {
           <div className="border-t border-border p-3">
             <button
               onClick={() => setCollapsed(false)}
-              className="w-full flex items-center justify-center rounded-xl p-2 hover:bg-surface text-text-secondary hover:text-primary-900 transition-colors"
+              className="w-full flex items-center justify-center rounded-xl p-2 hover:bg-surface text-text-secondary hover:text-primary-500 transition-colors"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

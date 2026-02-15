@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
               <AlertCircle className="h-6 w-6 text-red-600" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-primary-900">Invalid link</h1>
+          <h1 className="text-2xl font-bold text-primary-500">Invalid link</h1>
           <p className="text-sm text-text-secondary">
             The password reset link is invalid or has expired.
           </p>
@@ -86,15 +86,15 @@ export default function ResetPasswordPage() {
       {/* Header - mobile logo */}
       <div className="lg:hidden flex items-center gap-2.5 mb-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary-900 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center">
             <span className="text-white font-bold text-xs tracking-wider">OS</span>
           </div>
-          <span className="font-semibold text-primary-900 text-lg">OpenSight</span>
+          <span className="font-semibold text-primary-500 text-lg">OpenSight</span>
         </Link>
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold text-primary-900">Reset password</h1>
+        <h1 className="text-2xl font-bold text-primary-500">Reset password</h1>
         <p className="text-sm text-text-secondary">
           Enter your new password below
         </p>
@@ -102,7 +102,7 @@ export default function ResetPasswordPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-sm font-medium text-primary-800">New Password</Label>
+          <Label htmlFor="password" className="text-sm font-medium text-indigo-500">New Password</Label>
           <Input
             id="password"
             type="password"
@@ -116,7 +116,7 @@ export default function ResetPasswordPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword" className="text-sm font-medium text-primary-800">Confirm Password</Label>
+          <Label htmlFor="confirmPassword" className="text-sm font-medium text-indigo-500">Confirm Password</Label>
           <Input
             id="confirmPassword"
             type="password"
