@@ -1,0 +1,22 @@
+{
+  "name": "opensight",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "db:generate": "npm run generate --workspace=@opensight/db",
+    "db:migrate": "npm run migrate --workspace=@opensight/db",
+    "db:seed": "npm run seed --workspace=@opensight/db"
+  },
+  "devDependencies": {
+    "@types/node-cron": "^3.0.11",
+    "turbo": "^2.0.0",
+    "typescript": "^5.5.0"
+  }
+}

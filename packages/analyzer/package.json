@@ -1,0 +1,20 @@
+{
+  "name": "@opensight/analyzer",
+  "version": "1.0.0",
+  "description": "NLP analyzer package for sentiment analysis, mention extraction, visibility scoring, and content scoring",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "vader-sentiment": "^1.1.3",
+    "cheerio": "^1.0.0-rc.12",
+    "text-readability": "^1.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.6"
+  }
+}
