@@ -1,85 +1,135 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink, Sparkles } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-gray-50 -z-10" />
+    <section className="relative overflow-hidden">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(99,102,241,0.08),transparent)]" />
+        <div
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        />
+      </div>
 
-      <div className="max-w-6xl mx-auto">
-        {/* Main content */}
-        <div className="text-center space-y-8">
+      <div className="container-tight py-24 sm:py-32 lg:py-40">
+        <div className="text-center space-y-8 max-w-4xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 border border-blue-200">
-            <span className="text-sm font-medium text-blue-900">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-50 border border-accent-200 animate-fade-in">
+            <Sparkles className="w-3.5 h-3.5 text-accent-500" />
+            <span className="text-sm font-medium text-accent-700">
               Open-source AI visibility platform
             </span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-5xl sm:text-6xl font-bold tracking-tight text-gray-900">
-            See how AI search engines talk about your brand.
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-primary-900 leading-[1.1] text-balance animate-slide-up">
+            See how AI talks about your brand
           </h1>
 
           {/* Subheading */}
-          <p className="max-w-2xl mx-auto text-xl text-gray-600 leading-relaxed">
-            Open-source AI visibility analytics. Track your brand across ChatGPT,
-            Perplexity, and Google AI Overviews.
+          <p className="max-w-2xl mx-auto text-lg sm:text-xl text-text-secondary leading-relaxed animate-slide-up">
+            Track your brand visibility across ChatGPT, Perplexity, and Google AI Overviews. 
+            Open-source analytics for the AI-first web.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2 animate-slide-up">
             <Link href="/register">
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8"
-              >
-                Start Free — No Credit Card
+              <Button size="xl">
+                Start Free
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
             <a
               href="https://github.com/yourusername/opensight"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-gray-300 text-gray-900 hover:bg-gray-50 transition-colors font-medium"
             >
-              View on GitHub
-              <ExternalLink className="w-4 h-4" />
+              <Button variant="outline" size="xl">
+                View on GitHub
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </Button>
             </a>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="flex items-center justify-center gap-8 pt-8 text-sm text-text-tertiary animate-fade-in">
+            <span className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-success" />
+              No credit card required
+            </span>
+            <span className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-success" />
+              Self-host available
+            </span>
+            <span className="hidden sm:flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-success" />
+              3 AI engines
+            </span>
           </div>
         </div>
 
-        {/* Dashboard screenshot placeholder */}
-        <div className="mt-16 mx-auto max-w-4xl">
-          <div className="relative">
-            {/* Gradient border effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 rounded-2xl opacity-0 blur group-hover:opacity-100 transition duration-300" />
+        {/* Dashboard preview */}
+        <div className="mt-20 mx-auto max-w-5xl animate-slide-up">
+          <div className="relative group">
+            {/* Glow effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-accent-200 via-accent-100 to-accent-200 rounded-3xl opacity-0 group-hover:opacity-50 blur-xl transition-opacity duration-500" />
 
-            {/* Screenshot placeholder */}
-            <div className="relative bg-gray-100 rounded-2xl border border-gray-200 aspect-video flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100" />
-              <div className="relative z-10 flex flex-col items-center justify-center gap-4">
-                <div className="w-16 h-16 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <div className="w-8 h-8 bg-blue-600 rounded opacity-50" />
+            {/* Screenshot container */}
+            <div className="relative bg-white rounded-2xl border border-border shadow-large overflow-hidden">
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-300" />
+                  <div className="w-3 h-3 rounded-full bg-amber-300" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-300" />
                 </div>
-                <div className="text-center space-y-2">
-                  <p className="text-gray-600 font-medium">Dashboard Preview</p>
-                  <p className="text-gray-500 text-sm">
-                    Track your AI visibility in real-time
-                  </p>
+                <div className="flex-1 mx-4">
+                  <div className="bg-white rounded-lg border border-border px-3 py-1.5 text-xs text-text-tertiary max-w-md mx-auto">
+                    app.opensight.ai/dashboard
+                  </div>
                 </div>
               </div>
 
-              {/* Grid pattern overlay */}
-              <div
-                className="absolute inset-0 opacity-5"
-                style={{
-                  backgroundImage: `linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent)`,
-                  backgroundSize: "50px 50px",
-                }}
-              />
+              {/* Dashboard mockup */}
+              <div className="p-6 bg-surface aspect-[16/9]">
+                <div className="space-y-4">
+                  {/* Metric cards row */}
+                  <div className="grid grid-cols-4 gap-3">
+                    {[
+                      { label: "Visibility Score", value: "78.5%", color: "bg-accent-100" },
+                      { label: "Total Mentions", value: "1,247", color: "bg-emerald-100" },
+                      { label: "Sentiment", value: "92.1%", color: "bg-amber-100" },
+                      { label: "Active Prompts", value: "48", color: "bg-purple-100" },
+                    ].map((card, i) => (
+                      <div key={i} className="bg-white rounded-xl border border-border p-4">
+                        <div className="text-[10px] text-text-tertiary font-medium">{card.label}</div>
+                        <div className="text-lg font-bold text-primary-900 mt-1">{card.value}</div>
+                        <div className={`h-1 ${card.color} rounded-full mt-2 w-3/4`} />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Chart area */}
+                  <div className="bg-white rounded-xl border border-border p-4 h-40">
+                    <div className="text-xs font-medium text-primary-900 mb-3">Visibility Over Time</div>
+                    <div className="h-24 flex items-end gap-1">
+                      {[40, 45, 42, 58, 55, 62, 68, 65, 72, 78, 75, 82, 85, 80, 88, 92].map((h, i) => (
+                        <div
+                          key={i}
+                          className="flex-1 bg-accent-200 rounded-t transition-all hover:bg-accent-400"
+                          style={{ height: `${h}%` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

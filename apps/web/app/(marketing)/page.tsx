@@ -3,23 +3,23 @@ import { Button } from "@/components/ui/button";
 import Hero from "@/components/marketing/Hero";
 import Features from "@/components/marketing/Features";
 import PricingTable from "@/components/marketing/PricingTable";
-import { TrendingUp, Users, Zap } from "lucide-react";
+import { TrendingUp, Users, Zap, ArrowRight, Github } from "lucide-react";
 
 const stats = [
   {
     icon: TrendingUp,
     label: "3 AI Engines",
-    description: "ChatGPT, Perplexity, Google AI",
+    description: "ChatGPT, Perplexity, Google AI Overviews",
   },
   {
     icon: Users,
     label: "Competitor Intelligence",
-    description: "Track your competitive landscape",
+    description: "Track your competitive landscape in real-time",
   },
   {
     icon: Zap,
     label: "API on Every Plan",
-    description: "Automate your AI visibility",
+    description: "Integrate AI visibility into your workflows",
   },
 ];
 
@@ -30,49 +30,55 @@ export default function HomePage() {
       <Hero />
 
       {/* Problem/Solution Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="section-padding bg-surface">
+        <div className="container-tight">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Problem description */}
             <div className="space-y-6">
-              <h2 className="text-4xl font-bold text-gray-900">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-xs font-medium">
+                The Problem
+              </div>
+              <h2 className="text-4xl font-bold text-primary-900 text-balance">
                 AI search is the new front door. Are you invisible?
               </h2>
               <div className="space-y-4">
-                <p className="text-lg text-gray-600">
+                <p className="text-text-secondary leading-relaxed">
                   ChatGPT, Perplexity, and Google AI are changing how people
-                  discover information. Your traditional SEO doesn't tell the
+                  discover information. Your traditional SEO doesn&apos;t tell the
                   full story.
                 </p>
-                <p className="text-lg text-gray-600">
-                  You need to know: Are your competitors appearing in AI search
-                  results? How often is your content cited? What recommendations
-                  are AI engines making about your industry?
-                </p>
-                <p className="text-lg text-gray-600">
-                  Without this data, you're flying blind in the AI-first world.
+                <p className="text-text-secondary leading-relaxed">
+                  Without AI visibility data, you&apos;re flying blind. You need to know
+                  how often your content is cited, what recommendations AI engines
+                  make, and where competitors outrank you.
                 </p>
               </div>
+              <Link href="/register">
+                <Button className="mt-2">
+                  Start tracking for free
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
             </div>
 
             {/* Right: Stats cards */}
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 gap-4">
               {stats.map((stat, index) => {
                 const Icon = stat.icon;
                 return (
                   <div
                     key={index}
-                    className="bg-white rounded-lg p-6 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300"
+                    className="bg-white rounded-2xl p-6 border border-border card-hover"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 mt-1">
-                        <Icon className="w-6 h-6 text-blue-600" />
+                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-accent-50 flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-accent-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 mb-1">
+                        <h3 className="font-semibold text-primary-900 mb-1">
                           {stat.label}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-text-secondary">
                           {stat.description}
                         </p>
                       </div>
@@ -89,21 +95,22 @@ export default function HomePage() {
       <Features />
 
       {/* Open Source Banner */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900">
+      <section className="section-padding bg-primary-900">
         <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white text-balance">
             Built in the open. No vendor lock-in.
           </h2>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Opensight is open-source and community-driven. Deploy it yourself,
+          <p className="text-lg text-primary-300 max-w-2xl mx-auto leading-relaxed">
+            OpenSight is open-source and community-driven. Deploy it yourself,
             contribute improvements, and maintain full control of your data.
           </p>
           <a
             href="https://github.com/yourusername/opensight"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-gray-700 text-white hover:bg-gray-800 transition-colors font-medium"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary-700 text-white hover:bg-primary-800 transition-colors font-medium"
           >
+            <Github className="w-5 h-5" />
             View on GitHub
           </a>
         </div>
@@ -113,18 +120,19 @@ export default function HomePage() {
       <PricingTable />
 
       {/* Final CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="section-padding bg-white">
         <div className="max-w-2xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+          <h2 className="text-4xl sm:text-5xl font-bold text-primary-900 text-balance">
             Stop guessing. Start tracking.
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-lg text-text-secondary leading-relaxed">
             Join teams that are already monitoring their AI visibility across
             every major platform.
           </p>
           <Link href="/register">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 px-8">
+            <Button size="xl">
               Get Started Free
+              <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
         </div>

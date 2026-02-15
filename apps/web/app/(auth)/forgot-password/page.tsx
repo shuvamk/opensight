@@ -38,37 +38,37 @@ export default function ForgotPasswordPage() {
 
   if (isSubmitted) {
     return (
-      <div className="w-full max-w-[400px] space-y-6">
-        <div className="space-y-2 text-center">
+      <div className="space-y-8">
+        <div className="space-y-4 text-center">
           <div className="flex justify-center">
-            <div className="rounded-full bg-primary/10 p-3">
-              <Mail className="h-6 w-6 text-primary" />
+            <div className="rounded-2xl bg-accent-50 p-3.5">
+              <Mail className="h-6 w-6 text-accent-600" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold">Check your email</h1>
-          <p className="text-sm text-muted-foreground">
-            We've sent a password reset link to {email}
+          <h1 className="text-2xl font-bold text-primary-900">Check your email</h1>
+          <p className="text-sm text-text-secondary">
+            We&apos;ve sent a password reset link to {email}
           </p>
         </div>
 
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-          <p className="text-sm text-blue-900">
-            The link will expire in 24 hours. If you don't see the email, check your spam folder.
+        <div className="rounded-xl border border-accent-200 bg-accent-50 p-4">
+          <p className="text-sm text-accent-800">
+            The link will expire in 24 hours. If you don&apos;t see the email, check your spam folder.
           </p>
         </div>
 
-        <Button variant="outline" className="w-full" asChild>
-          <Link href="/login" className="flex items-center justify-center">
+        <Link href="/login">
+          <Button variant="outline" className="w-full">
             <ChevronLeft className="mr-2 h-4 w-4" />
             Back to sign in
-          </Link>
-        </Button>
+          </Button>
+        </Link>
 
-        <p className="text-center text-xs text-muted-foreground">
-          Didn't receive the email?{" "}
+        <p className="text-center text-xs text-text-tertiary">
+          Didn&apos;t receive the email?{" "}
           <button
             onClick={() => setIsSubmitted(false)}
-            className="text-primary hover:underline"
+            className="text-accent-600 hover:text-accent-700 font-medium"
           >
             Try again
           </button>
@@ -78,40 +78,50 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="w-full max-w-[400px] space-y-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold">Reset password</h1>
-        <p className="text-sm text-muted-foreground">
-          Enter your email address and we'll send you a link to reset your password
+    <div className="space-y-8">
+      {/* Header - mobile logo */}
+      <div className="lg:hidden flex items-center gap-2.5 mb-4">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-primary-900 flex items-center justify-center">
+            <span className="text-white font-bold text-xs tracking-wider">OS</span>
+          </div>
+          <span className="font-semibold text-primary-900 text-lg">OpenSight</span>
+        </Link>
+      </div>
+
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold text-primary-900">Reset password</h1>
+        <p className="text-sm text-text-secondary">
+          Enter your email address and we&apos;ll send you a link to reset your password
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-primary-800">Email</Label>
           <Input
             id="email"
             type="email"
-            placeholder="name@example.com"
+            placeholder="you@example.com"
             disabled={isSubmitting}
             {...register("email")}
           />
           {errors.email && (
-            <p className="text-sm text-destructive">{errors.email.message}</p>
+            <p className="text-sm text-error">{errors.email.message}</p>
           )}
         </div>
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
+        <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
           {isSubmitting ? "Sending..." : "Send Reset Link"}
         </Button>
       </form>
 
-      <Button variant="outline" className="w-full" asChild>
-        <Link href="/login" className="flex items-center justify-center">
+      <Link href="/login">
+        <Button variant="outline" className="w-full">
           <ChevronLeft className="mr-2 h-4 w-4" />
           Back to sign in
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </div>
   );
 }
