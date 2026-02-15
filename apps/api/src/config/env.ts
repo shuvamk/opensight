@@ -12,8 +12,9 @@ const envSchema = z.object({
   // Database
   DATABASE_URL: z.string().url(),
   
-  // Redis
-  REDIS_URL: z.string().url().default('redis://localhost:6379'),
+  // Redis (Upstash)
+  UPSTASH_REDIS_REST_URL: z.string().url(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
   
   // JWT
   JWT_SECRET: z.string().min(32),

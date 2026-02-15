@@ -1,13 +1,11 @@
 import { db, brands, visibilitySnapshots, notifications, notificationSettings } from '@opensight/db';
 import { eq, and, sql, desc } from 'drizzle-orm';
-import { createQueue, createWorker } from '../config/redis.js';
+import { runJob } from '../config/redis.js';
 import { logger } from '../utils/logger.js';
 
 interface AlertCheckerJobData {
   brandId: string;
 }
-
-const queueName = 'alert-checker';
 
 /**
  * Check for visibility drop (>10% decrease)
@@ -16,7 +14,6 @@ async function checkVisibilityDrop(
   brandId: string,
   currentScore: number
 ): Promise<{ triggered: boolean; message: string }> {
-  // Get previous snapshot (yesterday or last recorded)
   const previousSnapshot = await db
     .select()
     .from(visibilitySnapshots)
@@ -97,7 +94,6 @@ async function checkSentimentShift(
   const prevPositive = parseFloat(String(prevSent.sentimentPositive || 0));
   const prevNegative = parseFloat(String(prevSent.sentimentNegative || 0));
 
-  // Check for significant shift (5% or more change)
   const positiveChange = currentSentiment.positive - prevPositive;
   const negativeChange = currentSentiment.negative - prevNegative;
 
@@ -191,15 +187,14 @@ async function sendWebhookNotification(
 }
 
 /**
- * BullMQ job processor for alert checking
+ * Alert checker processor function
  */
-async function alertCheckerProcessor(job: any): Promise<any> {
-  const { brandId } = job.data as AlertCheckerJobData;
+export async function alertCheckerProcessor(data: AlertCheckerJobData): Promise<any> {
+  const { brandId } = data;
 
   try {
     logger.info({ brandId }, 'Starting alert checker job');
 
-    // Get brand and its owner
     const brand = await db.select().from(brands).where(eq(brands.id, brandId)).limit(1);
 
     if (!brand.length || !brand[0]) {
@@ -208,7 +203,6 @@ async function alertCheckerProcessor(job: any): Promise<any> {
 
     const brandRecord = brand[0];
 
-    // Get today's snapshot
     const today = new Date().toISOString().split('T')[0];
     const todaySnapshot = await db
       .select()
@@ -228,7 +222,6 @@ async function alertCheckerProcessor(job: any): Promise<any> {
 
     const snapshot = todaySnapshot[0];
 
-    // Get user notification settings
     const notifSettings = await db
       .select()
       .from(notificationSettings)
@@ -248,7 +241,6 @@ async function alertCheckerProcessor(job: any): Promise<any> {
       severity: string;
     }> = [];
 
-    // Check visibility drop
     if (settings.alertVisibilityDrop && snapshot.overallScore) {
       const visibilityCheck = await checkVisibilityDrop(brandId, snapshot.overallScore);
       if (visibilityCheck.triggered) {
@@ -261,7 +253,6 @@ async function alertCheckerProcessor(job: any): Promise<any> {
       }
     }
 
-    // Check new mentions
     if (settings.alertNewMention && snapshot.totalMentions) {
       const mentionsCheck = await checkNewMentions(brandId, snapshot.totalMentions);
       if (mentionsCheck.triggered) {
@@ -274,7 +265,6 @@ async function alertCheckerProcessor(job: any): Promise<any> {
       }
     }
 
-    // Check sentiment shift
     if (settings.alertSentimentShift) {
       const sentimentCheck = await checkSentimentShift(brandId, {
         positive: parseFloat(String(snapshot.sentimentPositive || 0)),
@@ -291,7 +281,6 @@ async function alertCheckerProcessor(job: any): Promise<any> {
       }
     }
 
-    // Check new competitors
     if (settings.alertCompetitorNew && snapshot.competitorData) {
       const competitorCheck = await checkNewCompetitors(
         brandId,
@@ -307,10 +296,8 @@ async function alertCheckerProcessor(job: any): Promise<any> {
       }
     }
 
-    // Create notifications and send webhooks
     let createdCount = 0;
     for (const alert of alerts) {
-      // Create notification in database
       const notification = await db
         .insert(notifications)
         .values({
@@ -333,7 +320,6 @@ async function alertCheckerProcessor(job: any): Promise<any> {
         'Created notification'
       );
 
-      // Send webhook if configured
       if (settings.webhookUrl) {
         await sendWebhookNotification(settings.webhookUrl, {
           type: alert.type,
@@ -363,38 +349,16 @@ async function alertCheckerProcessor(job: any): Promise<any> {
   }
 }
 
-// Create queue and worker
-export const alertCheckerQueue = createQueue(queueName);
-export const alertCheckerWorker = createWorker(queueName, alertCheckerProcessor, 10);
-
 /**
- * Queue an alert checker job
+ * Queue an alert checker job (runs in-process with retry)
  */
-export async function queueAlertChecker(data: AlertCheckerJobData): Promise<string> {
-  const job = await alertCheckerQueue.add(queueName, data, {
+export async function queueAlertChecker(data: AlertCheckerJobData): Promise<void> {
+  runJob('alert-checker', data, alertCheckerProcessor, {
     attempts: 3,
-    backoff: {
-      type: 'exponential',
-      delay: 2000,
-    },
-    removeOnComplete: true,
+    backoffMs: 2000,
+  }).catch((error) => {
+    logger.error({ error: error.message, brandId: data.brandId }, 'Alert checker job failed after retries');
   });
-
-  logger.info({ jobId: job.id, brandId: data.brandId }, 'Queued alert checker job');
-  return job.id || '';
 }
-
-// Event handlers
-alertCheckerWorker.on('completed', (job: any) => {
-  logger.info({ jobId: job.id }, 'Alert checker job completed');
-});
-
-alertCheckerWorker.on('failed', (job: any, error: Error) => {
-  logger.error({ jobId: job?.id, error: error.message }, 'Alert checker job failed');
-});
-
-alertCheckerWorker.on('error', (error: Error) => {
-  logger.error({ error: error.message }, 'Alert checker worker error');
-});
 
 export default alertCheckerProcessor;

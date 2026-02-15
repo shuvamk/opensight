@@ -13,6 +13,7 @@ export function rateLimiter(options: RateLimiterOptions) {
     const key = `${options.keyPrefix}:${getClientId(req)}`;
 
     try {
+      // Upstash Redis REST client: incr returns the new value
       const current = await redis.incr(key);
 
       if (current === 1) {

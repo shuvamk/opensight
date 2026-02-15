@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
-import { redis } from '../config/redis.js';
 import { logger } from '../utils/logger.js';
 
 export async function requireApiKey(req: Request, res: Response, next: NextFunction): Promise<void> {

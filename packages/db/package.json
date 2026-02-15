@@ -2,13 +2,14 @@
   "name": "@opensight/db",
   "version": "1.0.0",
   "description": "Database layer for Opensight using Drizzle ORM",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "generate": "drizzle-kit generate",
-    "migrate": "tsx migrate.ts",
-    "seed": "tsx seed.ts",
+    "migrate": "tsx src/migrate.ts",
+    "seed": "tsx src/seed.ts",
     "dev": "tsc --watch"
   },
   "dependencies": {

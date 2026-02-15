@@ -1,6 +1,6 @@
 import { db, users, notifications, notificationSettings } from '@opensight/db';
 import { eq, and, isNull } from 'drizzle-orm';
-import { createQueue, createWorker } from '../config/redis.js';
+import { runJob } from '../config/redis.js';
 import { resend } from '../config/email.js';
 import { logger } from '../utils/logger.js';
 
@@ -8,8 +8,6 @@ interface EmailDigestJobData {
   userId: string;
   frequency: 'daily' | 'weekly';
 }
-
-const queueName = 'email-digest';
 
 /**
  * Format notifications into HTML email
@@ -74,15 +72,14 @@ function formatEmailContent(
 }
 
 /**
- * BullMQ job processor for email digests
+ * Email digest processor function
  */
-async function emailDigestProcessor(job: any): Promise<any> {
-  const { userId, frequency } = job.data as EmailDigestJobData;
+export async function emailDigestProcessor(data: EmailDigestJobData): Promise<any> {
+  const { userId, frequency } = data;
 
   try {
     logger.info({ userId, frequency }, 'Starting email digest job');
 
-    // Get user
     const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
 
     if (!user.length || !user[0]) {
@@ -91,7 +88,6 @@ async function emailDigestProcessor(job: any): Promise<any> {
 
     const userRecord = user[0];
 
-    // Get unread notifications
     const unreadNotifications = await db
       .select()
       .from(notifications)
@@ -103,7 +99,6 @@ async function emailDigestProcessor(job: any): Promise<any> {
       return { success: true, emailSent: false, reason: 'No unread notifications' };
     }
 
-    // Format and send email
     const { subject, html } = formatEmailContent(
       userRecord.fullName,
       unreadNotifications.map((n) => ({
@@ -148,38 +143,16 @@ async function emailDigestProcessor(job: any): Promise<any> {
   }
 }
 
-// Create queue and worker
-export const emailDigestQueue = createQueue(queueName);
-export const emailDigestWorker = createWorker(queueName, emailDigestProcessor, 5);
-
 /**
- * Queue an email digest job
+ * Queue an email digest job (runs in-process with retry)
  */
-export async function queueEmailDigest(data: EmailDigestJobData): Promise<string> {
-  const job = await emailDigestQueue.add(queueName, data, {
+export async function queueEmailDigest(data: EmailDigestJobData): Promise<void> {
+  runJob('email-digest', data, emailDigestProcessor, {
     attempts: 3,
-    backoff: {
-      type: 'exponential',
-      delay: 2000,
-    },
-    removeOnComplete: true,
+    backoffMs: 2000,
+  }).catch((error) => {
+    logger.error({ error: error.message, userId: data.userId }, 'Email digest job failed after retries');
   });
-
-  logger.info({ jobId: job.id, userId: data.userId }, 'Queued email digest job');
-  return job.id || '';
 }
-
-// Event handlers
-emailDigestWorker.on('completed', (job: any) => {
-  logger.info({ jobId: job.id }, 'Email digest job completed');
-});
-
-emailDigestWorker.on('failed', (job: any, error: Error) => {
-  logger.error({ jobId: job?.id, error: error.message }, 'Email digest job failed');
-});
-
-emailDigestWorker.on('error', (error: Error) => {
-  logger.error({ error: error.message }, 'Email digest worker error');
-});
 
 export default emailDigestProcessor;
