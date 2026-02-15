@@ -22,7 +22,7 @@ export function useMarkRead() {
 
   return useMutation({
     mutationFn: (notificationId: string) =>
-      apiClient.patch(`/notifications/${notificationId}`, { read: true }),
+      apiClient.patch(`/notifications/${notificationId}/read`, {}),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },

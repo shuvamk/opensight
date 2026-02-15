@@ -18,10 +18,10 @@ import BrandSwitcher from "./BrandSwitcher";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Prompts", href: "/prompts", icon: Zap },
-  { label: "Competitors", href: "/competitors", icon: TrendingUp },
-  { label: "Content Score", href: "/content-score", icon: BarChart3 },
-  { label: "Alerts", href: "/alerts", icon: Bell },
+  { label: "Prompts", href: "/dashboard/prompts", icon: Zap },
+  { label: "Competitors", href: "/dashboard/competitors", icon: TrendingUp },
+  { label: "Content Score", href: "/dashboard/content-score", icon: BarChart3 },
+  { label: "Alerts", href: "/dashboard/alerts", icon: Bell },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 

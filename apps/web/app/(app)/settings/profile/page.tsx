@@ -45,10 +45,19 @@ export default function ProfileSettingsPage() {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const queryClient = useQueryClient();
 
-  // Fetch profile
+  // Fetch profile (API returns full_name, we map to displayName)
   const { data: profile, isLoading } = useQuery<UserProfile>({
     queryKey: ["userProfile"],
-    queryFn: () => apiClient.get("/api/user/profile"),
+    queryFn: async () => {
+      const data = await apiClient.get<{ id: string; email: string; full_name?: string; avatar_url?: string }>("/users/profile");
+      return {
+        id: data.id,
+        email: data.email,
+        displayName: data.full_name ?? "",
+        avatar: data.avatar_url,
+        authMethod: "email",
+      };
+    },
   });
 
   // Profile form
@@ -65,10 +74,10 @@ export default function ProfileSettingsPage() {
     resolver: zodResolver(passwordSchema),
   });
 
-  // Update profile mutation
+  // Update profile mutation (API expects name, not displayName)
   const { mutate: updateProfile, isPending: isUpdatingProfile } = useMutation({
     mutationFn: (data: ProfileFormInputs) =>
-      apiClient.patch("/api/user/profile", data),
+      apiClient.patch("/users/profile", { name: data.displayName }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
       toast.success("Profile updated successfully!");
@@ -80,12 +89,12 @@ export default function ProfileSettingsPage() {
     },
   });
 
-  // Update password mutation
+  // Update password mutation (API expects current_password, new_password)
   const { mutate: updatePassword, isPending: isUpdatingPassword } = useMutation({
     mutationFn: (data: PasswordFormInputs) =>
-      apiClient.patch("/api/user/password", {
-        currentPassword: data.currentPassword,
-        newPassword: data.newPassword,
+      apiClient.patch("/users/password", {
+        current_password: data.currentPassword,
+        new_password: data.newPassword,
       }),
     onSuccess: () => {
       toast.success("Password updated successfully!");

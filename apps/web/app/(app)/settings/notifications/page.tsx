@@ -57,7 +57,7 @@ export default function NotificationsSettingsPage() {
   // Fetch current settings
   const { data: settings, isLoading } = useQuery<NotificationsSettings>({
     queryKey: ["notificationsSettings"],
-    queryFn: () => apiClient.get("/api/notifications/settings"),
+    queryFn: () => apiClient.get("/notifications/settings"),
   });
 
   const {
@@ -93,7 +93,7 @@ export default function NotificationsSettingsPage() {
   // Update settings mutation
   const { mutate: updateSettings, isPending } = useMutation({
     mutationFn: (data: NotificationsSettingsInputs) =>
-      apiClient.patch("/api/notifications/settings", {
+      apiClient.patch("/notifications/settings", {
         alerts: {
           visibilityDrop: data.visibilityDrop,
           newMention: data.newMention,

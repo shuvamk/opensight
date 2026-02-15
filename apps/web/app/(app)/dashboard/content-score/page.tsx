@@ -63,7 +63,7 @@ export default function ContentScorePage() {
   // Fetch history
   const { data: history = [], isLoading: historyLoading } = useQuery<HistoryItem[]>({
     queryKey: ["contentScoreHistory"],
-    queryFn: () => apiClient.get("/api/content/score/history"),
+    queryFn: () => apiClient.get("/content/score/history"),
   });
 
   // Score mutation

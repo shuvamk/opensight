@@ -61,7 +61,27 @@ const planFeatures: PlanFeature[] = [
 export default function BillingPage() {
   const { data: billingData, isLoading } = useQuery<BillingData>({
     queryKey: ["billing"],
-    queryFn: () => apiClient.get("/api/user/profile"),
+    queryFn: async () => {
+      const profile = await apiClient.get<{ plan_id?: string }>("/users/profile");
+      return {
+        currentPlan: {
+          id: profile.plan_id ?? "free",
+          name: profile.plan_id === "growth" ? "Growth" : profile.plan_id === "starter" ? "Starter" : "Free",
+          price: profile.plan_id === "growth" ? 99 : profile.plan_id === "starter" ? 29 : 0,
+          renewalDate: "",
+          isCurrentPlan: true,
+        },
+        usage: {
+          promptsUsed: 0,
+          promptsLimit: profile.plan_id === "free" ? 10 : profile.plan_id === "starter" ? 100 : 999999,
+          contentScoresUsed: 0,
+          contentScoresLimit: 5,
+          apiRequestsUsed: 0,
+          apiRequestsLimit: 100,
+        },
+        portalUrl: "",
+      };
+    },
   });
 
   const { mutate: managePayment, isPending } = useMutation({

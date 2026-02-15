@@ -80,13 +80,13 @@ export default function AlertsPage() {
   // Fetch notifications
   const { data: notifications = [], isLoading, refetch } = useQuery<Notification[]>({
     queryKey: ["notifications"],
-    queryFn: () => apiClient.get("/api/notifications"),
+    queryFn: () => apiClient.get("/notifications"),
   });
 
   // Mark as read mutation
   const { mutate: markAsRead } = useMutation({
     mutationFn: (notificationId: string) =>
-      apiClient.patch(`/api/notifications/${notificationId}/read`, {}),
+      apiClient.patch(`/notifications/${notificationId}/read`, {}),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
@@ -97,7 +97,7 @@ export default function AlertsPage() {
 
   // Mark all as read mutation
   const { mutate: markAllAsRead, isPending: isMarkingAll } = useMutation({
-    mutationFn: () => apiClient.patch("/api/notifications/read-all", {}),
+    mutationFn: () => apiClient.patch("/notifications/read-all", {}),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       toast.success("All notifications marked as read");

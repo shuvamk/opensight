@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { registerSchema, type RegisterInput } from "@opensight/shared";
 import { useRegister } from "@/hooks/useAuth";
+import { getOAuthUrl } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,7 +54,7 @@ export default function RegisterPage() {
 
   const handleOAuthRegister = (provider: "github" | "google") => {
     setIsOAuthLoading(true);
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}`;
+    window.location.href = getOAuthUrl(provider);
   };
 
   return (

@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginInput } from "@opensight/shared";
 import { useLogin } from "@/hooks/useAuth";
+import { getOAuthUrl } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,7 +40,7 @@ export default function LoginPage() {
 
   const handleOAuthLogin = (provider: "github" | "google") => {
     setIsOAuthLoading(true);
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}`;
+    window.location.href = getOAuthUrl(provider);
   };
 
   return (

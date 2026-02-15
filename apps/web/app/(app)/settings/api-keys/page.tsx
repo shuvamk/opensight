@@ -85,19 +85,19 @@ export default function ApiKeysPage() {
   // Fetch API keys
   const { data: apiKeys = [], isLoading } = useQuery<ApiKey[]>({
     queryKey: ["apiKeys"],
-    queryFn: () => apiClient.get("/api/api-keys"),
+    queryFn: () => apiClient.get("/api-keys"),
   });
 
   // Fetch rate limit info
   const { data: rateLimitInfo } = useQuery<RateLimitInfo>({
     queryKey: ["rateLimitInfo"],
-    queryFn: () => apiClient.get("/api/api-keys/rate-limit"),
+    queryFn: () => apiClient.get("/api-keys/rate-limit"),
   });
 
   // Create API key mutation
   const { mutate: createApiKey, isPending: isCreating } = useMutation({
     mutationFn: (data: ApiKeyFormInputs) =>
-      apiClient.post<NewApiKeyResponse>("/api/api-keys", data),
+      apiClient.post<NewApiKeyResponse>("/api-keys", data),
     onSuccess: (data) => {
       setNewKey(data);
       reset();
@@ -114,7 +114,7 @@ export default function ApiKeysPage() {
   // Delete API key mutation
   const { mutate: deleteApiKey } = useMutation({
     mutationFn: (keyId: string) =>
-      apiClient.del(`/api/api-keys/${keyId}`),
+      apiClient.del(`/api-keys/${keyId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["apiKeys"] });
       toast.success("API key deleted successfully!");

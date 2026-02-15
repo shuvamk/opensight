@@ -2,11 +2,19 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
+import { setAuthToken, clearAuthToken } from "@/lib/auth-token";
 
+/** API returns full_name; we expose as name for UI */
 interface User {
   id: string;
   email: string;
   name: string;
+  full_name?: string;
+}
+
+interface AuthResponse {
+  user: User;
+  accessToken: string;
 }
 
 interface LoginPayload {
@@ -23,27 +31,39 @@ interface RegisterPayload {
 export function useProfile() {
   return useQuery({
     queryKey: ["auth", "profile"],
-    queryFn: () => apiClient.get<User>("/user/profile"),
+    queryFn: async () => {
+      const data = await apiClient.get<User & { full_name?: string }>("/users/profile");
+      return { ...data, name: data.name ?? data.full_name ?? "" } as User;
+    },
   });
 }
 
 export function useLogin() {
   return useMutation({
-    mutationFn: (payload: LoginPayload) =>
-      apiClient.post<User>("/auth/login", payload),
+    mutationFn: async (payload: LoginPayload) => {
+      const data = await apiClient.post<AuthResponse>("/auth/login", payload);
+      if (data.accessToken) setAuthToken(data.accessToken);
+      return data;
+    },
   });
 }
 
 export function useRegister() {
   return useMutation({
-    mutationFn: (payload: RegisterPayload) =>
-      apiClient.post<User>("/auth/register", payload),
+    mutationFn: async (payload: RegisterPayload) => {
+      const data = await apiClient.post<AuthResponse>("/auth/register", payload);
+      if (data.accessToken) setAuthToken(data.accessToken);
+      return data;
+    },
   });
 }
 
 export function useLogout() {
   return useMutation({
-    mutationFn: () => apiClient.post("/auth/logout"),
+    mutationFn: async () => {
+      await apiClient.post("/auth/logout");
+      clearAuthToken();
+    },
   });
 }
 
