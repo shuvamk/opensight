@@ -15,7 +15,7 @@ import {
 export default function NotificationBell() {
   const { data, isLoading } = useNotifications();
   const notifications = Array.isArray(data) ? data : [];
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
     <DropdownMenu>
@@ -52,7 +52,7 @@ export default function NotificationBell() {
               className="flex flex-col items-start py-3 cursor-pointer"
             >
               <span className="text-sm text-primary-500">
-                {notification.message}
+                {notification.title ?? notification.body ?? ""}
               </span>
               <span className="text-xs text-text-tertiary mt-0.5">
                 {new Date(notification.createdAt).toLocaleDateString()}

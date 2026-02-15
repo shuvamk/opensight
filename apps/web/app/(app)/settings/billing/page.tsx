@@ -1,7 +1,7 @@
 "use client";
 
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import { useMutation } from "@tanstack/react-query";
+import { useBilling } from "@/hooks/useBilling";
 import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,34 +18,11 @@ import {
 import { Check, Loader2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
-interface Plan {
-  id: string;
-  name: string;
-  price: number;
-  renewalDate: string;
-  isCurrentPlan: boolean;
-}
-
-interface UsageMetrics {
-  promptsUsed: number;
-  promptsLimit: number;
-  contentScoresUsed: number;
-  contentScoresLimit: number;
-  apiRequestsUsed: number;
-  apiRequestsLimit: number;
-}
-
-interface BillingData {
-  currentPlan: Plan;
-  usage: UsageMetrics;
-  portalUrl: string;
-}
-
 interface PlanFeature {
   name: string;
-  free: boolean;
-  starter: boolean;
-  growth: boolean;
+  free: boolean | number | string;
+  starter: boolean | number | string;
+  growth: boolean | number | string;
 }
 
 const planFeatures: PlanFeature[] = [
@@ -59,47 +36,7 @@ const planFeatures: PlanFeature[] = [
 ];
 
 export default function BillingPage() {
-  const { data: billingData, isLoading } = useQuery<BillingData>({
-    queryKey: ["billing"],
-    queryFn: async () => {
-      const profile = await apiClient.get<{ plan_id?: string }>(
-        "/users/profile",
-      );
-      return {
-        currentPlan: {
-          id: profile.plan_id ?? "free",
-          name:
-            profile.plan_id === "growth"
-              ? "Growth"
-              : profile.plan_id === "starter"
-                ? "Starter"
-                : "Free",
-          price:
-            profile.plan_id === "growth"
-              ? 99
-              : profile.plan_id === "starter"
-                ? 29
-                : 0,
-          renewalDate: "",
-          isCurrentPlan: true,
-        },
-        usage: {
-          promptsUsed: 0,
-          promptsLimit:
-            profile.plan_id === "free"
-              ? 10
-              : profile.plan_id === "starter"
-                ? 100
-                : 999999,
-          contentScoresUsed: 0,
-          contentScoresLimit: 5,
-          apiRequestsUsed: 0,
-          apiRequestsLimit: 100,
-        },
-        portalUrl: "",
-      };
-    },
-  });
+  const { data: billingData, isLoading } = useBilling();
 
   const { mutate: managePayment, isPending } = useMutation({
     mutationFn: () => {
@@ -120,12 +57,6 @@ export default function BillingPage() {
 
   const getUsagePercentage = (used: number, limit: number) => {
     return Math.round((used / limit) * 100);
-  };
-
-  const getUsageColor = (percentage: number) => {
-    if (percentage >= 90) return "bg-red-500";
-    if (percentage >= 70) return "bg-amber-500";
-    return "bg-green-500";
   };
 
   return (

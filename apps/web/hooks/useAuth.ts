@@ -3,6 +3,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 import { setAuthToken, clearAuthToken } from "@/lib/auth-token";
+import * as usersApi from "@/lib/api/users";
 
 /** API returns full_name; we expose as name for UI */
 interface User {
@@ -28,12 +29,12 @@ interface RegisterPayload {
   name: string;
 }
 
-export function useProfile() {
+export function useAuthProfile() {
   return useQuery({
     queryKey: ["auth", "profile"],
     queryFn: async () => {
-      const data = await apiClient.get<User & { full_name?: string }>("/users/profile");
-      return { ...data, name: data.name ?? data.full_name ?? "" } as User;
+      const data = await usersApi.getProfile();
+      return { ...data, name: data.full_name ?? "" } as User;
     },
   });
 }

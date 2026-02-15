@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useProfile, useLogout } from "@/hooks/useAuth";
+import { useAuthProfile, useLogout } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -15,7 +15,7 @@ import {
 
 export default function UserMenu() {
   const router = useRouter();
-  const { data: user, isLoading } = useProfile();
+  const { data: user, isLoading } = useAuthProfile();
   const logoutMutation = useLogout();
 
   const handleLogout = async () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useProfile } from "@/hooks/useAuth";
+import { useAuthProfile } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
@@ -13,7 +13,7 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { data: user, isLoading } = useProfile();
+  const { data: user, isLoading } = useAuthProfile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Redirect to login if not authenticated

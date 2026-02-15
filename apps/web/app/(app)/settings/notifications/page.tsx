@@ -4,8 +4,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import {
+  useNotificationSettings,
+  useUpdateNotificationSettings,
+} from "@/hooks/useNotifications";
 import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,43 +40,27 @@ const notificationsSettingsSchema = z.object({
 
 type NotificationsSettingsInputs = z.infer<typeof notificationsSettingsSchema>;
 
-interface NotificationsSettings {
-  alerts: {
-    visibilityDrop: boolean;
-    newMention: boolean;
-    sentimentShift: boolean;
-    newCompetitor: boolean;
-  };
-  emailFrequency: "daily" | "weekly" | "none";
-  webhookUrl?: string;
-  planType: "free" | "starter" | "growth";
-}
-
 export default function NotificationsSettingsPage() {
   const [isSaved, setIsSaved] = useState(false);
-  const queryClient = useQueryClient();
 
-  // Fetch current settings
-  const { data: settings, isLoading } = useQuery<NotificationsSettings>({
-    queryKey: ["notificationsSettings"],
-    queryFn: () => apiClient.get("/notifications/settings"),
-  });
+  const { data: settings, isLoading } = useNotificationSettings();
+  const { mutate: updateSettings, isPending } = useUpdateNotificationSettings();
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     watch,
-    reset,
   } = useForm<NotificationsSettingsInputs>({
     resolver: zodResolver(notificationsSettingsSchema),
     values: settings
       ? {
-          visibilityDrop: settings.alerts.visibilityDrop,
-          newMention: settings.alerts.newMention,
-          sentimentShift: settings.alerts.sentimentShift,
-          newCompetitor: settings.alerts.newCompetitor,
-          emailFrequency: settings.emailFrequency,
+          visibilityDrop: settings.alertVisibilityDrop ?? true,
+          newMention: settings.alertNewMention ?? true,
+          sentimentShift: settings.alertSentimentShift ?? true,
+          newCompetitor: settings.alertCompetitorNew ?? true,
+          emailFrequency: (settings.emailFrequency as "daily" | "weekly" | "none") ?? "daily",
           webhookUrl: settings.webhookUrl || "",
         }
       : {
@@ -88,36 +74,31 @@ export default function NotificationsSettingsPage() {
   });
 
   const emailFrequency = watch("emailFrequency");
-  const webhookUrl = watch("webhookUrl");
 
-  // Update settings mutation
-  const { mutate: updateSettings, isPending } = useMutation({
-    mutationFn: (data: NotificationsSettingsInputs) =>
-      apiClient.patch("/notifications/settings", {
-        alerts: {
-          visibilityDrop: data.visibilityDrop,
-          newMention: data.newMention,
-          sentimentShift: data.sentimentShift,
-          newCompetitor: data.newCompetitor,
-        },
-        emailFrequency: data.emailFrequency,
-        webhookUrl: data.webhookUrl || null,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notificationsSettings"] });
-      toast.success("Notification settings updated!");
-      setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 3000);
-    },
-    onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to update settings"
-      );
-    },
-  });
+  const handleSubmitSuccess = () => {
+    toast.success("Notification settings updated!");
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 3000);
+  };
 
   const onSubmit = (data: NotificationsSettingsInputs) => {
-    updateSettings(data);
+    updateSettings(
+      {
+        email_frequency: data.emailFrequency,
+        alert_visibility_drop: data.visibilityDrop,
+        alert_new_mention: data.newMention,
+        alert_sentiment_shift: data.sentimentShift,
+        alert_competitor_new: data.newCompetitor,
+        webhook_url: data.webhookUrl || null,
+      },
+      {
+        onSuccess: handleSubmitSuccess,
+        onError: (e) =>
+          toast.error(
+            e instanceof Error ? e.message : "Failed to update settings"
+          ),
+      }
+    );
   };
 
   return (
@@ -233,9 +214,12 @@ export default function NotificationsSettingsPage() {
                   {/* Email Frequency */}
                   <Card className="p-6">
                     <h3 className="text-lg font-semibold mb-4">Email Frequency</h3>
-                    <Select value={emailFrequency} onValueChange={(value) => {
-                      // This is a controlled select, value changes are handled by watch
-                    }}>
+                    <Select
+                      value={emailFrequency}
+                      onValueChange={(value) =>
+                        setValue("emailFrequency", value as "daily" | "weekly" | "none")
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select frequency" />
                       </SelectTrigger>
@@ -253,13 +237,6 @@ export default function NotificationsSettingsPage() {
                   {/* Webhook */}
                   <Card className="p-6">
                     <h3 className="text-lg font-semibold mb-4">Webhook</h3>
-                    {settings?.planType !== "growth" && (
-                      <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-sm text-blue-800">
-                          Webhooks are available on the Growth plan. Upgrade to enable this feature.
-                        </p>
-                      </div>
-                    )}
                     <div>
                       <Label htmlFor="webhookUrl">Webhook URL</Label>
                       <Input
@@ -267,12 +244,6 @@ export default function NotificationsSettingsPage() {
                         type="url"
                         placeholder="https://example.com/webhook"
                         {...register("webhookUrl")}
-                        disabled={settings?.planType !== "growth"}
-                        className={
-                          settings?.planType !== "growth"
-                            ? "bg-gray-50 cursor-not-allowed"
-                            : ""
-                        }
                       />
                       {errors.webhookUrl && (
                         <p className="text-sm text-red-500 mt-1">

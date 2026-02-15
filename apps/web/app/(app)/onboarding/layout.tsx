@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useProfile } from "@/hooks/useAuth";
+import { useAuthProfile } from "@/hooks/useAuth";
 
 export default function OnboardingLayout({
   children,
@@ -9,7 +9,7 @@ export default function OnboardingLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { data: user, isLoading } = useProfile();
+  const { data: user, isLoading } = useAuthProfile();
 
   // Redirect to login if not authenticated
   if (!isLoading && !user) {

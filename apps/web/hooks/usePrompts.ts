@@ -1,39 +1,26 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import * as promptsApi from "@/lib/api/prompts";
+import type {
+  PromptWithLatest,
+  ListPromptsResponse,
+  GetPromptResultsResponse,
+  CreatePromptPayload,
+} from "@/lib/api/prompts/types";
 
-interface Prompt {
-  id: string;
-  title: string;
-  content: string;
-  brandId: string;
-}
-
-interface PromptResult {
-  id: string;
-  promptId: string;
-  result: string;
-  timestamp: string;
-}
+export type { PromptWithLatest, ListPromptsResponse, GetPromptResultsResponse };
 
 interface PromptsParams {
   page?: number;
   limit?: number;
+  tags?: string;
 }
 
 export function usePrompts(brandId?: string, params?: PromptsParams) {
   return useQuery({
     queryKey: ["brands", brandId, "prompts", params],
-    queryFn: () => {
-      const query = new URLSearchParams();
-      if (params?.page) query.append("page", String(params.page));
-      if (params?.limit) query.append("limit", String(params.limit));
-      const queryString = query.toString();
-      return apiClient.get<Prompt[]>(
-        `/brands/${brandId}/prompts${queryString ? `?${queryString}` : ""}`
-      );
-    },
+    queryFn: () => promptsApi.listPrompts(brandId!, params),
     enabled: !!brandId,
   });
 }
@@ -41,8 +28,7 @@ export function usePrompts(brandId?: string, params?: PromptsParams) {
 export function usePrompt(brandId?: string, promptId?: string) {
   return useQuery({
     queryKey: ["brands", brandId, "prompts", promptId],
-    queryFn: () =>
-      apiClient.get<Prompt>(`/brands/${brandId}/prompts/${promptId}`),
+    queryFn: () => promptsApi.getPrompt(brandId!, promptId!),
     enabled: !!brandId && !!promptId,
   });
 }
@@ -50,10 +36,29 @@ export function usePrompt(brandId?: string, promptId?: string) {
 export function usePromptResults(brandId?: string, promptId?: string) {
   return useQuery({
     queryKey: ["brands", brandId, "prompts", promptId, "results"],
-    queryFn: () =>
-      apiClient.get<PromptResult[]>(
-        `/brands/${brandId}/prompts/${promptId}/results`
-      ),
+    queryFn: () => promptsApi.getPromptResults(brandId!, promptId!),
     enabled: !!brandId && !!promptId,
+  });
+}
+
+export function useCreatePrompt(brandId?: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreatePromptPayload) =>
+      promptsApi.createPrompt(brandId!, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["brands", brandId, "prompts"] });
+    },
+  });
+}
+
+export function useDeletePrompt(brandId?: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (promptId: string) =>
+      promptsApi.deletePrompt(brandId!, promptId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["brands", brandId, "prompts"] });
+    },
   });
 }

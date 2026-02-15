@@ -4,8 +4,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import {
+  useProfile,
+  useUpdateProfile,
+  useChangePassword,
+} from "@/hooks/useProfile";
 import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,34 +36,16 @@ const passwordSchema = z.object({
 type ProfileFormInputs = z.infer<typeof profileSchema>;
 type PasswordFormInputs = z.infer<typeof passwordSchema>;
 
-interface UserProfile {
-  id: string;
-  displayName: string;
-  email: string;
-  avatar?: string;
-  authMethod: "email" | "oauth";
-}
-
 export default function ProfileSettingsPage() {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
-  const queryClient = useQueryClient();
 
-  // Fetch profile (API returns full_name, we map to displayName)
-  const { data: profile, isLoading } = useQuery<UserProfile>({
-    queryKey: ["userProfile"],
-    queryFn: async () => {
-      const data = await apiClient.get<{ id: string; email: string; full_name?: string; avatar_url?: string }>("/users/profile");
-      return {
-        id: data.id,
-        email: data.email,
-        displayName: data.full_name ?? "",
-        avatar: data.avatar_url,
-        authMethod: "email",
-      };
-    },
-  });
+  const { data: profile, isLoading } = useProfile();
+  const { mutate: updateProfile, isPending: isUpdatingProfile } =
+    useUpdateProfile();
+  const { mutate: updatePassword, isPending: isUpdatingPassword } =
+    useChangePassword();
 
-  // Profile form
+
   const profileForm = useForm<ProfileFormInputs>({
     resolver: zodResolver(profileSchema),
     values: {
@@ -69,51 +54,37 @@ export default function ProfileSettingsPage() {
     },
   });
 
-  // Password form
   const passwordForm = useForm<PasswordFormInputs>({
     resolver: zodResolver(passwordSchema),
   });
 
-  // Update profile mutation (API expects name, not displayName)
-  const { mutate: updateProfile, isPending: isUpdatingProfile } = useMutation({
-    mutationFn: (data: ProfileFormInputs) =>
-      apiClient.patch("/users/profile", { name: data.displayName }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-      toast.success("Profile updated successfully!");
-    },
-    onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to update profile"
-      );
-    },
-  });
-
-  // Update password mutation (API expects current_password, new_password)
-  const { mutate: updatePassword, isPending: isUpdatingPassword } = useMutation({
-    mutationFn: (data: PasswordFormInputs) =>
-      apiClient.patch("/users/password", {
-        current_password: data.currentPassword,
-        new_password: data.newPassword,
-      }),
-    onSuccess: () => {
-      toast.success("Password updated successfully!");
-      passwordForm.reset();
-      setShowPasswordForm(false);
-    },
-    onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to update password"
-      );
-    },
-  });
-
   const onProfileSubmit = (data: ProfileFormInputs) => {
-    updateProfile(data);
+    updateProfile(
+      { displayName: data.displayName },
+      {
+        onSuccess: () => toast.success("Profile updated successfully!"),
+        onError: (e) =>
+          toast.error(e instanceof Error ? e.message : "Failed to update profile"),
+      }
+    );
   };
 
   const onPasswordSubmit = (data: PasswordFormInputs) => {
-    updatePassword(data);
+    updatePassword(
+      {
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Password updated successfully!");
+          passwordForm.reset();
+          setShowPasswordForm(false);
+        },
+        onError: (e) =>
+          toast.error(e instanceof Error ? e.message : "Failed to update password"),
+      }
+    );
   };
 
   const initials =
@@ -158,7 +129,7 @@ export default function ProfileSettingsPage() {
                     <Label className="text-sm font-medium mb-4 block">Avatar</Label>
                     <div className="flex items-center gap-4">
                       <Avatar className="h-20 w-20">
-                        <AvatarImage src={profile?.avatar} alt={profile?.displayName} />
+                        <AvatarImage src={profile?.avatar ?? undefined} alt={profile?.displayName} />
                         <AvatarFallback>{initials}</AvatarFallback>
                       </Avatar>
                       <Button variant="outline" size="sm" disabled>
