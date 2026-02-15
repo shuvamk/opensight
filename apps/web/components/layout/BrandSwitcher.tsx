@@ -16,7 +16,8 @@ interface BrandSwitcherProps {
 }
 
 export default function BrandSwitcher({ collapsed }: BrandSwitcherProps) {
-  const { data: brands, isLoading } = useBrands();
+  const { data, isLoading } = useBrands();
+  const brands = Array.isArray(data) ? data : [];
   const { activeBrandId, setActiveBrand } = useBrandStore();
 
   if (isLoading) {

@@ -62,18 +62,35 @@ export default function BillingPage() {
   const { data: billingData, isLoading } = useQuery<BillingData>({
     queryKey: ["billing"],
     queryFn: async () => {
-      const profile = await apiClient.get<{ plan_id?: string }>("/users/profile");
+      const profile = await apiClient.get<{ plan_id?: string }>(
+        "/users/profile",
+      );
       return {
         currentPlan: {
           id: profile.plan_id ?? "free",
-          name: profile.plan_id === "growth" ? "Growth" : profile.plan_id === "starter" ? "Starter" : "Free",
-          price: profile.plan_id === "growth" ? 99 : profile.plan_id === "starter" ? 29 : 0,
+          name:
+            profile.plan_id === "growth"
+              ? "Growth"
+              : profile.plan_id === "starter"
+                ? "Starter"
+                : "Free",
+          price:
+            profile.plan_id === "growth"
+              ? 99
+              : profile.plan_id === "starter"
+                ? 29
+                : 0,
           renewalDate: "",
           isCurrentPlan: true,
         },
         usage: {
           promptsUsed: 0,
-          promptsLimit: profile.plan_id === "free" ? 10 : profile.plan_id === "starter" ? 100 : 999999,
+          promptsLimit:
+            profile.plan_id === "free"
+              ? 10
+              : profile.plan_id === "starter"
+                ? 100
+                : 999999,
           contentScoresUsed: 0,
           contentScoresLimit: 5,
           apiRequestsUsed: 0,
@@ -94,7 +111,9 @@ export default function BillingPage() {
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error ? error.message : "Failed to open payment portal"
+        error instanceof Error
+          ? error.message
+          : "Failed to open payment portal",
       );
     },
   });
@@ -153,7 +172,10 @@ export default function BillingPage() {
                       </Badge>
                     </div>
                     <div className="text-sm text-gray-600">
-                      Renewal: {new Date(billingData.currentPlan.renewalDate).toLocaleDateString("en-US", {
+                      Renewal:{" "}
+                      {new Date(
+                        billingData.currentPlan.renewalDate,
+                      ).toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",
                         year: "numeric",
@@ -190,7 +212,7 @@ export default function BillingPage() {
                       <Progress
                         value={getUsagePercentage(
                           billingData.usage.promptsUsed,
-                          billingData.usage.promptsLimit
+                          billingData.usage.promptsLimit,
                         )}
                         className="h-2"
                       />
@@ -199,7 +221,9 @@ export default function BillingPage() {
                     {/* Content Scores */}
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">Content Scores</span>
+                        <span className="text-sm font-medium">
+                          Content Scores
+                        </span>
                         <span className="text-sm text-gray-600">
                           {billingData.usage.contentScoresUsed} /{" "}
                           {billingData.usage.contentScoresLimit}
@@ -208,7 +232,7 @@ export default function BillingPage() {
                       <Progress
                         value={getUsagePercentage(
                           billingData.usage.contentScoresUsed,
-                          billingData.usage.contentScoresLimit
+                          billingData.usage.contentScoresLimit,
                         )}
                         className="h-2"
                       />
@@ -217,7 +241,9 @@ export default function BillingPage() {
                     {/* API Requests */}
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">API Requests</span>
+                        <span className="text-sm font-medium">
+                          API Requests
+                        </span>
                         <span className="text-sm text-gray-600">
                           {billingData.usage.apiRequestsUsed} /{" "}
                           {billingData.usage.apiRequestsLimit}
@@ -226,7 +252,7 @@ export default function BillingPage() {
                       <Progress
                         value={getUsagePercentage(
                           billingData.usage.apiRequestsUsed,
-                          billingData.usage.apiRequestsLimit
+                          billingData.usage.apiRequestsLimit,
                         )}
                         className="h-2"
                       />
@@ -236,7 +262,9 @@ export default function BillingPage() {
 
                 {/* Plan Comparison */}
                 <Card className="p-6">
-                  <h2 className="text-xl font-semibold mb-6">Plan Comparison</h2>
+                  <h2 className="text-xl font-semibold mb-6">
+                    Plan Comparison
+                  </h2>
                   <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
@@ -272,7 +300,9 @@ export default function BillingPage() {
                                   <span className="text-gray-400">—</span>
                                 )
                               ) : (
-                                <span className="text-sm">{feature.starter}</span>
+                                <span className="text-sm">
+                                  {feature.starter}
+                                </span>
                               )}
                             </TableCell>
                             <TableCell className="text-center">
@@ -283,7 +313,9 @@ export default function BillingPage() {
                                   <span className="text-gray-400">—</span>
                                 )
                               ) : (
-                                <span className="text-sm">{feature.growth}</span>
+                                <span className="text-sm">
+                                  {feature.growth}
+                                </span>
                               )}
                             </TableCell>
                           </TableRow>

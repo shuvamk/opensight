@@ -13,13 +13,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function NotificationBell() {
-  const { data: notifications = [], isLoading } = useNotifications();
+  const { data, isLoading } = useNotifications();
+  const notifications = Array.isArray(data) ? data : [];
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="relative h-9 w-9 p-0 rounded-full">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="relative h-9 w-9 p-0 rounded-full"
+        >
           <Bell className="h-[18px] w-[18px]" />
           {unreadCount > 0 && (
             <span className="absolute -right-0.5 -top-0.5 h-4 w-4 flex items-center justify-center rounded-full bg-indigo-300 text-[10px] font-bold text-white">
@@ -29,7 +34,9 @@ export default function NotificationBell() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80 rounded-xl">
-        <DropdownMenuLabel className="font-semibold">Notifications</DropdownMenuLabel>
+        <DropdownMenuLabel className="font-semibold">
+          Notifications
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {isLoading ? (
           <DropdownMenuItem disabled>Loading...</DropdownMenuItem>
@@ -44,7 +51,9 @@ export default function NotificationBell() {
               key={notification.id}
               className="flex flex-col items-start py-3 cursor-pointer"
             >
-              <span className="text-sm text-primary-500">{notification.message}</span>
+              <span className="text-sm text-primary-500">
+                {notification.message}
+              </span>
               <span className="text-xs text-text-tertiary mt-0.5">
                 {new Date(notification.createdAt).toLocaleDateString()}
               </span>
