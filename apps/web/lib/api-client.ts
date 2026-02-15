@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 interface RequestOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -28,7 +28,7 @@ async function request<T>(
   method: string,
   path: string,
   body?: unknown,
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<T> {
   const url = `${API_URL}${path}`;
   const headers: Record<string, string> = {
@@ -58,8 +58,11 @@ export const apiClient = {
   post: <T = unknown>(path: string, body?: unknown, options?: RequestOptions) =>
     request<T>("POST", path, body, options),
 
-  patch: <T = unknown>(path: string, body?: unknown, options?: RequestOptions) =>
-    request<T>("PATCH", path, body, options),
+  patch: <T = unknown>(
+    path: string,
+    body?: unknown,
+    options?: RequestOptions,
+  ) => request<T>("PATCH", path, body, options),
 
   del: <T = unknown>(path: string, options?: RequestOptions) =>
     request<T>("DELETE", path, undefined, options),
