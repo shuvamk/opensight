@@ -29,6 +29,13 @@ export interface UpdateBrandPayload {
   industry?: string;
 }
 
+export interface RecentChange {
+  id: string;
+  type: "up" | "down";
+  description: string;
+  timestamp: string;
+}
+
 export interface DashboardData {
   brandId: string;
   overallScore?: number;
@@ -39,6 +46,7 @@ export interface DashboardData {
   totalMentions?: number;
   totalPromptsChecked?: number;
   competitorData?: Record<string, unknown>;
+  recent_changes?: RecentChange[];
 }
 
 export interface TrendDataPoint {

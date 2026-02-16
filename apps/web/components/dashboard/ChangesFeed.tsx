@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDashboard } from "@/hooks/useDashboard";
@@ -33,7 +32,7 @@ export function ChangesFeed() {
     );
   }
 
-  const changes = dashboardData?.recentChanges.slice(0, 10) || [];
+  const changes = dashboardData?.recent_changes?.slice(0, 10) || [];
 
   if (changes.length === 0) {
     return (

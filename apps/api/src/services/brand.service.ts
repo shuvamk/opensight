@@ -204,10 +204,61 @@ export class BrandService {
           totalMentions: 0,
           totalPromptsChecked: 0,
           competitorData: {},
+          recent_changes: [],
         };
       }
 
       const snapshot = latestSnapshot[0];
+
+      // Build recent_changes from last 11 snapshots (compare consecutive for up to 10 changes)
+      const recentSnapshots = await db
+        .select({
+          id: visibilitySnapshots.id,
+          snapshotDate: visibilitySnapshots.snapshotDate,
+          overallScore: visibilitySnapshots.overallScore,
+          totalMentions: visibilitySnapshots.totalMentions,
+          createdAt: visibilitySnapshots.createdAt,
+        })
+        .from(visibilitySnapshots)
+        .where(eq(visibilitySnapshots.brandId, brandId))
+        .orderBy(desc(visibilitySnapshots.snapshotDate))
+        .limit(11);
+
+      const recent_changes: Array<{
+        id: string;
+        type: 'up' | 'down';
+        description: string;
+        timestamp: string;
+      }> = [];
+      for (let i = 0; i < recentSnapshots.length - 1; i++) {
+        const newer = recentSnapshots[i];
+        const older = recentSnapshots[i + 1];
+        if (!newer || !older) continue;
+        const scoreDelta = (newer.overallScore ?? 0) - (older.overallScore ?? 0);
+        const mentionsDelta = (newer.totalMentions ?? 0) - (older.totalMentions ?? 0);
+        if (scoreDelta !== 0) {
+          recent_changes.push({
+            id: newer.id,
+            type: scoreDelta > 0 ? 'up' : 'down',
+            description:
+              scoreDelta > 0
+                ? `Overall visibility score increased by ${scoreDelta}`
+                : `Overall visibility score decreased by ${Math.abs(scoreDelta)}`,
+            timestamp: (newer.createdAt ?? new Date()).toISOString(),
+          });
+        } else if (mentionsDelta !== 0) {
+          recent_changes.push({
+            id: `${newer.id}-mentions`,
+            type: mentionsDelta > 0 ? 'up' : 'down',
+            description:
+              mentionsDelta > 0
+                ? `Mentions increased by ${mentionsDelta}`
+                : `Mentions decreased by ${Math.abs(mentionsDelta)}`,
+            timestamp: (newer.createdAt ?? new Date()).toISOString(),
+          });
+        }
+        if (recent_changes.length >= 10) break;
+      }
 
       return {
         brandId,
@@ -223,6 +274,7 @@ export class BrandService {
         totalMentions: snapshot.totalMentions,
         totalPromptsChecked: snapshot.totalPromptsChecked,
         competitorData: snapshot.competitorData,
+        recent_changes,
       };
     } catch (error) {
       logger.error(error, 'Error getting brand dashboard');
