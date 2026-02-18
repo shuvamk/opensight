@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 
 interface PricingPlan {
   name: string;
@@ -63,105 +63,118 @@ const plans: PricingPlan[] = [
 
 export default function PricingTable() {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative">
+      {/* Dot pattern background */}
+      <div
+        className="absolute inset-0 -z-10 opacity-[0.25]"
+        style={{
+          backgroundImage: `radial-gradient(circle, #d2dbe7 1px, transparent 1px)`,
+          backgroundSize: "24px 24px",
+        }}
+      />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* Section heading */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            Simple, transparent pricing.
+        <div className="text-center mb-16 max-w-2xl mx-auto">
+          <h2 className="text-4xl sm:text-5xl font-bold text-primary-500 mb-5 text-balance">
+            Simple, transparent{" "}
+            <span className="text-gradient">pricing</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Start free. Scale as you grow. No credit card required to get started.
+          <p className="text-lg text-text-secondary leading-relaxed">
+            Start free. Scale as you grow. No credit card required.
           </p>
         </div>
 
-        {/* Pricing cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        {/* Pricing cards — Firecrawl-style clean cards with subtle borders */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border/50 border border-border rounded-2xl overflow-hidden mb-12">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative rounded-2xl border transition-all duration-300 ${
-                plan.highlighted
-                  ? "md:scale-105 border-blue-600 bg-blue-50 shadow-2xl"
-                  : "border-gray-200 bg-white hover:border-gray-300 shadow-lg hover:shadow-xl"
+              className={`bg-white p-7 flex flex-col ${
+                plan.highlighted ? "relative" : ""
               }`}
             >
               {/* Recommended badge */}
               {plan.highlighted && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                    Recommended
-                  </div>
-                </div>
+                <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-indigo-300 to-accent-400" />
               )}
 
-              <div className="p-8 flex flex-col h-full">
-                {/* Plan name */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              {/* Plan name */}
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-xl font-bold text-primary-500">
                   {plan.name}
                 </h3>
+                {plan.highlighted && (
+                  <span className="text-[10px] font-semibold uppercase tracking-wider bg-indigo-50 text-indigo-300 px-2 py-0.5 rounded-full">
+                    Popular
+                  </span>
+                )}
+              </div>
 
-                {/* Description */}
-                <p className="text-gray-600 text-sm mb-6">{plan.description}</p>
+              {/* Description */}
+              <p className="text-text-secondary text-sm mb-6">{plan.description}</p>
 
-                {/* Price */}
-                <div className="mb-8">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold text-gray-900">
-                      ${plan.price}
-                    </span>
-                    <span className="text-gray-600">/month</span>
-                  </div>
-                  <p className="text-sm text-gray-500 mt-2">
-                    Billed monthly or annually
-                  </p>
+              {/* Price */}
+              <div className="mb-7">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-primary-500">
+                    ${plan.price}
+                  </span>
+                  <span className="text-text-secondary text-sm">/month</span>
                 </div>
+                <p className="text-xs text-text-tertiary mt-1.5">
+                  Billed monthly or annually
+                </p>
+              </div>
 
-                {/* CTA Button */}
-                <Link href={plan.ctaLink} className="mb-8">
-                  <Button
-                    className={`w-full ${
-                      plan.highlighted
-                        ? "bg-blue-600 hover:bg-blue-700 text-white"
-                        : "bg-gray-100 hover:bg-gray-200 text-gray-900"
-                    }`}
-                    size="lg"
-                  >
-                    {plan.cta}
-                  </Button>
-                </Link>
+              {/* CTA Button */}
+              <Link href={plan.ctaLink} className="mb-7">
+                <Button
+                  className={`w-full rounded-full ${
+                    plan.highlighted
+                      ? "bg-primary-500 hover:bg-indigo-500 text-white"
+                      : ""
+                  }`}
+                  variant={plan.highlighted ? "default" : "outline"}
+                  size="lg"
+                >
+                  {plan.cta}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
 
-                {/* Features list */}
-                <div className="space-y-4 flex-grow">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                    What's included
-                  </p>
-                  <ul className="space-y-3">
-                    {plan.features.map((feature, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-3 text-gray-700"
-                      >
-                        <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {/* Features list */}
+              <div className="space-y-4 flex-grow">
+                <p className="text-xs font-semibold text-text-tertiary uppercase tracking-wider">
+                  What&apos;s included
+                </p>
+                <ul className="space-y-3">
+                  {plan.features.map((feature, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3 text-accent-600"
+                    >
+                      <div className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center">
+                        <Check className="w-3 h-3 text-emerald-600" />
+                      </div>
+                      <span className="text-sm">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           ))}
         </div>
 
         {/* Self-host option */}
-        <div className="mt-16 pt-12 border-t border-gray-200">
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="mt-12">
+          <div className="bg-white rounded-2xl border border-border p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Self-host
+              <h3 className="text-lg font-semibold text-primary-500 mb-1.5">
+                Self-host for free
               </h3>
-              <p className="text-gray-600">
-                Always free — unlimited everything. Perfect for teams managing
+              <p className="text-text-secondary text-sm">
+                Always free &mdash; unlimited everything. Perfect for teams managing
                 their own infrastructure.
               </p>
             </div>
@@ -169,9 +182,11 @@ export default function PricingTable() {
               href="https://github.com/yourusername/opensight"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-2 rounded-lg border border-gray-300 text-gray-900 hover:bg-white transition-colors font-medium whitespace-nowrap"
             >
-              View Docs
+              <Button variant="outline" className="rounded-full">
+                View Docs
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
             </a>
           </div>
         </div>

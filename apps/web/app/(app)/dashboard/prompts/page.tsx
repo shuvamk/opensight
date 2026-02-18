@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { usePrompts } from "@/hooks/usePrompts";
-import { useBrandStore } from "@/stores/brand-store";
 import { useQueryClient } from "@tanstack/react-query";
+import { usePrompts, useCreatePrompt } from "@/hooks/usePrompts";
+import { useBrandStore } from "@/stores/brand-store";
 import { PromptList, PromptListItem } from "@/components/prompts/PromptList";
 import { AddPromptDialog } from "@/components/prompts/AddPromptDialog";
 import { BulkAddDialog } from "@/components/prompts/BulkAddDialog";
@@ -13,98 +13,80 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { apiClient } from "@/lib/api-client";
+import * as promptsApi from "@/lib/api/prompts";
 import { Search, X } from "lucide-react";
+import { toast } from "sonner";
 
 const TAGS = ["AI", "Search", "Content", "Brand", "Competitor", "Feature", "FAQ", "General"];
 const PROMPT_LIMIT = 100;
 
 export default function PromptsPage() {
   const { activeBrandId } = useBrandStore();
-  const { data: prompts = [], isLoading } = usePrompts(activeBrandId);
   const queryClient = useQueryClient();
+  const { data: promptsData, isLoading } = usePrompts(activeBrandId);
+  const { mutateAsync: createPrompt, isPending: isCreating } = useCreatePrompt(activeBrandId);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isBulkAdding, setIsBulkAdding] = useState(false);
+
+  const prompts = promptsData?.prompts ?? [];
+  const promptCount = prompts.length;
 
   const filteredPrompts = useMemo(() => {
     return (prompts as Array<{
       id: string;
-      content: string;
-      tags?: string[];
-      results?: Array<{ engine: string; score: number; timestamp: string }>;
+      text: string;
+      tags?: string[] | null;
+      latestResult?: unknown;
     }>)
       .filter((p) => {
         const matchesSearch =
-          p.content.toLowerCase().includes(searchTerm.toLowerCase());
+          (p.text ?? "").toLowerCase().includes(searchTerm.toLowerCase());
         const matchesTags =
           selectedTags.length === 0 ||
           (p.tags || []).some((tag) => selectedTags.includes(tag));
         return matchesSearch && matchesTags;
       })
-      .map((p) => {
-        // Transform to PromptListItem format
-        const results = p.results || [];
-        const chatgptResult = results.find((r) => r.engine === "chatgpt");
-        const perplexityResult = results.find((r) => r.engine === "perplexity");
-        const googleResult = results.find((r) => r.engine === "google");
-
-        return {
-          id: p.id,
-          text: p.content,
-          tags: p.tags || [],
-          chatgptScore: chatgptResult?.score || 0,
-          perplexityScore: perplexityResult?.score || 0,
-          googleAIOScore: googleResult?.score || 0,
-          lastChecked: results[0]?.timestamp || new Date().toISOString(),
-        } as PromptListItem;
-      });
+      .map((p) => ({
+        id: p.id,
+        text: p.text ?? "",
+        tags: p.tags || [],
+        chatgptScore: 0,
+        perplexityScore: 0,
+        googleAIOScore: 0,
+        lastChecked: new Date().toISOString(),
+      } as PromptListItem));
   }, [prompts, searchTerm, selectedTags]);
 
-  const handleAddPrompt = async (
-    promptText: string,
-    tags: string[]
-  ) => {
+  const handleAddPrompt = async (promptText: string, tags: string[]) => {
     if (!activeBrandId) return;
-
     try {
-      setIsAdding(true);
-      await apiClient.post(`/brands/${activeBrandId}/prompts`, {
-        content: promptText,
-        tags,
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["brands", activeBrandId, "prompts"],
-      });
-    } finally {
-      setIsAdding(false);
+      await createPrompt({ text: promptText, tags });
+      toast.success("Prompt added");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to add prompt");
     }
   };
 
   const handleBulkAdd = async (
-    prompts: Array<{ text: string; tags: string[] }>
+    toAdd: Array<{ text: string; tags: string[] }>
   ) => {
     if (!activeBrandId) return;
-
     try {
-      setIsAdding(true);
-      await Promise.all(
-        prompts.map((p) =>
-          apiClient.post(`/brands/${activeBrandId}/prompts`, {
-            content: p.text,
-            tags: p.tags,
-          })
-        )
-      );
+      setIsBulkAdding(true);
+      await promptsApi.createBulkPrompts(activeBrandId, { prompts: toAdd });
       await queryClient.invalidateQueries({
         queryKey: ["brands", activeBrandId, "prompts"],
       });
+      toast.success("Prompts added");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to add prompts");
     } finally {
-      setIsAdding(false);
+      setIsBulkAdding(false);
     }
   };
 
-  const usagePercent = (prompts.length / PROMPT_LIMIT) * 100;
+  const usagePercent = Math.min((promptCount / PROMPT_LIMIT) * 100, 100);
 
   if (!activeBrandId) {
     return (
@@ -134,10 +116,10 @@ export default function PromptsPage() {
         <div className="flex gap-2">
           <AddPromptDialog
             onAdd={handleAddPrompt}
-            isLoading={isAdding}
+            isLoading={isCreating}
             availableTags={TAGS}
           />
-          <BulkAddDialog onAdd={handleBulkAdd} isLoading={isAdding} />
+          <BulkAddDialog onAdd={handleBulkAdd} isLoading={isBulkAdding} />
         </div>
       </div>
 
@@ -213,10 +195,10 @@ export default function PromptsPage() {
             <div className="flex gap-2 justify-center">
               <AddPromptDialog
                 onAdd={handleAddPrompt}
-                isLoading={isAdding}
+                isLoading={isCreating}
                 availableTags={TAGS}
               />
-              <BulkAddDialog onAdd={handleBulkAdd} isLoading={isAdding} />
+              <BulkAddDialog onAdd={handleBulkAdd} isLoading={isBulkAdding} />
             </div>
           </div>
         </Card>

@@ -3,23 +3,23 @@ import { Button } from "@/components/ui/button";
 import Hero from "@/components/marketing/Hero";
 import Features from "@/components/marketing/Features";
 import PricingTable from "@/components/marketing/PricingTable";
-import { TrendingUp, Users, Zap } from "lucide-react";
+import { TrendingUp, Users, Zap, ArrowRight, Github } from "lucide-react";
 
 const stats = [
   {
     icon: TrendingUp,
     label: "3 AI Engines",
-    description: "ChatGPT, Perplexity, Google AI",
+    description: "ChatGPT, Perplexity, Google AI Overviews",
   },
   {
     icon: Users,
     label: "Competitor Intelligence",
-    description: "Track your competitive landscape",
+    description: "Track your competitive landscape in real-time",
   },
   {
     icon: Zap,
     label: "API on Every Plan",
-    description: "Automate your AI visibility",
+    description: "Integrate AI visibility into your workflows",
   },
 ];
 
@@ -29,50 +29,72 @@ export default function HomePage() {
       {/* Hero Section */}
       <Hero />
 
-      {/* Problem/Solution Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      {/* Problem/Solution Section — Firecrawl-style clean layout */}
+      <section className="relative">
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.2]"
+          style={{
+            backgroundImage: `radial-gradient(circle, #d2dbe7 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          {/* Section indicator */}
+          <div className="flex items-center gap-3 mb-16">
+            <div className="w-0.5 h-5 bg-indigo-300 rounded-full" />
+            <span className="section-indicator">
+              <span className="text-indigo-300">00</span> / 06
+            </span>
+            <span className="text-xs font-medium uppercase tracking-widest text-text-tertiary">
+              The Problem
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Problem description */}
             <div className="space-y-6">
-              <h2 className="text-4xl font-bold text-gray-900">
-                AI search is the new front door. Are you invisible?
+              <h2 className="text-4xl font-bold text-primary-500 text-balance">
+                AI search is the new front door.{" "}
+                <span className="text-gradient">Are you invisible?</span>
               </h2>
               <div className="space-y-4">
-                <p className="text-lg text-gray-600">
+                <p className="text-text-secondary leading-relaxed">
                   ChatGPT, Perplexity, and Google AI are changing how people
-                  discover information. Your traditional SEO doesn't tell the
+                  discover information. Your traditional SEO doesn&apos;t tell the
                   full story.
                 </p>
-                <p className="text-lg text-gray-600">
-                  You need to know: Are your competitors appearing in AI search
-                  results? How often is your content cited? What recommendations
-                  are AI engines making about your industry?
-                </p>
-                <p className="text-lg text-gray-600">
-                  Without this data, you're flying blind in the AI-first world.
+                <p className="text-text-secondary leading-relaxed">
+                  Without AI visibility data, you&apos;re flying blind. You need to know
+                  how often your content is cited, what recommendations AI engines
+                  make, and where competitors outrank you.
                 </p>
               </div>
+              <Link href="/register">
+                <Button className="mt-2 rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-8">
+                  Start tracking for free
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
             </div>
 
-            {/* Right: Stats cards */}
-            <div className="grid grid-cols-1 gap-6">
+            {/* Right: Stats cards — Firecrawl-style bordered grid */}
+            <div className="grid grid-cols-1 gap-px bg-border/50 border border-border rounded-2xl overflow-hidden">
               {stats.map((stat, index) => {
                 const Icon = stat.icon;
                 return (
                   <div
                     key={index}
-                    className="bg-white rounded-lg p-6 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300"
+                    className="bg-white p-6 hover:bg-surface/50 transition-colors"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 mt-1">
-                        <Icon className="w-6 h-6 text-blue-600" />
+                      <div className="flex-shrink-0">
+                        <Icon className="w-5 h-5 text-indigo-300" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 mb-1">
+                        <h3 className="font-semibold text-primary-500 mb-1">
                           {stat.label}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-text-secondary">
                           {stat.description}
                         </p>
                       </div>
@@ -88,47 +110,62 @@ export default function HomePage() {
       {/* Features Section */}
       <Features />
 
-      {/* Open Source Banner */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">
-            Built in the open. No vendor lock-in.
-          </h2>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Opensight is open-source and community-driven. Deploy it yourself,
-            contribute improvements, and maintain full control of your data.
-          </p>
-          <a
-            href="https://github.com/yourusername/opensight"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-gray-700 text-white hover:bg-gray-800 transition-colors font-medium"
-          >
-            View on GitHub
-          </a>
+      {/* Open Source Banner — Firecrawl "Get Started" CTA style */}
+      <section className="relative">
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.3]"
+          style={{
+            backgroundImage: `radial-gradient(circle, #d2dbe7 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        {/* Decorative dashed boxes */}
+        <div className="absolute top-12 left-[8%] w-40 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
+        <div className="absolute bottom-12 right-[6%] w-36 h-28 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          {/* Section indicator */}
+          <div className="flex items-center gap-3 mb-8 justify-center">
+            <div className="w-7 h-7 rounded-lg bg-primary-500 flex items-center justify-center">
+              <span className="text-white font-bold text-[10px] tracking-wider">OS</span>
+            </div>
+            <span className="text-xs font-medium uppercase tracking-widest text-text-tertiary">
+              Get started
+            </span>
+          </div>
+
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <h2 className="text-3xl sm:text-5xl font-bold text-primary-500 text-balance">
+              Ready to{" "}
+              <span className="text-gradient">build?</span>
+            </h2>
+            <p className="text-lg text-text-secondary leading-relaxed">
+              OpenSight is open-source and community-driven. Start tracking for free
+              and scale seamlessly as your project expands.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
+              <Link href="/register">
+                <Button className="rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-8" size="lg">
+                  Start for free
+                </Button>
+              </Link>
+              <a
+                href="https://github.com/yourusername/opensight"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" size="lg" className="rounded-full px-8">
+                  <Github className="w-4 h-4 mr-2" />
+                  View on GitHub
+                </Button>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Pricing Preview */}
       <PricingTable />
-
-      {/* Final CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-2xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
-            Stop guessing. Start tracking.
-          </h2>
-          <p className="text-xl text-gray-600">
-            Join teams that are already monitoring their AI visibility across
-            every major platform.
-          </p>
-          <Link href="/register">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 px-8">
-              Get Started Free
-            </Button>
-          </Link>
-        </div>
-      </section>
     </>
   );
 }

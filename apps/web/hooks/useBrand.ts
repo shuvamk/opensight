@@ -1,35 +1,22 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import * as brandsApi from "@/lib/api/brands";
+import type { Brand, DashboardData, GetBrandTrendsResponse } from "@/lib/api/brands/types";
 
-interface Brand {
-  id: string;
-  name: string;
-  description?: string;
-}
-
-interface DashboardData {
-  brandId: string;
-  metrics: Record<string, unknown>;
-}
-
-interface TrendData {
-  timestamp: string;
-  value: number;
-}
+export type { Brand, DashboardData };
 
 export function useBrands() {
   return useQuery({
     queryKey: ["brands"],
-    queryFn: () => apiClient.get<Brand[]>("/brands"),
+    queryFn: () => brandsApi.listBrands(),
   });
 }
 
 export function useBrand(id?: string) {
   return useQuery({
     queryKey: ["brands", id],
-    queryFn: () => apiClient.get<Brand>(`/brands/${id}`),
+    queryFn: () => brandsApi.getBrand(id!),
     enabled: !!id,
   });
 }
@@ -37,7 +24,7 @@ export function useBrand(id?: string) {
 export function useDashboard(id?: string) {
   return useQuery({
     queryKey: ["brands", id, "dashboard"],
-    queryFn: () => apiClient.get<DashboardData>(`/brands/${id}/dashboard`),
+    queryFn: () => brandsApi.getBrandDashboard(id!),
     enabled: !!id,
   });
 }
@@ -45,10 +32,9 @@ export function useDashboard(id?: string) {
 export function useTrends(id?: string, range?: string) {
   return useQuery({
     queryKey: ["brands", id, "trends", range],
-    queryFn: () =>
-      apiClient.get<TrendData[]>(`/brands/${id}/trends`, {
-        headers: range ? { "X-Range": range } : {},
-      }),
+    queryFn: () => brandsApi.getBrandTrends(id!, range),
     enabled: !!id,
   });
 }
+
+export type { GetBrandTrendsResponse };

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useBrands } from "@/hooks/useBrand";
 import { useBrandStore } from "@/stores/brand-store";
 import {
@@ -16,8 +17,15 @@ interface BrandSwitcherProps {
 }
 
 export default function BrandSwitcher({ collapsed }: BrandSwitcherProps) {
-  const { data: brands, isLoading } = useBrands();
+  const { data, isLoading } = useBrands();
+  const brands = Array.isArray(data) ? data : [];
   const { activeBrandId, setActiveBrand } = useBrandStore();
+
+  useEffect(() => {
+    if (!isLoading && brands.length > 0 && !activeBrandId) {
+      setActiveBrand(brands[0].id);
+    }
+  }, [isLoading, brands, activeBrandId, setActiveBrand]);
 
   if (isLoading) {
     return <Skeleton className="h-10 w-full" />;

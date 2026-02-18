@@ -4,8 +4,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import {
+  useApiKeys,
+  useCreateApiKey,
+  useRevokeApiKey,
+} from "@/hooks/useApiKeys";
+import type { CreateApiKeyResponse } from "@/lib/api/api-keys/types";
 import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,7 +30,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Loader2, Copy, Check, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -36,27 +39,10 @@ const apiKeyFormSchema = z.object({
 
 type ApiKeyFormInputs = z.infer<typeof apiKeyFormSchema>;
 
-interface ApiKey {
-  id: string;
-  name: string;
-  prefix: string;
-  requestsToday: number;
-  requestsThisMonth: number;
-  lastUsedAt?: string;
-  createdAt: string;
-}
-
-interface NewApiKeyResponse {
+interface NewKeyDisplay {
   id: string;
   name: string;
   key: string;
-}
-
-interface RateLimitInfo {
-  requestsToday: number;
-  requestsThisMonth: number;
-  dailyLimit: number;
-  monthlyLimit: number;
 }
 
 const formatDate = (date: string) => {
@@ -69,9 +55,8 @@ const formatDate = (date: string) => {
 
 export default function ApiKeysPage() {
   const [showDialog, setShowDialog] = useState(false);
-  const [newKey, setNewKey] = useState<NewApiKeyResponse | null>(null);
+  const [newKey, setNewKey] = useState<NewKeyDisplay | null>(null);
   const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null);
-  const queryClient = useQueryClient();
 
   const {
     register,
@@ -82,52 +67,29 @@ export default function ApiKeysPage() {
     resolver: zodResolver(apiKeyFormSchema),
   });
 
-  // Fetch API keys
-  const { data: apiKeys = [], isLoading } = useQuery<ApiKey[]>({
-    queryKey: ["apiKeys"],
-    queryFn: () => apiClient.get("/api/api-keys"),
-  });
+  const { data: apiKeys = [], isLoading } = useApiKeys();
+  const { mutate: createApiKey, isPending: isCreating } = useCreateApiKey();
+  const { mutate: deleteApiKey } = useRevokeApiKey();
 
-  // Fetch rate limit info
-  const { data: rateLimitInfo } = useQuery<RateLimitInfo>({
-    queryKey: ["rateLimitInfo"],
-    queryFn: () => apiClient.get("/api/api-keys/rate-limit"),
-  });
-
-  // Create API key mutation
-  const { mutate: createApiKey, isPending: isCreating } = useMutation({
-    mutationFn: (data: ApiKeyFormInputs) =>
-      apiClient.post<NewApiKeyResponse>("/api/api-keys", data),
-    onSuccess: (data) => {
-      setNewKey(data);
-      reset();
-      queryClient.invalidateQueries({ queryKey: ["apiKeys"] });
-      toast.success("API key created successfully!");
-    },
-    onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to create API key"
-      );
-    },
-  });
-
-  // Delete API key mutation
-  const { mutate: deleteApiKey } = useMutation({
-    mutationFn: (keyId: string) =>
-      apiClient.del(`/api/api-keys/${keyId}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["apiKeys"] });
-      toast.success("API key deleted successfully!");
-    },
-    onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to delete API key"
-      );
-    },
-  });
+  const handleCreateSuccess = (data: CreateApiKeyResponse) => {
+    setNewKey({
+      id: data.key.id,
+      name: data.key.name,
+      key: data.key.key ?? "",
+    });
+    reset();
+    toast.success("API key created successfully!");
+  };
 
   const onSubmit = (data: ApiKeyFormInputs) => {
-    createApiKey(data);
+    createApiKey(
+      { name: data.name },
+      {
+        onSuccess: handleCreateSuccess,
+        onError: (e) =>
+          toast.error(e instanceof Error ? e.message : "Failed to create API key"),
+      }
+    );
   };
 
   const copyToClipboard = (text: string, keyId: string) => {
@@ -178,28 +140,6 @@ export default function ApiKeysPage() {
               </Button>
             </div>
 
-            {/* Rate Limit Info */}
-            {rateLimitInfo && (
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Rate Limits</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-gray-600">Daily Requests</p>
-                    <p className="text-2xl font-bold">
-                      {rateLimitInfo.requestsToday} / {rateLimitInfo.dailyLimit}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Monthly Requests</p>
-                    <p className="text-2xl font-bold">
-                      {rateLimitInfo.requestsThisMonth} /{" "}
-                      {rateLimitInfo.monthlyLimit}
-                    </p>
-                  </div>
-                </div>
-              </Card>
-            )}
-
             {/* API Keys Table */}
             <Card className="p-6">
               {isLoading ? (
@@ -216,10 +156,8 @@ export default function ApiKeysPage() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Name</TableHead>
-                        <TableHead>Prefix</TableHead>
-                        <TableHead className="text-right">Requests Today</TableHead>
-                        <TableHead className="text-right">Requests This Month</TableHead>
-                        <TableHead>Last Used</TableHead>
+                        <TableHead>Key Prefix</TableHead>
+                        <TableHead className="text-right">Last Used</TableHead>
                         <TableHead className="text-right">Action</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -228,15 +166,9 @@ export default function ApiKeysPage() {
                         <TableRow key={key.id}>
                           <TableCell className="font-medium">{key.name}</TableCell>
                           <TableCell className="font-mono text-sm">
-                            {key.prefix}...
+                            {key.keyPrefix}...
                           </TableCell>
-                          <TableCell className="text-right">
-                            {key.requestsToday}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {key.requestsThisMonth}
-                          </TableCell>
-                          <TableCell className="text-sm text-gray-600">
+                          <TableCell className="text-right text-sm text-gray-600">
                             {key.lastUsedAt
                               ? formatDate(key.lastUsedAt)
                               : "Never"}
@@ -251,7 +183,14 @@ export default function ApiKeysPage() {
                                     "Are you sure you want to delete this API key? This cannot be undone."
                                   )
                                 ) {
-                                  deleteApiKey(key.id);
+                                  deleteApiKey(key.id, {
+                                    onSuccess: () =>
+                                      toast.success("API key deleted successfully!"),
+                                    onError: (e) =>
+                                      toast.error(
+                                        e instanceof Error ? e.message : "Failed to delete API key"
+                                      ),
+                                  });
                                 }
                               }}
                               className="text-red-600 hover:text-red-800 hover:bg-red-50"

@@ -26,9 +26,9 @@ const faqItems = [
       "We'll notify you when you're approaching your limits. You can upgrade anytime, and overage charges apply at the same rate as your plan until you upgrade.",
   },
   {
-    question: "Can I self-host Opensight?",
+    question: "Can I self-host OpenSight?",
     answer:
-      "Absolutely! Opensight is open-source and free to self-host. You get unlimited everything when you self-host. Check our documentation for setup instructions.",
+      "Absolutely! OpenSight is open-source and free to self-host. You get unlimited everything when you self-host. Check our documentation for setup instructions.",
   },
   {
     question: "Do you have a dedicated support plan?",
@@ -59,23 +59,23 @@ function FAQItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 transition-colors">
+    <div className="border-b border-border last:border-b-0">
       <button
         onClick={onToggle}
-        className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
+        className="w-full px-0 py-5 flex items-center justify-between hover:opacity-80 transition-opacity"
       >
-        <span className="text-left font-semibold text-gray-900">
+        <span className="text-left font-semibold text-primary-500 text-sm">
           {question}
         </span>
         <ChevronDown
-          className={`w-5 h-5 text-gray-500 flex-shrink-0 transition-transform duration-300 ${
+          className={`w-4 h-4 text-text-tertiary flex-shrink-0 transition-transform duration-300 ${
             isOpen ? "transform rotate-180" : ""
           }`}
         />
       </button>
       {isOpen && (
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <p className="text-gray-600 leading-relaxed">{answer}</p>
+        <div className="pb-5">
+          <p className="text-sm text-text-secondary leading-relaxed">{answer}</p>
         </div>
       )}
     </div>
@@ -102,22 +102,30 @@ export default function PricingPage() {
         <PricingTable />
       </div>
 
-      {/* FAQ Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-3xl mx-auto">
+      {/* FAQ Section — Firecrawl-style clean list */}
+      <section className="relative">
+        <div
+          className="absolute inset-0 -z-10 opacity-[0.2]"
+          style={{
+            backgroundImage: `radial-gradient(circle, #d2dbe7 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           {/* Section heading */}
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              Frequently asked questions
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <h2 className="text-4xl sm:text-5xl font-bold text-primary-500 mb-5 text-balance">
+              Frequently asked{" "}
+              <span className="text-gradient">questions</span>
             </h2>
-            <p className="text-lg text-gray-600">
-              Can't find the answer you're looking for? Feel free to reach out
+            <p className="text-lg text-text-secondary">
+              Can&apos;t find the answer you&apos;re looking for? Feel free to reach out
               to our support team.
             </p>
           </div>
 
-          {/* FAQ items */}
-          <div className="space-y-4">
+          {/* FAQ items — Firecrawl clean divider style */}
+          <div className="border-t border-border">
             {faqItems.map((item, index) => (
               <FAQItem
                 key={index}
@@ -130,15 +138,15 @@ export default function PricingPage() {
           </div>
 
           {/* Contact CTA */}
-          <div className="mt-16 text-center space-y-4 p-8 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
-            <h3 className="text-xl font-semibold text-gray-900">
+          <div className="mt-16 text-center space-y-4 p-8 rounded-2xl border border-border bg-white">
+            <h3 className="text-lg font-semibold text-primary-500">
               Still have questions?
             </h3>
-            <p className="text-gray-600">
+            <p className="text-sm text-text-secondary">
               Our team is happy to help. Reach out to us at{" "}
               <a
                 href="mailto:support@opensight.ai"
-                className="text-blue-600 hover:text-blue-700 font-medium"
+                className="text-indigo-300 hover:text-indigo-400 font-medium"
               >
                 support@opensight.ai
               </a>

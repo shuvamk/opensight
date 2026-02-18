@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import Link from "next/link";
+import { AlertCircle } from "lucide-react";
 
 const resetPasswordFormSchema = resetPasswordSchema.omit({ token: true }).extend({
   confirmPassword: z.string().min(1, "Please confirm your password"),
@@ -56,71 +57,86 @@ export default function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <div className="w-full max-w-[400px] space-y-6">
-        <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-bold">Invalid link</h1>
-          <p className="text-sm text-muted-foreground">
+      <div className="space-y-8">
+        <div className="space-y-4 text-center">
+          <div className="flex justify-center">
+            <div className="rounded-2xl bg-red-50 p-3.5">
+              <AlertCircle className="h-6 w-6 text-red-600" />
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold text-primary-500">Invalid link</h1>
+          <p className="text-sm text-text-secondary">
             The password reset link is invalid or has expired.
           </p>
         </div>
 
-        <Button className="w-full" asChild>
-          <Link href="/forgot-password">Request a new link</Link>
-        </Button>
+        <Link href="/forgot-password">
+          <Button className="w-full" size="lg">Request a new link</Button>
+        </Link>
 
-        <Button variant="outline" className="w-full" asChild>
-          <Link href="/login">Back to sign in</Link>
-        </Button>
+        <Link href="/login">
+          <Button variant="outline" className="w-full">Back to sign in</Button>
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-[400px] space-y-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold">Reset password</h1>
-        <p className="text-sm text-muted-foreground">
+    <div className="space-y-8">
+      {/* Header - mobile logo */}
+      <div className="lg:hidden flex items-center gap-2.5 mb-4">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center">
+            <span className="text-white font-bold text-xs tracking-wider">OS</span>
+          </div>
+          <span className="font-semibold text-primary-500 text-lg">OpenSight</span>
+        </Link>
+      </div>
+
+      <div className="space-y-2">
+        <h1 className="text-2xl font-bold text-primary-500">Reset password</h1>
+        <p className="text-sm text-text-secondary">
           Enter your new password below
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="password">New Password</Label>
+          <Label htmlFor="password" className="text-sm font-medium text-indigo-500">New Password</Label>
           <Input
             id="password"
             type="password"
-            placeholder="••••••••"
+            placeholder="Create a strong password"
             disabled={isSubmitting}
             {...register("password")}
           />
           {errors.password && (
-            <p className="text-sm text-destructive">{errors.password.message}</p>
+            <p className="text-sm text-error">{errors.password.message}</p>
           )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword" className="text-sm font-medium text-indigo-500">Confirm Password</Label>
           <Input
             id="confirmPassword"
             type="password"
-            placeholder="••••••••"
+            placeholder="Confirm your password"
             disabled={isSubmitting}
             {...register("confirmPassword")}
           />
           {errors.confirmPassword && (
-            <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
+            <p className="text-sm text-error">{errors.confirmPassword.message}</p>
           )}
         </div>
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
+        <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
           {isSubmitting ? "Resetting..." : "Reset Password"}
         </Button>
       </form>
 
-      <Button variant="outline" className="w-full" asChild>
-        <Link href="/login">Back to sign in</Link>
-      </Button>
+      <Link href="/login">
+        <Button variant="outline" className="w-full">Back to sign in</Button>
+      </Link>
     </div>
   );
 }

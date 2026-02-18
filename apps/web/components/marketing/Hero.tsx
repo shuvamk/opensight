@@ -1,85 +1,147 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-gray-50 -z-10" />
+    <section className="relative overflow-hidden">
+      {/* Firecrawl-style dot pattern background */}
+      <div className="absolute inset-0 -z-10">
+        <div
+          className="absolute inset-0 opacity-[0.4]"
+          style={{
+            backgroundImage: `radial-gradient(circle, #d2dbe7 1px, transparent 1px)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        {/* Subtle radial fade from center */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(28,37,65,0.04),transparent)]" />
+      </div>
 
-      <div className="max-w-6xl mx-auto">
-        {/* Main content */}
-        <div className="text-center space-y-8">
-          {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 border border-blue-200">
-            <span className="text-sm font-medium text-blue-900">
+      {/* Firecrawl-style floating decorative elements */}
+      <div className="absolute top-32 left-[15%] text-text-tertiary/30 text-xs font-mono hidden lg:block">[ AI ]</div>
+      <div className="absolute top-48 right-[12%] text-text-tertiary/30 text-xs font-mono hidden lg:block">[ VISIBILITY ]</div>
+      <div className="absolute bottom-40 left-[10%] text-text-tertiary/30 text-xs font-mono hidden lg:block">[ TRACK ]</div>
+      <div className="absolute bottom-32 right-[15%] text-text-tertiary/30 text-xs font-mono hidden lg:block">[ SCORE ]</div>
+
+      {/* Decorative dashed boxes like Firecrawl */}
+      <div className="absolute top-20 left-[8%] w-32 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
+      <div className="absolute top-40 right-[6%] w-40 h-28 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
+      <div className="absolute bottom-20 left-[5%] w-36 h-36 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
+      <div className="absolute bottom-28 right-[8%] w-28 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
+        <div className="text-center space-y-8 max-w-4xl mx-auto">
+          {/* Announcement badge — Firecrawl style pill */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-border/60 animate-fade-in">
+            <span className="text-sm text-text-secondary">
               Open-source AI visibility platform
             </span>
+            <ArrowRight className="w-3.5 h-3.5 text-text-tertiary" />
           </div>
 
-          {/* Heading */}
-          <h1 className="text-5xl sm:text-6xl font-bold tracking-tight text-gray-900">
-            See how AI search engines talk about your brand.
+          {/* Heading — Firecrawl large centered heading with colored keyword */}
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-primary-500 leading-[1.08] text-balance animate-slide-up">
+            See how AI talks about{" "}
+            <span className="text-gradient">your brand</span>
           </h1>
 
           {/* Subheading */}
-          <p className="max-w-2xl mx-auto text-xl text-gray-600 leading-relaxed">
-            Open-source AI visibility analytics. Track your brand across ChatGPT,
-            Perplexity, and Google AI Overviews.
+          <p className="max-w-2xl mx-auto text-lg sm:text-xl text-text-secondary leading-relaxed animate-slide-up">
+            Track your brand visibility across ChatGPT, Perplexity, and Google AI Overviews.
+            Open-source analytics for the AI-first web.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2 animate-slide-up">
             <Link href="/register">
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8"
-              >
-                Start Free — No Credit Card
+              <Button size="lg" className="rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-8">
+                Start for free
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
             <a
               href="https://github.com/yourusername/opensight"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-lg border border-gray-300 text-gray-900 hover:bg-gray-50 transition-colors font-medium"
             >
-              View on GitHub
-              <ExternalLink className="w-4 h-4" />
+              <Button variant="outline" size="lg" className="rounded-full px-8">
+                View on GitHub
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </Button>
             </a>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="flex items-center justify-center gap-8 pt-8 text-sm text-text-tertiary animate-fade-in">
+            <span className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-success" />
+              No credit card required
+            </span>
+            <span className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-success" />
+              Self-host available
+            </span>
+            <span className="hidden sm:flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-success" />
+              3 AI engines
+            </span>
           </div>
         </div>
 
-        {/* Dashboard screenshot placeholder */}
-        <div className="mt-16 mx-auto max-w-4xl">
-          <div className="relative">
-            {/* Gradient border effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 rounded-2xl opacity-0 blur group-hover:opacity-100 transition duration-300" />
-
-            {/* Screenshot placeholder */}
-            <div className="relative bg-gray-100 rounded-2xl border border-gray-200 aspect-video flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100" />
-              <div className="relative z-10 flex flex-col items-center justify-center gap-4">
-                <div className="w-16 h-16 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <div className="w-8 h-8 bg-blue-600 rounded opacity-50" />
+        {/* Dashboard preview — Firecrawl-style browser mockup with dashed outlines */}
+        <div className="mt-20 mx-auto max-w-5xl animate-slide-up">
+          <div className="relative group">
+            {/* Screenshot container */}
+            <div className="relative bg-white rounded-2xl border border-border shadow-large overflow-hidden">
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface/50">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-300/80" />
+                  <div className="w-3 h-3 rounded-full bg-amber-300/80" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-300/80" />
                 </div>
-                <div className="text-center space-y-2">
-                  <p className="text-gray-600 font-medium">Dashboard Preview</p>
-                  <p className="text-gray-500 text-sm">
-                    Track your AI visibility in real-time
-                  </p>
+                <div className="flex-1 mx-4">
+                  <div className="bg-white rounded-lg border border-border px-3 py-1.5 text-xs text-text-tertiary max-w-md mx-auto">
+                    app.opensight.ai/dashboard
+                  </div>
                 </div>
               </div>
 
-              {/* Grid pattern overlay */}
-              <div
-                className="absolute inset-0 opacity-5"
-                style={{
-                  backgroundImage: `linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent)`,
-                  backgroundSize: "50px 50px",
-                }}
-              />
+              {/* Dashboard mockup */}
+              <div className="p-6 bg-surface/30 aspect-[16/9]">
+                <div className="space-y-4">
+                  {/* Metric cards row */}
+                  <div className="grid grid-cols-4 gap-3">
+                    {[
+                      { label: "Visibility Score", value: "78.5%", color: "bg-indigo-50" },
+                      { label: "Total Mentions", value: "1,247", color: "bg-emerald-50" },
+                      { label: "Sentiment", value: "92.1%", color: "bg-amber-50" },
+                      { label: "Active Prompts", value: "48", color: "bg-purple-50" },
+                    ].map((card, i) => (
+                      <div key={i} className="bg-white rounded-xl border border-border p-4">
+                        <div className="text-[10px] text-text-tertiary font-medium">{card.label}</div>
+                        <div className="text-lg font-bold text-primary-500 mt-1">{card.value}</div>
+                        <div className={`h-1 ${card.color} rounded-full mt-2 w-3/4`} />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Chart area */}
+                  <div className="bg-white rounded-xl border border-border p-4 h-40">
+                    <div className="text-xs font-medium text-primary-500 mb-3">Visibility Over Time</div>
+                    <div className="h-24 flex items-end gap-1">
+                      {[40, 45, 42, 58, 55, 62, 68, 65, 72, 78, 75, 82, 85, 80, 88, 92].map((h, i) => (
+                        <div
+                          key={i}
+                          className="flex-1 bg-indigo-100 rounded-t transition-all hover:bg-indigo-200"
+                          style={{ height: `${h}%` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

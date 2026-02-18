@@ -1,63 +1,24 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import * as brandsApi from "@/lib/api/brands";
+import type { DashboardData } from "@/lib/api/brands/types";
 
-export interface DashboardMetrics {
-  overallScore: number;
-  totalMentions: number;
-  positiveSentimentPercent: number;
-  activePrompts: number;
-}
+export type { DashboardData };
 
-export interface TrendData {
-  date: string;
-  chatgpt: number;
-  perplexity: number;
-  googleAIO: number;
-}
-
-export interface EngineMetric {
-  engine: string;
-  score: number;
-  trend: number;
-  topPrompt: string;
-  sparklineData: Array<{ value: number }>;
-}
-
-export interface Change {
-  id: string;
-  type: "up" | "down";
-  description: string;
-  timestamp: string;
-}
-
-export interface DashboardData {
-  metrics: DashboardMetrics;
-  trends: TrendData[];
-  engineMetrics: EngineMetric[];
-  recentChanges: Change[];
-}
-
-export function useDashboard(brandId?: string) {
+export function useDashboard(brandId?: string | null) {
   return useQuery({
     queryKey: ["brands", brandId, "dashboard"],
-    queryFn: () => apiClient.get<DashboardData>(`/brands/${brandId}/dashboard`),
+    queryFn: () => brandsApi.getBrandDashboard(brandId!),
     enabled: !!brandId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
   });
 }
 
-export function useTrends(
-  brandId?: string,
-  timeRange: "7d" | "30d" | "90d" = "30d"
-) {
+export function useTrends(brandId?: string, timeRange?: string) {
   return useQuery({
     queryKey: ["brands", brandId, "trends", timeRange],
-    queryFn: () =>
-      apiClient.get<TrendData[]>(
-        `/brands/${brandId}/trends?timeRange=${timeRange}`
-      ),
+    queryFn: () => brandsApi.getBrandTrends(brandId!, timeRange),
     enabled: !!brandId,
     staleTime: 1000 * 60 * 5,
   });

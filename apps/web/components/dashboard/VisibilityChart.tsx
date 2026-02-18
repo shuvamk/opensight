@@ -29,7 +29,7 @@ export function VisibilityChart() {
           <CardTitle>Visibility Over Time</CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton className="h-80" />
+          <Skeleton className="h-80 rounded-xl" />
         </CardContent>
       </Card>
     );
@@ -52,15 +52,16 @@ export function VisibilityChart() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle>Visibility Over Time</CardTitle>
-        <div className="flex gap-2">
-          {["7d", "30d", "90d"].map((range) => (
+        <div className="flex gap-1 bg-surface rounded-lg p-1">
+          {(["7d", "30d", "90d"] as const).map((range) => (
             <Button
               key={range}
-              variant={timeRange === range ? "default" : "outline"}
+              variant={timeRange === range ? "default" : "ghost"}
               size="sm"
-              onClick={() => setTimeRange(range as "7d" | "30d" | "90d")}
+              onClick={() => setTimeRange(range)}
+              className={timeRange === range ? "shadow-soft" : ""}
             >
-              {range === "7d" ? "7 days" : range === "30d" ? "30 days" : "90 days"}
+              {range === "7d" ? "7d" : range === "30d" ? "30d" : "90d"}
             </Button>
           ))}
         </div>
@@ -68,18 +69,27 @@ export function VisibilityChart() {
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={trends} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
             <XAxis
               dataKey="date"
-              stroke="#6b7280"
+              stroke="#94A3B8"
               style={{ fontSize: "12px" }}
+              tickLine={false}
+              axisLine={false}
             />
-            <YAxis stroke="#6b7280" style={{ fontSize: "12px" }} />
+            <YAxis
+              stroke="#94A3B8"
+              style={{ fontSize: "12px" }}
+              tickLine={false}
+              axisLine={false}
+            />
             <Tooltip
               contentStyle={{
                 backgroundColor: "#fff",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
+                border: "1px solid #E2E8F0",
+                borderRadius: "12px",
+                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
+                padding: "12px",
               }}
               formatter={(value) => `${value}%`}
             />
@@ -87,7 +97,7 @@ export function VisibilityChart() {
             <Line
               type="monotone"
               dataKey="chatgpt"
-              stroke="#3b82f6"
+              stroke="#6366F1"
               name="ChatGPT"
               dot={false}
               strokeWidth={2}
@@ -95,7 +105,7 @@ export function VisibilityChart() {
             <Line
               type="monotone"
               dataKey="perplexity"
-              stroke="#a855f7"
+              stroke="#A855F7"
               name="Perplexity"
               dot={false}
               strokeWidth={2}
@@ -103,7 +113,7 @@ export function VisibilityChart() {
             <Line
               type="monotone"
               dataKey="googleAIO"
-              stroke="#10b981"
+              stroke="#10B981"
               name="Google AIO"
               dot={false}
               strokeWidth={2}

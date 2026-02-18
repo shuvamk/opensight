@@ -1,0 +1,1014 @@
+{
+  "info": {
+    "name": "OpenSight API",
+    "description": "Complete API collection for OpenSight platform - AI-powered brand visibility monitoring.\n\nSetup:\n1. Register a user or login to get a JWT token\n2. The token is automatically saved to the `accessToken` collection variable\n3. All authenticated endpoints use the Bearer token from the variable\n\nBase URL: http://localhost:4000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "brandId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "promptId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "competitorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "apiKeyId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "notificationId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Check if the API server is running."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints - register, login, password management, and OAuth.",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('accessToken', jsonData.accessToken);",
+                  "    console.log('Token saved:', jsonData.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@opensight.dev\",\n  \"password\": \"StrongPass123!\",\n  \"name\": \"Test User\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Register a new user account. The access token is automatically saved."
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('accessToken', jsonData.accessToken);",
+                  "    console.log('Token saved:', jsonData.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@opensight.dev\",\n  \"password\": \"StrongPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login with email and password. The access token is automatically saved."
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@opensight.dev\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "forgot-password"]
+            },
+            "description": "Request a password reset email."
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"<reset-token-from-email>\",\n  \"password\": \"NewStrongPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "reset-password"]
+            },
+            "description": "Reset password using the token received via email."
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.accessToken) {",
+                  "        pm.collectionVariables.set('accessToken', jsonData.accessToken);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "refresh"]
+            },
+            "description": "Refresh the access token using the HTTP-only refresh cookie."
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Logout the current user and invalidate tokens."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "User profile management.",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "profile"]
+            },
+            "description": "Get the authenticated user's profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"avatar_url\": \"https://example.com/avatar.png\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "profile"]
+            },
+            "description": "Update the authenticated user's profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_password\": \"StrongPass123!\",\n  \"new_password\": \"NewStrongPass456!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "password"]
+            },
+            "description": "Change the authenticated user's password."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Brands",
+      "description": "Brand management - CRUD, dashboard, and trends.",
+      "item": [
+        {
+          "name": "List Brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands"]
+            },
+            "description": "List all brands for the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Brand",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('brandId', jsonData.brand.id);",
+                  "    console.log('Brand ID saved:', jsonData.brand.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Brand\",\n  \"website_url\": \"https://mybrand.com\",\n  \"industry\": \"Technology\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands"]
+            },
+            "description": "Create a new brand. The brand ID is automatically saved."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Brand",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}"]
+            },
+            "description": "Get a specific brand by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Brand",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Brand Name\",\n  \"industry\": \"SaaS\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}"]
+            },
+            "description": "Update an existing brand."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Brand",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}"]
+            },
+            "description": "Delete a brand and all associated data."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Brand Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "dashboard"]
+            },
+            "description": "Get the dashboard overview for a brand with visibility scores and metrics."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Brand Trends",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/trends?range=30d",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "trends"],
+              "query": [
+                {
+                  "key": "range",
+                  "value": "30d",
+                  "description": "Time range: 7d, 14d, 30d, or 90d"
+                }
+              ]
+            },
+            "description": "Get visibility trend data for a brand over time."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Prompts",
+      "description": "Manage AI prompts for brand monitoring. Prompts are nested under brands.",
+      "item": [
+        {
+          "name": "List Prompts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/prompts?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "prompts"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "tags",
+                  "value": "industry",
+                  "disabled": true,
+                  "description": "Filter by tag"
+                }
+              ]
+            },
+            "description": "List all prompts for a brand with pagination."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Prompt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('promptId', jsonData.prompt.id);",
+                  "    console.log('Prompt ID saved:', jsonData.prompt.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"What are the best tools for project management?\",\n  \"tags\": [\"productivity\", \"tools\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/prompts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "prompts"]
+            },
+            "description": "Create a new prompt for a brand."
+          },
+          "response": []
+        },
+        {
+          "name": "Bulk Create Prompts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompts\": [\n    {\n      \"text\": \"What are the top cloud infrastructure providers?\",\n      \"tags\": [\"cloud\", \"infrastructure\"]\n    },\n    {\n      \"text\": \"Which companies lead in AI development?\",\n      \"tags\": [\"ai\", \"technology\"]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/prompts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "prompts"]
+            },
+            "description": "Create multiple prompts at once for a brand."
+          },
+          "response": []
+        },
+        {
+          "name": "Suggest Prompts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"brand_name\": \"My Brand\",\n  \"industry\": \"Technology\",\n  \"count\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/prompts/suggest",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "prompts", "suggest"]
+            },
+            "description": "Get AI-generated prompt suggestions for a brand."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Prompt",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/prompts/{{promptId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "prompts", "{{promptId}}"]
+            },
+            "description": "Get a specific prompt by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Prompt",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Updated prompt text here\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/prompts/{{promptId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "prompts", "{{promptId}}"]
+            },
+            "description": "Update an existing prompt."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Prompt",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/prompts/{{promptId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "prompts", "{{promptId}}"]
+            },
+            "description": "Delete a prompt."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Prompt Results",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/prompts/{{promptId}}/results",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "prompts", "{{promptId}}", "results"]
+            },
+            "description": "Get AI engine results for a specific prompt."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Competitors",
+      "description": "Competitor tracking for brands.",
+      "item": [
+        {
+          "name": "List Competitors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/competitors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "competitors"]
+            },
+            "description": "List all competitors for a brand."
+          },
+          "response": []
+        },
+        {
+          "name": "Add Competitor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('competitorId', jsonData.competitor.id);",
+                  "    console.log('Competitor ID saved:', jsonData.competitor.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Competitor Corp\",\n  \"website_url\": \"https://competitor.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/competitors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "competitors"]
+            },
+            "description": "Add a new competitor to track."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Competitor Comparison",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/competitors/comparison",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "competitors", "comparison"]
+            },
+            "description": "Get a comparison view of your brand vs competitors."
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Competitor",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/{{brandId}}/competitors/{{competitorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "{{brandId}}", "competitors", "{{competitorId}}"]
+            },
+            "description": "Remove a competitor from tracking."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Content Scoring",
+      "description": "Content optimization scoring for URLs.",
+      "item": [
+        {
+          "name": "Score Content",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://mybrand.com/blog/example-post\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/content/score",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "content", "score"]
+            },
+            "description": "Score a URL for AI visibility optimization."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Score History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/content/score/history?limit=10&offset=0",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "content", "score", "history"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            },
+            "description": "Get history of content scores."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "description": "Notification management and settings.",
+      "item": [
+        {
+          "name": "List Notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.notifications && jsonData.notifications.length > 0) {",
+                  "        pm.collectionVariables.set('notificationId', jsonData.notifications[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications?unread=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications"],
+              "query": [
+                {
+                  "key": "unread",
+                  "value": "true",
+                  "description": "Filter for unread only"
+                }
+              ]
+            },
+            "description": "List notifications. Optionally filter by unread status."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/{{notificationId}}/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "{{notificationId}}", "read"]
+            },
+            "description": "Mark a specific notification as read."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/read-all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "read-all"]
+            },
+            "description": "Mark all notifications as read."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Notification Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "settings"]
+            },
+            "description": "Get the user's notification preferences."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Notification Settings",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email_frequency\": \"daily\",\n  \"alert_visibility_drop\": true,\n  \"alert_new_mention\": true,\n  \"alert_sentiment_shift\": true,\n  \"alert_competitor_new\": false,\n  \"webhook_url\": \"https://hooks.example.com/opensight\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "notifications", "settings"]
+            },
+            "description": "Update notification preferences including webhook URL."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "API Keys",
+      "description": "API key management for programmatic access.",
+      "item": [
+        {
+          "name": "List API Keys",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/api-keys",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "api-keys"]
+            },
+            "description": "List all API keys for the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Create API Key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('apiKeyId', jsonData.apiKey.id);",
+                  "    console.log('API Key ID saved:', jsonData.apiKey.id);",
+                  "    console.log('API Key (save this!):', jsonData.rawKey);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Integration Key\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/api-keys",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "api-keys"]
+            },
+            "description": "Create a new API key. The raw key is only shown once - save it!"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete API Key",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/api-keys/{{apiKeyId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "api-keys", "{{apiKeyId}}"]
+            },
+            "description": "Revoke/delete an API key."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "description": "Webhook endpoints for third-party integrations.",
+      "item": [
+        {
+          "name": "Stripe Webhook",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "stripe-signature",
+                "value": "t=1234567890,v1=test_signature",
+                "description": "Stripe webhook signature (normally set by Stripe)"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"checkout.session.completed\",\n  \"data\": {\n    \"object\": {\n      \"customer\": \"cus_test123\",\n      \"subscription\": \"sub_test123\",\n      \"metadata\": {\n        \"plan\": \"starter\"\n      }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/webhooks/stripe",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "webhooks", "stripe"]
+            },
+            "description": "Stripe webhook endpoint. This is normally called by Stripe, not manually."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

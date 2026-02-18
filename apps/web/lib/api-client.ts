@@ -1,6 +1,11 @@
-import { redirect } from "next/navigation";
+import { getAuthToken } from "./auth-token";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = API_BASE.endsWith("/api") ? API_BASE : `${API_BASE}/api`;
+
+export function getOAuthUrl(provider: "github" | "google"): string {
+  return `${API_BASE.endsWith("/api") ? API_BASE.replace(/\/api$/, "") : API_BASE}/api/auth/${provider}`;
+}
 
 interface RequestOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -8,7 +13,8 @@ interface RequestOptions extends RequestInit {
 
 async function handleResponse(response: Response) {
   if (response.status === 401) {
-    redirect("/login");
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.message || "Unauthorized");
   }
 
   if (!response.ok) {
@@ -28,11 +34,13 @@ async function request<T>(
   method: string,
   path: string,
   body?: unknown,
-  options?: RequestOptions
+  options?: RequestOptions,
 ): Promise<T> {
   const url = `${API_URL}${path}`;
+  const token = getAuthToken();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(options?.headers || {}),
   };
 
@@ -58,8 +66,11 @@ export const apiClient = {
   post: <T = unknown>(path: string, body?: unknown, options?: RequestOptions) =>
     request<T>("POST", path, body, options),
 
-  patch: <T = unknown>(path: string, body?: unknown, options?: RequestOptions) =>
-    request<T>("PATCH", path, body, options),
+  patch: <T = unknown>(
+    path: string,
+    body?: unknown,
+    options?: RequestOptions,
+  ) => request<T>("PATCH", path, body, options),
 
   del: <T = unknown>(path: string, options?: RequestOptions) =>
     request<T>("DELETE", path, undefined, options),

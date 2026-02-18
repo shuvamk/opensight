@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import {
+  useNotifications,
+  useMarkRead,
+  useMarkAllAsRead,
+} from "@/hooks/useNotifications";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,14 +21,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-interface Notification {
-  id: string;
-  type: "visibility_drop" | "mention" | "sentiment" | "competitor";
-  title: string;
-  body: string;
-  isRead: boolean;
-  createdAt: string;
-}
 
 const getNotificationIcon = (
   type: "visibility_drop" | "mention" | "sentiment" | "competitor"
@@ -75,37 +70,9 @@ const formatDate = (date: string) => {
 
 export default function AlertsPage() {
   const [filter, setFilter] = useState<"all" | "unread">("all");
-  const queryClient = useQueryClient();
-
-  // Fetch notifications
-  const { data: notifications = [], isLoading, refetch } = useQuery<Notification[]>({
-    queryKey: ["notifications"],
-    queryFn: () => apiClient.get("/api/notifications"),
-  });
-
-  // Mark as read mutation
-  const { mutate: markAsRead } = useMutation({
-    mutationFn: (notificationId: string) =>
-      apiClient.patch(`/api/notifications/${notificationId}/read`, {}),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-    },
-    onError: (error) => {
-      toast.error("Failed to mark as read");
-    },
-  });
-
-  // Mark all as read mutation
-  const { mutate: markAllAsRead, isPending: isMarkingAll } = useMutation({
-    mutationFn: () => apiClient.patch("/api/notifications/read-all", {}),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-      toast.success("All notifications marked as read");
-    },
-    onError: (error) => {
-      toast.error("Failed to mark all as read");
-    },
-  });
+  const { data: notifications = [], isLoading } = useNotifications();
+  const { mutate: markAsRead } = useMarkRead();
+  const { mutate: markAllAsRead, isPending: isMarkingAll } = useMarkAllAsRead();
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
   const filteredNotifications =
@@ -134,7 +101,12 @@ export default function AlertsPage() {
         {hasUnread && (
           <Button
             variant="outline"
-            onClick={() => markAllAsRead()}
+            onClick={() =>
+              markAllAsRead(undefined, {
+                onSuccess: () => toast.success("All notifications marked as read"),
+                onError: () => toast.error("Failed to mark all as read"),
+              })
+            }
             disabled={isMarkingAll}
           >
             {isMarkingAll ? "Marking..." : "Mark All Read"}
@@ -185,14 +157,16 @@ export default function AlertsPage() {
                 }`}
                 onClick={() => {
                   if (!notification.isRead) {
-                    markAsRead(notification.id);
+                    markAsRead(notification.id, {
+                      onError: () => toast.error("Failed to mark as read"),
+                    });
                   }
                 }}
               >
                 <div className="flex gap-4">
                   {/* Icon */}
                   <div className="flex-shrink-0 mt-1">
-                    {getNotificationIcon(notification.type)}
+                    {getNotificationIcon(notification.type as "visibility_drop" | "mention" | "sentiment" | "competitor")}
                   </div>
 
                   {/* Content */}
@@ -206,7 +180,7 @@ export default function AlertsPage() {
                           variant="secondary"
                           className="text-xs whitespace-nowrap"
                         >
-                          {getNotificationTypeLabel(notification.type)}
+                          {getNotificationTypeLabel(notification.type as "visibility_drop" | "mention" | "sentiment" | "competitor")}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-2">

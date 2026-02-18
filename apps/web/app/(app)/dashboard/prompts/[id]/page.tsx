@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { usePrompt, usePromptResults } from "@/hooks/usePrompts";
+import { usePrompt, usePromptResults, useDeletePrompt } from "@/hooks/usePrompts";
 import { useBrandStore } from "@/stores/brand-store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,8 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Edit2, Trash2, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
-import { apiClient } from "@/lib/api-client";
-import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface PromptResponse {
   engine: string;
@@ -32,34 +31,29 @@ export default function PromptDetailPage() {
   const params = useParams();
   const promptId = params?.id as string;
   const { activeBrandId } = useBrandStore();
-  const queryClient = useQueryClient();
 
   const { data: prompt, isLoading: isPromptLoading } = usePrompt(
     activeBrandId,
     promptId
   );
-  const { data: results = [], isLoading: isResultsLoading } = usePromptResults(
+  const { data: resultsData, isLoading: isResultsLoading } = usePromptResults(
     activeBrandId,
     promptId
   );
+  const results = resultsData?.results ?? [];
 
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { mutate: deletePrompt, isPending: isDeleting } = useDeletePrompt(activeBrandId);
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (!confirm("Are you sure you want to delete this prompt?")) return;
-
-    try {
-      setIsDeleting(true);
-      await apiClient.del(
-        `/brands/${activeBrandId}/prompts/${promptId}`
-      );
-      router.push("/dashboard/prompts");
-    } catch (error) {
-      console.error("Failed to delete prompt:", error);
-      alert("Failed to delete prompt");
-    } finally {
-      setIsDeleting(false);
-    }
+    deletePrompt(promptId, {
+      onSuccess: () => {
+        toast.success("Prompt deleted");
+        router.push("/dashboard/prompts");
+      },
+      onError: (e) =>
+        toast.error(e instanceof Error ? e.message : "Failed to delete prompt"),
+    });
   };
 
   if (isPromptLoading) {

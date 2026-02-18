@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import React from "react";
 
@@ -20,8 +20,6 @@ export function MetricCard({
   decimals = 0,
 }: MetricCardProps) {
   const isPositive = trend ? trend > 0 : false;
-  const trendColor = isPositive ? "text-green-600" : "text-red-600";
-  const trendBgColor = isPositive ? "bg-green-50" : "bg-red-50";
   const displayValue =
     typeof value === "number"
       ? decimals > 0
@@ -30,34 +28,35 @@ export function MetricCard({
       : value;
 
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-text-secondary">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="flex items-baseline justify-between">
-          <div className="text-3xl font-bold">
-            {displayValue}
-            {suffix && <span className="text-xl ml-1">{suffix}</span>}
-          </div>
+    <Card className="hover:shadow-medium transition-shadow duration-200">
+      <CardContent className="p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-text-secondary">{title}</p>
           {trend !== undefined && (
-            <div className={`flex items-center gap-1 px-2 py-1 rounded ${trendBgColor}`}>
+            <div
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                isPositive
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-red-50 text-red-700"
+              }`}
+            >
               {isPositive ? (
-                <ArrowUp className={`w-4 h-4 ${trendColor}`} />
+                <ArrowUp className="w-3 h-3" />
               ) : (
-                <ArrowDown className={`w-4 h-4 ${trendColor}`} />
+                <ArrowDown className="w-3 h-3" />
               )}
-              <span className={`text-sm font-semibold ${trendColor}`}>
-                {Math.abs(trend)}%
-              </span>
+              {Math.abs(trend)}%
             </div>
           )}
         </div>
 
+        <div className="text-3xl font-bold text-primary-500">
+          {displayValue}
+          {suffix && <span className="text-lg ml-0.5 text-text-secondary">{suffix}</span>}
+        </div>
+
         {sparkline && sparkline.length > 0 && (
-          <div className="h-8 flex items-end gap-0.5">
+          <div className="h-8 flex items-end gap-0.5 pt-1">
             {sparkline.map((point, i) => {
               const maxValue = Math.max(...sparkline.map((p) => p.value));
               const height =
@@ -65,7 +64,7 @@ export function MetricCard({
               return (
                 <div
                   key={i}
-                  className="flex-1 bg-blue-200 rounded-sm"
+                  className="flex-1 bg-indigo-200 rounded-sm hover:bg-indigo-300 transition-colors"
                   style={{ height: `${height}%`, minHeight: "2px" }}
                 />
               );

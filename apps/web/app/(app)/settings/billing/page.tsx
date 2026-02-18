@@ -1,7 +1,7 @@
 "use client";
 
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import { useMutation } from "@tanstack/react-query";
+import { useBilling } from "@/hooks/useBilling";
 import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,34 +18,11 @@ import {
 import { Check, Loader2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
-interface Plan {
-  id: string;
-  name: string;
-  price: number;
-  renewalDate: string;
-  isCurrentPlan: boolean;
-}
-
-interface UsageMetrics {
-  promptsUsed: number;
-  promptsLimit: number;
-  contentScoresUsed: number;
-  contentScoresLimit: number;
-  apiRequestsUsed: number;
-  apiRequestsLimit: number;
-}
-
-interface BillingData {
-  currentPlan: Plan;
-  usage: UsageMetrics;
-  portalUrl: string;
-}
-
 interface PlanFeature {
   name: string;
-  free: boolean;
-  starter: boolean;
-  growth: boolean;
+  free: boolean | number | string;
+  starter: boolean | number | string;
+  growth: boolean | number | string;
 }
 
 const planFeatures: PlanFeature[] = [
@@ -59,10 +36,7 @@ const planFeatures: PlanFeature[] = [
 ];
 
 export default function BillingPage() {
-  const { data: billingData, isLoading } = useQuery<BillingData>({
-    queryKey: ["billing"],
-    queryFn: () => apiClient.get("/api/user/profile"),
-  });
+  const { data: billingData, isLoading } = useBilling();
 
   const { mutate: managePayment, isPending } = useMutation({
     mutationFn: () => {
@@ -74,19 +48,15 @@ export default function BillingPage() {
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error ? error.message : "Failed to open payment portal"
+        error instanceof Error
+          ? error.message
+          : "Failed to open payment portal",
       );
     },
   });
 
   const getUsagePercentage = (used: number, limit: number) => {
     return Math.round((used / limit) * 100);
-  };
-
-  const getUsageColor = (percentage: number) => {
-    if (percentage >= 90) return "bg-red-500";
-    if (percentage >= 70) return "bg-amber-500";
-    return "bg-green-500";
   };
 
   return (
@@ -133,7 +103,10 @@ export default function BillingPage() {
                       </Badge>
                     </div>
                     <div className="text-sm text-gray-600">
-                      Renewal: {new Date(billingData.currentPlan.renewalDate).toLocaleDateString("en-US", {
+                      Renewal:{" "}
+                      {new Date(
+                        billingData.currentPlan.renewalDate,
+                      ).toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",
                         year: "numeric",
@@ -170,7 +143,7 @@ export default function BillingPage() {
                       <Progress
                         value={getUsagePercentage(
                           billingData.usage.promptsUsed,
-                          billingData.usage.promptsLimit
+                          billingData.usage.promptsLimit,
                         )}
                         className="h-2"
                       />
@@ -179,7 +152,9 @@ export default function BillingPage() {
                     {/* Content Scores */}
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">Content Scores</span>
+                        <span className="text-sm font-medium">
+                          Content Scores
+                        </span>
                         <span className="text-sm text-gray-600">
                           {billingData.usage.contentScoresUsed} /{" "}
                           {billingData.usage.contentScoresLimit}
@@ -188,7 +163,7 @@ export default function BillingPage() {
                       <Progress
                         value={getUsagePercentage(
                           billingData.usage.contentScoresUsed,
-                          billingData.usage.contentScoresLimit
+                          billingData.usage.contentScoresLimit,
                         )}
                         className="h-2"
                       />
@@ -197,7 +172,9 @@ export default function BillingPage() {
                     {/* API Requests */}
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">API Requests</span>
+                        <span className="text-sm font-medium">
+                          API Requests
+                        </span>
                         <span className="text-sm text-gray-600">
                           {billingData.usage.apiRequestsUsed} /{" "}
                           {billingData.usage.apiRequestsLimit}
@@ -206,7 +183,7 @@ export default function BillingPage() {
                       <Progress
                         value={getUsagePercentage(
                           billingData.usage.apiRequestsUsed,
-                          billingData.usage.apiRequestsLimit
+                          billingData.usage.apiRequestsLimit,
                         )}
                         className="h-2"
                       />
@@ -216,7 +193,9 @@ export default function BillingPage() {
 
                 {/* Plan Comparison */}
                 <Card className="p-6">
-                  <h2 className="text-xl font-semibold mb-6">Plan Comparison</h2>
+                  <h2 className="text-xl font-semibold mb-6">
+                    Plan Comparison
+                  </h2>
                   <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
@@ -252,7 +231,9 @@ export default function BillingPage() {
                                   <span className="text-gray-400">—</span>
                                 )
                               ) : (
-                                <span className="text-sm">{feature.starter}</span>
+                                <span className="text-sm">
+                                  {feature.starter}
+                                </span>
                               )}
                             </TableCell>
                             <TableCell className="text-center">
@@ -263,7 +244,9 @@ export default function BillingPage() {
                                   <span className="text-gray-400">—</span>
                                 )
                               ) : (
-                                <span className="text-sm">{feature.growth}</span>
+                                <span className="text-sm">
+                                  {feature.growth}
+                                </span>
                               )}
                             </TableCell>
                           </TableRow>

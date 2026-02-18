@@ -23,11 +23,10 @@ export default function AuthCallbackPage() {
           return;
         }
 
-        if (token) {
-          // Store token in localStorage or cookie
-          if (typeof window !== "undefined") {
-            localStorage.setItem("auth_token", token);
-          }
+        const accessToken = token || searchParams.get("accessToken");
+        if (accessToken) {
+          const { setAuthToken } = await import("@/lib/auth-token");
+          setAuthToken(accessToken);
 
           // Determine where to redirect
           const destination = redirectTo === "onboarding" ? "/onboarding" : "/dashboard";

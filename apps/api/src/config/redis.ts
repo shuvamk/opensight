@@ -1,50 +1,60 @@
-import Redis from 'ioredis';
-import { Queue, Worker } from 'bullmq';
+import { Redis } from '@upstash/redis';
 import { env } from './env.js';
 import { logger } from '../utils/logger.js';
 
-// Parse Redis URL
-const redisUrl = new URL(env.REDIS_URL);
-const redisConfig = {
-  host: redisUrl.hostname,
-  port: parseInt(redisUrl.port || '6379', 10),
-  password: redisUrl.password,
-  db: parseInt(redisUrl.pathname?.slice(1) || '0', 10),
-};
-
-// Create Redis client
-export const redis = new Redis(redisConfig);
-
-redis.on('error', (err) => {
-  logger.error(err, 'Redis connection error');
+// Create Upstash Redis client (HTTP-based, no TCP connection needed)
+export const redis = new Redis({
+  url: env.UPSTASH_REDIS_REST_URL,
+  token: env.UPSTASH_REDIS_REST_TOKEN,
 });
 
-redis.on('connect', () => {
-  logger.info('Redis connected');
-});
+logger.info('Upstash Redis client initialized');
 
-// BullMQ configuration
-const connection = {
-  host: redisConfig.host,
-  port: redisConfig.port,
-  password: redisConfig.password,
-  db: redisConfig.db,
-};
+// ---------------------------------------------------------------------------
+// Simple in-process job runner (replaces BullMQ which requires TCP Redis)
+// ---------------------------------------------------------------------------
 
-// Queue factories
-export const createQueue = (name: string) => {
-  return new Queue(name, { connection });
-};
+interface JobOptions {
+  attempts?: number;
+  backoffMs?: number;
+}
 
-export const createWorker = (
-  queueName: string,
-  processor: (job: any) => Promise<any>,
-  concurrency = 10
-) => {
-  return new Worker(queueName, processor, {
-    connection,
-    concurrency,
-  });
-};
+/**
+ * Run a job processor with retry logic.
+ * This replaces BullMQ queues for simple, single-server deployments.
+ */
+export async function runJob<T>(
+  jobName: string,
+  data: T,
+  processor: (data: T) => Promise<any>,
+  options: JobOptions = {}
+): Promise<any> {
+  const { attempts = 3, backoffMs = 2000 } = options;
+  let lastError: Error | undefined;
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      logger.info({ jobName, attempt, data }, `Running job (attempt ${attempt}/${attempts})`);
+      const result = await processor(data);
+      logger.info({ jobName, attempt }, `Job completed successfully`);
+      return result;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      logger.error(
+        { jobName, attempt, error: lastError.message },
+        `Job attempt ${attempt}/${attempts} failed`
+      );
+
+      if (attempt < attempts) {
+        const delay = backoffMs * Math.pow(2, attempt - 1);
+        logger.info({ jobName, delayMs: delay }, `Retrying in ${delay}ms`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  logger.error({ jobName, error: lastError?.message }, `Job failed after ${attempts} attempts`);
+  throw lastError;
+}
 
 export default redis;

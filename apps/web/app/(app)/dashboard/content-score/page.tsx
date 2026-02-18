@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api-client";
+import { useState } from "react";
+import { useScoreHistory, useScoreContent } from "@/hooks/useContentScore";
 import { ScoreForm } from "@/components/content-score/ScoreForm";
 import { ScoreBreakdown } from "@/components/content-score/ScoreBreakdown";
 import { Recommendations, Recommendation } from "@/components/content-score/Recommendations";
@@ -39,6 +38,40 @@ interface HistoryItem {
   previousScore?: number;
 }
 
+function mapScoreToResult(row: {
+  id: string;
+  url: string;
+  overallScore: number;
+  structureScore?: number | null;
+  readabilityScore?: number | null;
+  freshnessScore?: number | null;
+  keyContentScore?: number | null;
+  citationScore?: number | null;
+  recommendations?: string[] | null;
+  scoredAt?: string | null;
+}): ScoreResult {
+  const dims = [
+    { name: "Structure", score: row.structureScore ?? 0 },
+    { name: "Readability", score: row.readabilityScore ?? 0 },
+    { name: "Freshness", score: row.freshnessScore ?? 0 },
+    { name: "Key Content", score: row.keyContentScore ?? 0 },
+    { name: "Citation", score: row.citationScore ?? 0 },
+  ];
+  return {
+    id: row.id,
+    url: row.url,
+    score: row.overallScore,
+    dimensions: dims,
+    recommendations: (row.recommendations ?? []).map((r, i) => ({
+      id: `rec-${i}`,
+      dimension: "General",
+      action: typeof r === "string" ? r : "",
+      severity: "medium" as const,
+    })),
+    createdAt: row.scoredAt ?? new Date().toISOString(),
+  };
+}
+
 const getTrendIndicator = (current: number, previous?: number) => {
   if (!previous) return <Minus className="h-4 w-4 text-gray-400" />;
   if (current > previous) return <TrendingUp className="h-4 w-4 text-green-600" />;
@@ -58,31 +91,23 @@ const formatDate = (date: string) => {
 
 export default function ContentScorePage() {
   const [currentScore, setCurrentScore] = useState<ScoreResult | null>(null);
-  const queryClient = useQueryClient();
 
-  // Fetch history
-  const { data: history = [], isLoading: historyLoading } = useQuery<HistoryItem[]>({
-    queryKey: ["contentScoreHistory"],
-    queryFn: () => apiClient.get("/api/content/score/history"),
-  });
+  const { data: historyData, isLoading: historyLoading } = useScoreHistory();
+  const history: HistoryItem[] = (historyData?.scores ?? []).map((s) => ({
+    id: s.id,
+    url: s.url,
+    score: s.overallScore,
+    createdAt: s.scoredAt ?? "",
+    previousScore: undefined,
+  }));
 
-  // Score mutation
-  const { mutate: scoreUrl, isPending: isScoring } = useMutation({
-    mutationFn: async (url: string) => {
-      const result = await apiClient.post<ScoreResult>("/api/content/score", { url });
-      return result;
-    },
-    onSuccess: (data) => {
-      setCurrentScore(data);
-      toast.success("Page scored successfully!");
-      queryClient.invalidateQueries({ queryKey: ["contentScoreHistory"] });
-    },
-    onError: (error) => {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to score page"
-      );
-    },
-  });
+  const { mutateAsync: scoreUrlAsync, isPending: isScoring } = useScoreContent();
+
+  const handleScoreSubmit = async (url: string) => {
+    const data = await scoreUrlAsync(url);
+    setCurrentScore(mapScoreToResult(data.score));
+    toast.success("Page scored successfully!");
+  };
 
   return (
     <div className="space-y-6">
@@ -95,7 +120,18 @@ export default function ContentScorePage() {
       </div>
 
       {/* Score Form */}
-      <ScoreForm onScoreSubmit={(url) => scoreUrl(url)} isLoading={isScoring} />
+      <ScoreForm
+        onScoreSubmit={async (url) => {
+          try {
+            await handleScoreSubmit(url);
+          } catch (e) {
+            toast.error(
+              e instanceof Error ? e.message : "Failed to score page"
+            );
+          }
+        }}
+        isLoading={isScoring}
+      />
 
       {/* Current Score Results */}
       {currentScore && (

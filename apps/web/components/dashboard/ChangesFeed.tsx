@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDashboard } from "@/hooks/useDashboard";
@@ -21,10 +20,10 @@ export function ChangesFeed() {
         <CardContent className="space-y-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex gap-4 items-start">
-              <Skeleton className="w-8 h-8 rounded" />
+              <Skeleton className="w-9 h-9 rounded-xl" />
               <div className="flex-1">
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-3 w-32" />
+                <Skeleton className="h-4 w-full mb-2 rounded-lg" />
+                <Skeleton className="h-3 w-32 rounded-lg" />
               </div>
             </div>
           ))}
@@ -33,7 +32,7 @@ export function ChangesFeed() {
     );
   }
 
-  const changes = dashboardData?.recentChanges.slice(0, 10) || [];
+  const changes = dashboardData?.recent_changes?.slice(0, 10) || [];
 
   if (changes.length === 0) {
     return (
@@ -41,8 +40,8 @@ export function ChangesFeed() {
         <CardHeader>
           <CardTitle>Recent Changes</CardTitle>
         </CardHeader>
-        <CardContent className="text-center py-8">
-          <p className="text-text-secondary">No recent changes</p>
+        <CardContent className="text-center py-12">
+          <p className="text-text-secondary text-sm">No recent changes</p>
         </CardContent>
       </Card>
     );
@@ -53,25 +52,28 @@ export function ChangesFeed() {
       <CardHeader>
         <CardTitle>Recent Changes</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-1">
         {changes.map((change) => (
-          <div key={change.id} className="flex gap-4 items-start pb-4 border-b last:pb-0 last:border-0">
+          <div
+            key={change.id}
+            className="flex gap-4 items-start p-3 rounded-xl hover:bg-surface transition-colors -mx-1"
+          >
             <div
-              className={`flex-shrink-0 p-2 rounded-lg ${
-                change.type === "up" ? "bg-green-50" : "bg-red-50"
+              className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${
+                change.type === "up" ? "bg-emerald-50" : "bg-red-50"
               }`}
             >
               {change.type === "up" ? (
-                <ArrowUp className="w-4 h-4 text-green-600" />
+                <ArrowUp className="w-4 h-4 text-emerald-600" />
               ) : (
                 <ArrowDown className="w-4 h-4 text-red-600" />
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground">
+              <p className="text-sm font-medium text-primary-500">
                 {change.description}
               </p>
-              <p className="text-xs text-text-secondary mt-1">
+              <p className="text-xs text-text-tertiary mt-0.5">
                 {formatDistanceToNow(new Date(change.timestamp), {
                   addSuffix: true,
                 })}

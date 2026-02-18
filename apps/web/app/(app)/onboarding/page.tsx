@@ -6,7 +6,9 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createBrandSchema, createCompetitorSchema } from "@opensight/shared";
-import { apiClient } from "@/lib/api-client";
+import * as brandsApi from "@/lib/api/brands";
+import * as promptsApi from "@/lib/api/prompts";
+import * as competitorsApi from "@/lib/api/competitors";
 import { useBrandStore } from "@/stores/brand-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -192,32 +194,33 @@ export default function OnboardingPage() {
 
     setIsLoading(true);
     try {
-      // Create brand
-      const brandResponse = await apiClient.post("/brands", {
+      // Create brand (API returns { brand })
+      const brand = await brandsApi.createBrand({
         name: state.brandData.name,
         website_url: state.brandData.website_url,
         industry: state.brandData.industry,
       });
 
-      const brandId = brandResponse.id;
+      const brandId = brand.id;
       setActiveBrand(brandId);
 
-      // Bulk create prompts
+      // Bulk create prompts (API: POST /brands/:id/prompts with { prompts: [...] })
       const allPrompts = [
-        ...state.selectedPrompts.map((text) => ({ text })),
-        ...state.customPrompts.map((text) => ({ text })),
+        ...state.selectedPrompts.map((text) => ({ text, tags: [] as string[] })),
+        ...state.customPrompts.map((text) => ({ text, tags: [] as string[] })),
       ];
 
       if (allPrompts.length > 0) {
-        await apiClient.post(`/brands/${brandId}/prompts/bulk`, {
-          prompts: allPrompts,
-        });
+        await promptsApi.createBulkPrompts(brandId, { prompts: allPrompts });
       }
 
       // Create competitors
       if (state.competitors.length > 0) {
         for (const competitor of state.competitors) {
-          await apiClient.post(`/brands/${brandId}/competitors`, competitor);
+          await competitorsApi.addCompetitor(brandId, {
+            name: competitor.name,
+            website_url: competitor.website_url,
+          });
         }
       }
 
