@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import SectionHeading from "@/components/marketing/SectionHeading";
 import { site } from "@/lib/site-config";
 import { ArrowRight, ExternalLink } from "lucide-react";
+import { Badge } from "../ui/badge";
 
 export default function Hero() {
   return (
@@ -31,24 +33,24 @@ export default function Hero() {
       <div className="absolute bottom-20 left-[5%] w-36 h-36 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
       <div className="absolute bottom-28 right-[8%] w-28 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
           {/* Announcement badge — Firecrawl style pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-border/60 animate-fade-in">
-            <span className="text-sm text-text-secondary">
-              Open-source AI visibility platform
-            </span>
+          <Badge size="lg" variant="outline">
+            Open-source AI visibility platform
             <ArrowRight className="w-3.5 h-3.5 text-text-tertiary" />
-          </div>
+          </Badge>
 
-          {/* Heading — Firecrawl large centered heading with colored keyword */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter font-heading text-primary-500 leading-[1.08] text-balance animate-slide-up">
-            See how AI talks about{" "}
-            <span className="text-gradient">your brand</span>
-          </h1>
+          <SectionHeading
+            lead="See how AI talks about"
+            highlight="your brand"
+            as="h1"
+            size="lg"
+            className="max-w-xl animate-slide-up"
+          />
 
           {/* Subheading */}
-          <p className="max-w-2xl mx-auto text-lg sm:text-xl text-text-secondary leading-relaxed animate-slide-up">
+          <p className="max-w-2xl mx-auto text-base text-text-secondary leading-relaxed animate-slide-up">
             Track your brand visibility across ChatGPT, Perplexity, and Google AI Overviews.
             Open-source analytics for the AI-first web.
           </p>
@@ -58,7 +60,7 @@ export default function Hero() {
             <Link href="/register">
               <Button size="lg">
                 Start for free
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
             <a
@@ -68,7 +70,7 @@ export default function Hero() {
             >
               <Button variant="outline" size="lg">
                 View on GitHub
-                <ExternalLink className="w-4 h-4 ml-2" />
+                <ExternalLink className="w-4 h-4" />
               </Button>
             </a>
           </div>
@@ -91,10 +93,10 @@ export default function Hero() {
         </div>
 
         {/* Dashboard preview — Firecrawl-style browser mockup with dashed outlines */}
-        <div className="mt-20 mx-auto max-w-5xl animate-slide-up">
+        <div className="mt-20 mx-auto max-w-7xl animate-slide-up">
           <div className="relative group">
             {/* Screenshot container */}
-            <div className="relative bg-white rounded-2xl border border-border shadow-large overflow-hidden">
+            <div className="relative bg-white rounded-2xl border shadow-large overflow-hidden">
               {/* Browser chrome */}
               <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface/50">
                 <div className="flex gap-1.5">
@@ -103,7 +105,7 @@ export default function Hero() {
                   <div className="w-3 h-3 rounded-full bg-emerald-300/80" />
                 </div>
                 <div className="flex-1 mx-4">
-                  <div className="bg-white rounded-lg border border-border px-3 py-1.5 text-xs text-text-tertiary max-w-md mx-auto">
+                  <div className="bg-white rounded-full border px-3 py-1.5 text-xs text-text-tertiary max-w-md mx-auto">
                     {site.display.appDashboardUrl}
                   </div>
                 </div>

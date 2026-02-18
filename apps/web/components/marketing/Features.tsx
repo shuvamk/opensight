@@ -1,3 +1,5 @@
+import SectionHeading from "@/components/marketing/SectionHeading";
+import SectionIndicator from "@/components/marketing/SectionIndicator";
 import { Search, Users, FileCheck, BarChart3, Bell, Zap } from "lucide-react";
 
 const features = [
@@ -57,24 +59,18 @@ export default function Features() {
         }}
       />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        {/* Section indicator — Firecrawl style */}
-        <div className="flex items-center gap-3 mb-16">
-          <div className="w-0.5 h-5 bg-indigo-300 rounded-full" />
-          <span className="section-indicator">
-            <span className="text-indigo-300">01</span> / 06
-          </span>
-          <span className="text-xs font-medium uppercase tracking-widest text-text-tertiary">
-            Main Features
-          </span>
-        </div>
+      <div className="max-w-6xl mx-auto flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-24">
+        <SectionIndicator number="01" total="06" label="Main Features" />
 
-        {/* Section heading — Firecrawl centered large heading */}
+        {/* Section heading */}
         <div className="text-center mb-20 max-w-3xl mx-auto">
-          <h2 className="text-4xl sm:text-5xl font-bold text-primary-500 mb-5 text-balance">
-            Everything you need to{" "}
-            <span className="text-gradient">own AI search</span>
-          </h2>
+          <SectionHeading
+            lead="Everything you need to"
+            highlight="own AI search"
+            size="md"
+            centered
+            className="mb-5"
+          />
           <p className="text-lg text-text-secondary leading-relaxed">
             Comprehensive tools to understand and optimize your presence across
             all major AI search engines.
@@ -93,13 +89,13 @@ export default function Features() {
                 {/* Label tag */}
                 <div className="flex items-center gap-2 mb-4">
                   <Icon className="w-4 h-4 text-indigo-300" />
-                  <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
+                  <span className="text-xs font-mono uppercase tracking-wider text-text-tertiary">
                     {feature.label}
                   </span>
                 </div>
 
                 {/* Title — bold first part, Firecrawl style */}
-                <h3 className="text-xl font-bold text-primary-500 mb-3">
+                <h3 className="text-xl font-heading text-primary-500 mb-3">
                   {feature.title}
                 </h3>
 

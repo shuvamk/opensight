@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import Hero from "@/components/marketing/Hero";
 import Features from "@/components/marketing/Features";
 import PricingTable from "@/components/marketing/PricingTable";
+import SectionHeading from "@/components/marketing/SectionHeading";
+import SectionIndicator from "@/components/marketing/SectionIndicator";
 import { site } from "@/lib/site-config";
 import { TrendingUp, Users, Zap, ArrowRight, Github } from "lucide-react";
 
@@ -40,24 +42,18 @@ export default function HomePage() {
           }}
         />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          {/* Section indicator */}
-          <div className="flex items-center gap-3 mb-16">
-            <div className="w-0.5 h-5 bg-indigo-300 rounded-full" />
-            <span className="section-indicator">
-              <span className="text-indigo-300">00</span> / 06
-            </span>
-            <span className="text-xs font-medium uppercase tracking-widest text-text-tertiary">
-              The Problem
-            </span>
-          </div>
+          <SectionIndicator number="00" total="06" label="The Problem" />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Problem description */}
             <div className="space-y-6">
-              <h2 className="text-4xl font-bold text-primary-500 text-balance">
-                AI search is the new front door.{" "}
-                <span className="text-gradient">Are you invisible?</span>
-              </h2>
+              <SectionHeading
+                lead="AI search is the new front door."
+                highlight="Are you invisible?"
+                size="sm"
+                highlightVariant="primary"
+                className="animate-slide-up"
+              />
               <div className="space-y-4">
                 <p className="text-text-secondary leading-relaxed">
                   ChatGPT, Perplexity, and Google AI are changing how people
@@ -125,21 +121,16 @@ export default function HomePage() {
         <div className="absolute bottom-12 right-[6%] w-36 h-28 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          {/* Section indicator */}
-          <div className="flex items-center gap-3 mb-8 justify-center">
-            <div className="w-7 h-7 rounded-lg bg-primary-500 flex items-center justify-center">
-              <span className="text-white font-bold text-[10px] tracking-wider">OS</span>
-            </div>
-            <span className="text-xs font-medium uppercase tracking-widest text-text-tertiary">
-              Get started
-            </span>
-          </div>
+          <SectionIndicator number="02" total="06" label="Get started" className="mb-8 justify-center" />
 
           <div className="max-w-2xl mx-auto text-center space-y-6">
-            <h2 className="text-3xl sm:text-5xl font-bold text-primary-500 text-balance">
-              Ready to{" "}
-              <span className="text-gradient">build?</span>
-            </h2>
+            <SectionHeading
+              lead="Ready to"
+              highlight="build?"
+              size="md"
+              centered
+              className="text-3xl sm:text-5xl"
+            />
             <p className="text-lg text-text-secondary leading-relaxed">
               OpenSight is open-source and community-driven. Start tracking for free
               and scale seamlessly as your project expands.

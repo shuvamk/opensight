@@ -4,6 +4,7 @@ import { useState } from "react";
 import { site } from "@/lib/site-config";
 import { ChevronDown } from "lucide-react";
 import PricingTable from "@/components/marketing/PricingTable";
+import SectionHeading from "@/components/marketing/SectionHeading";
 
 const faqItems = [
   {
@@ -115,10 +116,13 @@ export default function PricingPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           {/* Section heading */}
           <div className="text-center mb-16 max-w-2xl mx-auto">
-            <h2 className="text-4xl sm:text-5xl font-bold text-primary-500 mb-5 text-balance">
-              Frequently asked{" "}
-              <span className="text-gradient">questions</span>
-            </h2>
+            <SectionHeading
+              lead="Frequently asked"
+              highlight="questions"
+              size="md"
+              centered
+              className="mb-5"
+            />
             <p className="text-lg text-text-secondary">
               Can&apos;t find the answer you&apos;re looking for? Feel free to reach out
               to our support team.

@@ -1,5 +1,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import SectionHeading from "@/components/marketing/SectionHeading";
+import SectionIndicator from "@/components/marketing/SectionIndicator";
 import { site } from "@/lib/site-config";
 import { Check, ArrowRight } from "lucide-react";
 
@@ -75,12 +84,16 @@ export default function PricingTable() {
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <SectionIndicator number="03" total="06" label="Pricing" className="justify-center" />
         {/* Section heading */}
         <div className="text-center mb-16 max-w-2xl mx-auto">
-          <h2 className="text-4xl sm:text-5xl font-bold text-primary-500 mb-5 text-balance">
-            Simple, transparent{" "}
-            <span className="text-gradient">pricing</span>
-          </h2>
+          <SectionHeading
+            lead="Simple, transparent"
+            highlight="pricing"
+            size="md"
+            centered
+            className="mb-5"
+          />
           <p className="text-lg text-text-secondary leading-relaxed">
             Start free. Scale as you grow. No credit card required.
           </p>
@@ -91,9 +104,8 @@ export default function PricingTable() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`bg-white p-7 flex flex-col ${
-                plan.highlighted ? "relative" : ""
-              }`}
+              className={`bg-white p-7 flex flex-col ${plan.highlighted ? "relative" : ""
+                }`}
             >
               {/* Recommended badge */}
               {plan.highlighted && (
@@ -102,7 +114,7 @@ export default function PricingTable() {
 
               {/* Plan name */}
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-xl font-bold text-primary-500">
+                <h3 className="text-xl font-heading text-primary-500">
                   {plan.name}
                 </h3>
                 {plan.highlighted && (
@@ -118,10 +130,10 @@ export default function PricingTable() {
               {/* Price */}
               <div className="mb-7">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-primary-500">
+                  <span className="text-4xl font-mono text-primary-500">
                     ${plan.price}
                   </span>
-                  <span className="text-text-secondary text-sm">/month</span>
+                  <span className="text-text-secondary font-mono text-sm">/month</span>
                 </div>
                 <p className="text-xs text-text-tertiary mt-1.5">
                   Billed monthly or annually
@@ -131,11 +143,7 @@ export default function PricingTable() {
               {/* CTA Button */}
               <Link href={plan.ctaLink} className="mb-7">
                 <Button
-                  className={`w-full rounded-full ${
-                    plan.highlighted
-                      ? "bg-primary-500 hover:bg-indigo-500 text-white"
-                      : ""
-                  }`}
+                  className="w-full"
                   variant={plan.highlighted ? "default" : "outline"}
                   size="lg"
                 >
@@ -145,8 +153,8 @@ export default function PricingTable() {
               </Link>
 
               {/* Features list */}
-              <div className="space-y-4 flex-grow">
-                <p className="text-xs font-semibold text-text-tertiary uppercase tracking-wider">
+              <div className="space-y-4 grow">
+                <p className="text-xs font-medium text-text-tertiary tracking-wider">
                   What&apos;s included
                 </p>
                 <ul className="space-y-3">
@@ -155,7 +163,7 @@ export default function PricingTable() {
                       key={idx}
                       className="flex items-start gap-3 text-accent-600"
                     >
-                      <div className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center">
+                      <div className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center">
                         <Check className="w-3 h-3 text-emerald-600" />
                       </div>
                       <span className="text-sm">{feature}</span>
@@ -169,27 +177,29 @@ export default function PricingTable() {
 
         {/* Self-host option */}
         <div className="mt-12">
-          <div className="bg-white rounded-2xl border border-border p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <h3 className="text-lg font-semibold text-primary-500 mb-1.5">
+          <Card>
+            <CardHeader className="gap-1.5">
+              <CardTitle className="text-primary-500 font-heading">
                 Self-host for free
-              </h3>
-              <p className="text-text-secondary text-sm">
-                Always free &mdash; unlimited everything. Perfect for teams managing
-                their own infrastructure.
-              </p>
-            </div>
-            <a
-              href={site.links.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" className="rounded-full">
-                View Docs
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </a>
-          </div>
+              </CardTitle>
+              <CardDescription className="text-text-secondary">
+                Always free - unlimited everything. Perfect for teams
+                managing their own infrastructure.
+              </CardDescription>
+              <CardAction>
+                <a
+                  href={site.links.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline">
+                    View Docs
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </a>
+              </CardAction>
+            </CardHeader>
+          </Card>
         </div>
       </div>
     </section>
