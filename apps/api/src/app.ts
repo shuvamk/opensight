@@ -6,10 +6,12 @@ import compression from 'compression';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
+import { serve } from 'inngest/express';
 import passport from './config/passport.js';
 import { env } from './config/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import routes from './routes/index.js';
+import { inngest, inngestFunctions } from './inngest/index.js';
 
 const app = express();
 
@@ -55,6 +57,9 @@ const swaggerSpec = swaggerJsdoc({
 });
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Inngest event handling endpoint
+app.use('/api/inngest', serve({ client: inngest, functions: inngestFunctions }));
 
 // Routes
 app.use('/api', routes);

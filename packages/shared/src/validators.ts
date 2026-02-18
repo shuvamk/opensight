@@ -138,6 +138,12 @@ export const contentScoreHistorySchema = z.object({
   limit: z.coerce.number().int().min(1).max(50).optional().default(10),
 });
 
+// Analyze validators
+export const analyzeRequestSchema = z.object({
+  domain: z.string().min(1, 'Domain is required').max(255),
+  email: z.string().email('Invalid email address'),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -154,3 +160,4 @@ export type CreateCompetitorInput = z.infer<typeof createCompetitorSchema>;
 export type ScoreContentInput = z.infer<typeof scoreContentSchema>;
 export type UpdateNotificationSettingsInput = z.infer<typeof updateNotificationSettingsSchema>;
 export type CreateApiKeyInput = z.infer<typeof createApiKeySchema>;
+export type AnalyzeRequestInput = z.infer<typeof analyzeRequestSchema>;

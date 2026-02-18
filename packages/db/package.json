@@ -1,6 +1,7 @@
 {
   "name": "@opensight/db",
   "version": "1.0.0",
+  "type": "module",
   "description": "Database layer for Opensight using Drizzle ORM",
   "type": "module",
   "main": "dist/index.js",

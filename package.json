@@ -6,10 +6,13 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:api": "pnpm --filter @opensight/api dev",
+    "dev:web": "pnpm --filter @opensight/web dev",
+    "dev:inngest": "npx inngest-cli@latest dev -u http://localhost:8080/api/inngest",
     "lint": "turbo lint",
-    "db:generate": "npm run generate --workspace=@opensight/db",
-    "db:migrate": "npm run migrate --workspace=@opensight/db",
-    "db:seed": "npm run seed --workspace=@opensight/db"
+    "db:generate": "pnpm --filter @opensight/db generate",
+    "db:migrate": "pnpm --filter @opensight/db migrate",
+    "db:seed": "pnpm --filter @opensight/db seed"
   },
   "devDependencies": {
     "@types/node-cron": "^3.0.11",

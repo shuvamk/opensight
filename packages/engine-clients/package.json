@@ -1,6 +1,7 @@
 {
   "name": "@opensight/engine-clients",
   "version": "1.0.0",
+  "type": "module",
   "description": "Clients for querying AI search engines",
   "type": "module",
   "main": "dist/index.js",
