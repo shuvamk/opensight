@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { site } from "@/lib/site-config";
 import { ArrowRight, ExternalLink } from "lucide-react";
 
 export default function Hero() {
@@ -41,7 +42,7 @@ export default function Hero() {
           </div>
 
           {/* Heading — Firecrawl large centered heading with colored keyword */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-primary-500 leading-[1.08] text-balance animate-slide-up">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tighter font-heading text-primary-500 leading-[1.08] text-balance animate-slide-up">
             See how AI talks about{" "}
             <span className="text-gradient">your brand</span>
           </h1>
@@ -55,17 +56,17 @@ export default function Hero() {
           {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2 animate-slide-up">
             <Link href="/register">
-              <Button size="lg" className="rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-8">
+              <Button size="lg">
                 Start for free
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
             <a
-              href="https://github.com/yourusername/opensight"
+              href={site.links.repo}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button variant="outline" size="lg" className="rounded-full px-8">
+              <Button variant="outline" size="lg">
                 View on GitHub
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>
@@ -103,7 +104,7 @@ export default function Hero() {
                 </div>
                 <div className="flex-1 mx-4">
                   <div className="bg-white rounded-lg border border-border px-3 py-1.5 text-xs text-text-tertiary max-w-md mx-auto">
-                    app.opensight.ai/dashboard
+                    {site.display.appDashboardUrl}
                   </div>
                 </div>
               </div>

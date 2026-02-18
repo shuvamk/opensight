@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { site } from "@/lib/site-config";
 
 const footerSections = [
   {
@@ -6,8 +7,8 @@ const footerSections = [
     links: [
       { label: "Features", href: "/#features" },
       { label: "Pricing", href: "/pricing" },
-      { label: "Docs", href: "https://docs.opensight.ai" },
-      { label: "API Reference", href: "https://docs.opensight.ai/api" },
+      { label: "Docs", href: site.links.docs },
+      { label: "API Reference", href: site.links.docsApi },
       { label: "Changelog", href: "/changelog" },
     ],
   },
@@ -26,8 +27,8 @@ const footerSections = [
     links: [
       { label: "Blog", href: "/blog" },
       { label: "Help Center", href: "/help" },
-      { label: "Community", href: "https://github.com/yourusername/opensight/discussions" },
-      { label: "Status", href: "https://status.opensight.ai" },
+      { label: "Community", href: site.links.discussions },
+      { label: "Status", href: site.links.status },
     ],
   },
   {
@@ -35,7 +36,7 @@ const footerSections = [
     links: [
       { label: "About", href: "/about" },
       { label: "Careers", href: "/careers" },
-      { label: "Contact", href: "mailto:hello@opensight.ai" },
+      { label: "Contact", href: site.links.contact },
       { label: "Brand", href: "/brand" },
     ],
   },
@@ -92,7 +93,7 @@ export default function Footer() {
       <div className="border-t border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-text-tertiary">
-            &copy; {currentYear} OpenSight
+            &copy; {currentYear} {site.name}
           </p>
           <div className="flex items-center gap-8">
             {legalLinks.map((link) => (

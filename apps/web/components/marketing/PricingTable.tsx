@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { site } from "@/lib/site-config";
 import { Check, ArrowRight } from "lucide-react";
 
 interface PricingPlan {
@@ -179,7 +180,7 @@ export default function PricingTable() {
               </p>
             </div>
             <a
-              href="https://github.com/yourusername/opensight"
+              href={site.links.repo}
               target="_blank"
               rel="noopener noreferrer"
             >

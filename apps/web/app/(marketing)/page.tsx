@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Hero from "@/components/marketing/Hero";
 import Features from "@/components/marketing/Features";
 import PricingTable from "@/components/marketing/PricingTable";
+import { site } from "@/lib/site-config";
 import { TrendingUp, Users, Zap, ArrowRight, Github } from "lucide-react";
 
 const stats = [
@@ -70,7 +71,7 @@ export default function HomePage() {
                 </p>
               </div>
               <Link href="/register">
-                <Button className="mt-2 rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-8">
+                <Button>
                   Start tracking for free
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -145,16 +146,16 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
               <Link href="/register">
-                <Button className="rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-8" size="lg">
+                <Button size="lg">
                   Start for free
                 </Button>
               </Link>
               <a
-                href="https://github.com/yourusername/opensight"
+                href={site.links.repo}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" size="lg" className="rounded-full px-8">
+                <Button variant="outline" size="lg">
                   <Github className="w-4 h-4 mr-2" />
                   View on GitHub
                 </Button>

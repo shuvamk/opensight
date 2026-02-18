@@ -1,13 +1,8 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { geist, geistMono, geistPixelSquare } from "@/lib/fonts";
 import QueryProvider from "@/lib/query-provider";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
+import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "OpenSight | AI Visibility Analytics",
@@ -20,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className={inter.className}>
+    <html lang="en" className={cn(geist.variable, geistMono.variable, geistPixelSquare.variable)}>
+      <body className={geist.className}>
         <QueryProvider>
           {children}
         </QueryProvider>

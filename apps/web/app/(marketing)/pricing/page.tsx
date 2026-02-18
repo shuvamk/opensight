@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { site } from "@/lib/site-config";
 import { ChevronDown } from "lucide-react";
 import PricingTable from "@/components/marketing/PricingTable";
 
@@ -145,10 +146,10 @@ export default function PricingPage() {
             <p className="text-sm text-text-secondary">
               Our team is happy to help. Reach out to us at{" "}
               <a
-                href="mailto:support@opensight.ai"
+                href={site.links.support}
                 className="text-indigo-300 hover:text-indigo-400 font-medium"
               >
-                support@opensight.ai
+                {site.display.supportEmail}
               </a>
             </p>
           </div>

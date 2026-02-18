@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { site } from "@/lib/site-config";
 import { Github, Menu, X } from "lucide-react";
 import { useState } from "react";
 
@@ -18,7 +19,7 @@ export default function Navbar() {
               <span className="text-white font-bold text-[10px] tracking-wider">OS</span>
             </div>
             <span className="font-semibold text-primary-500 text-lg">
-              OpenSight
+              {site.name}
             </span>
           </Link>
 
@@ -37,7 +38,7 @@ export default function Navbar() {
               Pricing
             </Link>
             <a
-              href="https://docs.opensight.ai"
+              href={site.links.docs}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 text-text-secondary hover:text-primary-500 transition-colors text-sm font-medium"
@@ -45,7 +46,7 @@ export default function Navbar() {
               Docs
             </a>
             <a
-              href="https://github.com/yourusername/opensight"
+              href={site.links.repo}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 text-text-secondary hover:text-primary-500 transition-colors text-sm font-medium"
@@ -56,17 +57,12 @@ export default function Navbar() {
 
           {/* Right side — GitHub stars + Sign up like Firecrawl */}
           <div className="hidden md:flex items-center gap-3">
-            <a
-              href="https://github.com/yourusername/opensight"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-primary-500 transition-colors"
-            >
+            <Button render={<Link href={site.links.repo} />} variant="outline" size="sm">
               <Github className="w-4 h-4" />
-              <span className="font-medium">Star</span>
-            </a>
+              Star
+            </Button>
             <Link href="/register">
-              <Button size="sm" className="rounded-full bg-primary-500 hover:bg-indigo-500 text-white px-5">
+              <Button size="sm">
                 Sign up
               </Button>
             </Link>
@@ -100,30 +96,25 @@ export default function Navbar() {
                 Pricing
               </Link>
               <a
-                href="https://docs.opensight.ai"
+                href={site.links.docs}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface hover:text-primary-500 transition-colors"
               >
                 Docs
               </a>
-              <a
-                href="https://github.com/yourusername/opensight"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface hover:text-primary-500 transition-colors flex items-center gap-1.5"
-              >
+              <Button render={<Link href={site.links.repo} />} variant="outline" className="w-full" size="sm">
                 <Github className="w-4 h-4" />
                 GitHub
-              </a>
-              <div className="flex gap-3 mt-3 px-3">
+              </Button>
+              <div className="flex gap-2 mt-2">
                 <Link href="/login" className="flex-1">
                   <Button variant="outline" className="w-full" size="sm">
                     Sign in
                   </Button>
                 </Link>
                 <Link href="/register" className="flex-1">
-                  <Button className="w-full rounded-full" size="sm">
+                  <Button className="w-full" size="sm">
                     Sign up
                   </Button>
                 </Link>
@@ -132,6 +123,6 @@ export default function Navbar() {
           </div>
         )}
       </div>
-    </nav>
+    </nav >
   );
 }
