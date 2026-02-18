@@ -1,6 +1,7 @@
 {
   "name": "@opensight/analyzer",
   "version": "1.0.0",
+  "type": "module",
   "description": "NLP analyzer package for sentiment analysis, mention extraction, visibility scoring, and content scoring",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

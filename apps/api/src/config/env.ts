@@ -37,6 +37,10 @@ const envSchema = z.object({
   // Email (Resend)
   RESEND_API_KEY: z.string().optional(),
   
+  // Inngest
+  INNGEST_EVENT_KEY: z.string().optional(),
+  INNGEST_SIGNING_KEY: z.string().optional(),
+
   // OpenAI (for analyzer)
   OPENAI_API_KEY: z.string().optional(),
 });

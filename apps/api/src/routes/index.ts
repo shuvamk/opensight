@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import analyzeRoutes from './analyze.routes.js';
 import authRoutes from './auth.routes.js';
 import userRoutes from './user.routes.js';
 import brandRoutes from './brand.routes.js';
@@ -10,6 +11,9 @@ import apiKeyRoutes from './api-key.routes.js';
 import webhookRoutes from './webhook.routes.js';
 
 const router = Router();
+
+// Analyze routes
+router.use('/analyze', analyzeRoutes);
 
 // Auth routes
 router.use('/auth', authRoutes);
