@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "@/components/marketing/SectionHeading";
 import { site } from "@/lib/site-config";
+import { BorderBeam } from "@/registry/magicui/border-beam";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Badge } from "../ui/badge";
 
@@ -22,10 +23,18 @@ export default function Hero() {
       </div>
 
       {/* Firecrawl-style floating decorative elements */}
-      <div className="absolute top-32 left-[15%] text-text-tertiary/30 text-xs font-mono hidden lg:block">[ AI ]</div>
-      <div className="absolute top-48 right-[12%] text-text-tertiary/30 text-xs font-mono hidden lg:block">[ VISIBILITY ]</div>
-      <div className="absolute bottom-40 left-[10%] text-text-tertiary/30 text-xs font-mono hidden lg:block">[ TRACK ]</div>
-      <div className="absolute bottom-32 right-[15%] text-text-tertiary/30 text-xs font-mono hidden lg:block">[ SCORE ]</div>
+      <div className="absolute top-32 left-[15%] text-text-tertiary/30 text-xs font-mono hidden lg:block">
+        [ AI ]
+      </div>
+      <div className="absolute top-48 right-[12%] text-text-tertiary/30 text-xs font-mono hidden lg:block">
+        [ VISIBILITY ]
+      </div>
+      <div className="absolute bottom-40 left-[10%] text-text-tertiary/30 text-xs font-mono hidden lg:block">
+        [ TRACK ]
+      </div>
+      <div className="absolute bottom-32 right-[15%] text-text-tertiary/30 text-xs font-mono hidden lg:block">
+        [ SCORE ]
+      </div>
 
       {/* Decorative dashed boxes like Firecrawl */}
       <div className="absolute top-20 left-[8%] w-32 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
@@ -35,11 +44,18 @@ export default function Hero() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
-          {/* Announcement badge — Firecrawl style pill */}
-          <Badge size="lg" variant="outline">
-            Open-source AI visibility platform
-            <ArrowRight className="w-3.5 h-3.5 text-text-tertiary" />
-          </Badge>
+          {/* Announcement badge — Firecrawl style pill with border beam */}
+          <div className="relative inline-flex rounded-full">
+            <Badge
+              size="lg"
+              variant="outline"
+              className="relative rounded-full border-border p-4"
+            >
+              Open-source AI visibility platform
+              <ArrowRight className="w-3.5 h-3.5 text-text-tertiary" />
+            </Badge>
+            <BorderBeam duration={8} size={30} />
+          </div>
 
           <SectionHeading
             lead="See how AI talks about"
@@ -51,8 +67,8 @@ export default function Hero() {
 
           {/* Subheading */}
           <p className="max-w-2xl mx-auto text-base text-text-secondary leading-relaxed animate-slide-up">
-            Track your brand visibility across ChatGPT, Perplexity, and Google AI Overviews.
-            Open-source analytics for the AI-first web.
+            Track your brand visibility across ChatGPT, Perplexity, and Google
+            AI Overviews. Open-source analytics for the AI-first web.
           </p>
 
           {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
@@ -63,11 +79,7 @@ export default function Hero() {
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
-            <a
-              href={site.links.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={site.links.repo} target="_blank" rel="noopener noreferrer">
               <Button variant="outline" size="lg">
                 View on GitHub
                 <ExternalLink className="w-4 h-4" />
@@ -86,8 +98,8 @@ export default function Hero() {
               Self-host available
             </span>
             <span className="hidden sm:flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-              3 AI engines
+              <div className="w-1.5 h-1.5 rounded-full bg-success" />3 AI
+              engines
             </span>
           </div>
         </div>
@@ -117,24 +129,54 @@ export default function Hero() {
                   {/* Metric cards row */}
                   <div className="grid grid-cols-4 gap-3">
                     {[
-                      { label: "Visibility Score", value: "78.5%", color: "bg-indigo-50" },
-                      { label: "Total Mentions", value: "1,247", color: "bg-emerald-50" },
-                      { label: "Sentiment", value: "92.1%", color: "bg-amber-50" },
-                      { label: "Active Prompts", value: "48", color: "bg-purple-50" },
+                      {
+                        label: "Visibility Score",
+                        value: "78.5%",
+                        color: "bg-indigo-50",
+                      },
+                      {
+                        label: "Total Mentions",
+                        value: "1,247",
+                        color: "bg-emerald-50",
+                      },
+                      {
+                        label: "Sentiment",
+                        value: "92.1%",
+                        color: "bg-amber-50",
+                      },
+                      {
+                        label: "Active Prompts",
+                        value: "48",
+                        color: "bg-purple-50",
+                      },
                     ].map((card, i) => (
-                      <div key={i} className="bg-white rounded-xl border border-border p-4">
-                        <div className="text-[10px] text-text-tertiary font-medium">{card.label}</div>
-                        <div className="text-lg font-bold text-primary-500 mt-1">{card.value}</div>
-                        <div className={`h-1 ${card.color} rounded-full mt-2 w-3/4`} />
+                      <div
+                        key={i}
+                        className="bg-white rounded-xl border border-border p-4"
+                      >
+                        <div className="text-[10px] text-text-tertiary font-medium">
+                          {card.label}
+                        </div>
+                        <div className="text-lg font-bold text-primary-500 mt-1">
+                          {card.value}
+                        </div>
+                        <div
+                          className={`h-1 ${card.color} rounded-full mt-2 w-3/4`}
+                        />
                       </div>
                     ))}
                   </div>
 
                   {/* Chart area */}
                   <div className="bg-white rounded-xl border border-border p-4 h-40">
-                    <div className="text-xs font-medium text-primary-500 mb-3">Visibility Over Time</div>
+                    <div className="text-xs font-medium text-primary-500 mb-3">
+                      Visibility Over Time
+                    </div>
                     <div className="h-24 flex items-end gap-1">
-                      {[40, 45, 42, 58, 55, 62, 68, 65, 72, 78, 75, 82, 85, 80, 88, 92].map((h, i) => (
+                      {[
+                        40, 45, 42, 58, 55, 62, 68, 65, 72, 78, 75, 82, 85, 80,
+                        88, 92,
+                      ].map((h, i) => (
                         <div
                           key={i}
                           className="flex-1 bg-indigo-100 rounded-t transition-all hover:bg-indigo-200"
