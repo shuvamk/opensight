@@ -1,10 +1,10 @@
-import { Router } from 'express';
+import { Router , type Router as ExpressRouter } from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { listApiKeys, createApiKey, deleteApiKey } from '../controllers/api-key.controller.js';
 import { z } from 'zod';
 
-const router = Router();
+const router : ExpressRouter = Router();
 
 const createApiKeySchema = z.object({
   name: z.string().min(1, 'API key name is required').max(100),

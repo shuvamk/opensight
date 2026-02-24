@@ -3,8 +3,8 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@duely/ui/components/button";
-import { ScrollArea } from "@duely/ui/components/scroll-area";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const DialogCreateHandle = DialogPrimitive.createHandle;
 

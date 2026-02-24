@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.15.0",
+  "pnpm": {
+    "overrides": {
+      "drizzle-orm": "0.33.0",
+      "@neondatabase/serverless": "0.9.5"
+    }
+  },
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",

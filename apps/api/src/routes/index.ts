@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router , type Router as ExpressRouter } from 'express';
 import authRoutes from './auth.routes.js';
 import userRoutes from './user.routes.js';
 import brandRoutes from './brand.routes.js';
@@ -9,7 +9,7 @@ import notificationRoutes from './notification.routes.js';
 import apiKeyRoutes from './api-key.routes.js';
 import webhookRoutes from './webhook.routes.js';
 
-const router = Router();
+const router : ExpressRouter = Router();
 
 // Auth routes
 router.use('/auth', authRoutes);

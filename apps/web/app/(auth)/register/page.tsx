@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { registerSchema, type RegisterInput } from "@opensight/shared";
 import { useRegister } from "@/hooks/useAuth";
 import { getOAuthUrl } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
@@ -15,12 +14,21 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Github } from "lucide-react";
 
-const registerFormSchema = registerSchema.extend({
-  confirmPassword: z.string().min(1, "Please confirm your password"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const registerFormSchema = z
+  .object({
+    name: z.string().min(1, "Name is required").max(255),
+    email: z.string().email("Invalid email address"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
+      .regex(/[0-9]/, "Password must contain at least 1 number"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormInput = z.infer<typeof registerFormSchema>;
 
@@ -119,7 +127,7 @@ export default function RegisterPage() {
             type="text"
             placeholder="John Doe"
             disabled={isSubmitting || isOAuthLoading}
-            {...register("name")}
+            {...register("name" as never)}
           />
           {errors.name && (
             <p className="text-sm text-error">{errors.name.message}</p>
@@ -133,7 +141,7 @@ export default function RegisterPage() {
             type="email"
             placeholder="you@example.com"
             disabled={isSubmitting || isOAuthLoading}
-            {...register("email")}
+            {...register("email" as never)}
           />
           {errors.email && (
             <p className="text-sm text-error">{errors.email.message}</p>

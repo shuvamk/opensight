@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router , type Router as ExpressRouter } from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import {
@@ -11,7 +11,7 @@ import {
 import { updateNotificationSettingsSchema } from '@opensight/shared';
 import { z } from 'zod';
 
-const router = Router();
+const router : ExpressRouter = Router();
 
 // GET /api/notifications - List notifications
 router.get(

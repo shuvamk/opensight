@@ -1,15 +1,13 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePrompts, useCreatePrompt } from "@/hooks/usePrompts";
 import { useBrandStore } from "@/stores/brand-store";
 import { PromptList, PromptListItem } from "@/components/prompts/PromptList";
 import { AddPromptDialog } from "@/components/prompts/AddPromptDialog";
 import { BulkAddDialog } from "@/components/prompts/BulkAddDialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,9 +20,10 @@ const PROMPT_LIMIT = 100;
 
 export default function PromptsPage() {
   const { activeBrandId } = useBrandStore();
+  const brandId = activeBrandId ?? undefined;
   const queryClient = useQueryClient();
-  const { data: promptsData, isLoading } = usePrompts(activeBrandId);
-  const { mutateAsync: createPrompt, isPending: isCreating } = useCreatePrompt(activeBrandId);
+  const { data: promptsData, isLoading } = usePrompts(brandId);
+  const { mutateAsync: createPrompt, isPending: isCreating } = useCreatePrompt(brandId);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isBulkAdding, setIsBulkAdding] = useState(false);

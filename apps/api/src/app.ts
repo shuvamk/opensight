@@ -1,4 +1,4 @@
-import express from 'express';
+import express , {type Express} from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -11,7 +11,7 @@ import { env } from './config/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import routes from './routes/index.js';
 
-const app = express();
+const app : Express = express();
 
 // Security middleware
 app.use(helmet());

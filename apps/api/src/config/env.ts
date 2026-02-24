@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const isDev = process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test';
+
 const envSchema = z.object({
   // App
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -10,14 +12,22 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().url().default('http://localhost:3000'),
   
   // Database
-  DATABASE_URL: z.string().url(),
+  DATABASE_URL: isDev
+    ? z.string().url().default('postgresql://localhost:5432/opensight')
+    : z.string().url(),
   
-  // Redis (Upstash)
-  UPSTASH_REDIS_REST_URL: z.string().url(),
-  UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
+  // Redis
+  UPSTASH_REDIS_REST_URL: isDev
+    ? z.string().url().default('https://placeholder.upstash.io')
+    : z.string().url(),
+  UPSTASH_REDIS_REST_TOKEN: isDev
+    ? z.string().min(1).default('dev-placeholder-token')
+    : z.string().min(1),
   
   // JWT
-  JWT_SECRET: z.string().min(32),
+  JWT_SECRET: isDev
+    ? z.string().min(1).default('development-only-secret-min-32-characters-long')
+    : z.string().min(32),
   JWT_EXPIRES_IN: z.string().default('7d'),
   
   // OAuth - GitHub

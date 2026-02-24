@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import { Router , type Router as ExpressRouter } from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import { scoreContent, getScoreHistory } from '../controllers/content.controller.js';
 import { scoreContentSchema } from '@opensight/shared';
 import { z } from 'zod';
 
-const router = Router();
+const router : ExpressRouter = Router();
 
 // POST /api/content/score - Score a URL
 router.post('/score', requireAuth, validate(scoreContentSchema), scoreContent);

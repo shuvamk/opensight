@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { usePrompt, usePromptResults, useDeletePrompt } from "@/hooks/usePrompts";
 import { useBrandStore } from "@/stores/brand-store";
@@ -31,18 +30,16 @@ export default function PromptDetailPage() {
   const params = useParams();
   const promptId = params?.id as string;
   const { activeBrandId } = useBrandStore();
+  const brandId = activeBrandId ?? undefined;
 
-  const { data: prompt, isLoading: isPromptLoading } = usePrompt(
-    activeBrandId,
-    promptId
-  );
+  const { data: prompt, isLoading: isPromptLoading } = usePrompt(brandId, promptId);
   const { data: resultsData, isLoading: isResultsLoading } = usePromptResults(
-    activeBrandId,
+    brandId,
     promptId
   );
   const results = resultsData?.results ?? [];
 
-  const { mutate: deletePrompt, isPending: isDeleting } = useDeletePrompt(activeBrandId);
+  const { mutate: deletePrompt, isPending: isDeleting } = useDeletePrompt(brandId);
 
   const handleDelete = () => {
     if (!confirm("Are you sure you want to delete this prompt?")) return;
@@ -101,26 +98,6 @@ export default function PromptDetailPage() {
     positive: "bg-green-100 text-green-800",
     neutral: "bg-gray-100 text-gray-800",
     negative: "bg-red-100 text-red-800",
-  };
-
-  const highlightMentions = (text: string, brandName: string, competitors: string[]) => {
-    // Simple implementation - in production, use a proper text parsing library
-    let highlighted = text;
-    const brandRegex = new RegExp(`(${brandName})`, "gi");
-    highlighted = highlighted.replace(
-      brandRegex,
-      '<span class="bg-blue-200 font-semibold">$1</span>'
-    );
-
-    competitors.forEach((competitor) => {
-      const regex = new RegExp(`(${competitor})`, "gi");
-      highlighted = highlighted.replace(
-        regex,
-        '<span class="bg-orange-200 font-semibold">$1</span>'
-      );
-    });
-
-    return highlighted;
   };
 
   return (

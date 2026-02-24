@@ -1,11 +1,11 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router , type Router as ExpressRouter , type Request, type Response, type NextFunction } from 'express';
 import { db, users } from '@opensight/db';
 import { eq } from 'drizzle-orm';
 import { env } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import crypto from 'crypto';
 
-const router = Router();
+const router : ExpressRouter = Router();
 
 // Verify Stripe webhook signature
 function verifyStripeSignature(req: Request): boolean {

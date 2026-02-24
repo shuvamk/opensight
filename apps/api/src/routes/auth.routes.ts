@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router , type Router as ExpressRouter } from 'express';
 import passport from 'passport';
 import { validate } from '../middleware/validate.js';
 import { requireAuth } from '../middleware/auth.js';
@@ -19,7 +19,7 @@ import {
   resetPasswordSchema,
 } from '@opensight/shared';
 
-const router = Router();
+const router : ExpressRouter = Router();
 
 /**
  * @swagger

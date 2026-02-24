@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createBrandSchema, createCompetitorSchema } from "@opensight/shared";
 import * as brandsApi from "@/lib/api/brands";
 import * as promptsApi from "@/lib/api/prompts";
 import * as competitorsApi from "@/lib/api/competitors";
@@ -100,7 +99,7 @@ export default function OnboardingPage() {
 
   // Step 1: Brand Info Form
   const brandForm = useForm<BrandFormInput>({
-    resolver: zodResolver(brandFormSchema),
+    resolver: zodResolver(brandFormSchema as any),
     defaultValues: {
       name: "",
       website_url: "",
@@ -110,7 +109,7 @@ export default function OnboardingPage() {
 
   // Step 3: Competitors Form
   const competitorForm = useForm<CompetitorFormInput>({
-    resolver: zodResolver(competitorFormSchema),
+    resolver: zodResolver(competitorFormSchema as any),
     defaultValues: {
       competitors: [{ name: "", website_url: "" }],
     },
@@ -287,7 +286,7 @@ export default function OnboardingPage() {
                 <Select
                   value={brandForm.watch("industry") || ""}
                   onValueChange={(value) =>
-                    brandForm.setValue("industry", value)
+                    brandForm.setValue("industry", value as string)
                   }
                   disabled={isGeneratingPrompts}
                 >

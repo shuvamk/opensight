@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useCompetitors, useAddCompetitor, useRemoveCompetitor } from "@/hooks/useCompetitors";
 import { useBrandStore } from "@/stores/brand-store";
 import { CompetitorTable, CompetitorTableItem } from "@/components/competitors/CompetitorTable";
@@ -19,7 +19,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { useState as useQueryState } from "react";
 
 // Mock trend data for comparison chart
 const mockTrendData = [
@@ -34,12 +33,11 @@ const mockTrendData = [
 
 export default function CompetitorsPage() {
   const { activeBrandId } = useBrandStore();
-  const { data: competitors = [], isLoading: isLoadingCompetitors } = useCompetitors(activeBrandId);
-  const { mutateAsync: addCompetitor, isPending: isAddingCompetitor } = useAddCompetitor(
-    activeBrandId
-  );
-  const { mutateAsync: removeCompetitor, isPending: isRemovingCompetitor } = useRemoveCompetitor(
-    activeBrandId
+  const brandId = activeBrandId ?? undefined;
+  const { data: competitors = [], isLoading: isLoadingCompetitors } = useCompetitors(brandId);
+  const { mutateAsync: addCompetitor, isPending: _isAddingCompetitor } = useAddCompetitor(brandId);
+  const { mutateAsync: removeCompetitor, isPending: _isRemovingCompetitor } = useRemoveCompetitor(
+    brandId
   );
   const [selectedCompetitorId, setSelectedCompetitorId] = useState<string | null>(null);
 
@@ -63,7 +61,7 @@ export default function CompetitorsPage() {
 
   const handleAddCompetitor = async (name: string, url: string) => {
     try {
-      await addCompetitor({ name, url });
+      await addCompetitor({ name, website_url: url });
     } catch (error) {
       console.error("Failed to add competitor:", error);
       alert("Failed to add competitor");

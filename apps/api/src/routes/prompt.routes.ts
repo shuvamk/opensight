@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router , type Router as ExpressRouter } from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import {
@@ -13,7 +13,7 @@ import {
 import { createPromptSchema, bulkCreatePromptsSchema, updatePromptSchema, suggestPromptsSchema } from '@opensight/shared';
 import { z } from 'zod';
 
-const router = Router({ mergeParams: true });
+const router : ExpressRouter = Router({ mergeParams: true });
 
 // GET /api/brands/:brandId/prompts - List prompts
 router.get(
