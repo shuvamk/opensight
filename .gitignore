@@ -37,3 +37,8 @@ coverage/
 
 # Sentry
 .sentryclirc
+
+# Claude / AI
+.agents/
+.claude/
+skills-lock.json

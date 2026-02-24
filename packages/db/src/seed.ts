@@ -1,7 +1,13 @@
+import net from 'net';
+import dns from 'dns';
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
+
+// Fix: Node.js happy eyeballs fails with Neon's unreachable IPv6
+dns.setDefaultResultOrder('ipv4first');
+net.setDefaultAutoSelectFamily(false);
 import {
   users,
   brands,

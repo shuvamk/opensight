@@ -1,12 +1,12 @@
 const siteConfig = {
   name: "OpenSight",
   github: "https://github.com/shuvamk/opensight",
-  docs: "https://docs.opensight.ai",
-  status: "https://status.opensight.ai",
-  appUrl: "https://app.opensight.ai",
+  docs: "https://docs.opensight.dev",
+  status: "https://status.opensight.dev",
+  appUrl: "https://app.opensight.dev",
   email: {
-    hello: "hello@opensight.ai",
-    support: "support@opensight.ai",
+    hello: "hello@opensight.dev",
+    support: "support@opensight.dev",
   },
 } as const;
 

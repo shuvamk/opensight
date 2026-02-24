@@ -8,7 +8,7 @@ export async function sendVerificationEmail(
   verificationUrl: string
 ): Promise<void> {
   await resend.emails.send({
-    from: 'noreply@opensight.ai',
+    from: 'noreply@opensight.dev',
     to: email,
     subject: 'Verify your OpenSight account',
     html: `
@@ -24,7 +24,7 @@ export async function sendPasswordResetEmail(
   resetUrl: string
 ): Promise<void> {
   await resend.emails.send({
-    from: 'noreply@opensight.ai',
+    from: 'noreply@opensight.dev',
     to: email,
     subject: 'Reset your OpenSight password',
     html: `
@@ -44,7 +44,7 @@ export async function sendAlertDigest(
     .join('');
 
   await resend.emails.send({
-    from: 'noreply@opensight.ai',
+    from: 'noreply@opensight.dev',
     to: email,
     subject: 'Your OpenSight Alert Digest',
     html: `

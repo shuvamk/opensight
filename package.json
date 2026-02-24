@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "turbo dev",
     "dev:web": "pnpm --filter @opensight/web dev",
+    "dev:inngest": "pnpm --filter @opensight/web dev:inngest",
     "dev:api": "pnpm --filter @opensight/api dev",
     "dev:db": "pnpm --filter @opensight/db dev",
     "dev:analyzer": "pnpm --filter @opensight/analyzer dev",

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import SectionHeading from "@/components/marketing/SectionHeading";
 import SectionIndicator from "@/components/marketing/SectionIndicator";
+import GetStartedDialog from "@/components/marketing/GetStartedDialog";
 import { site } from "@/lib/site-config";
 import { Check, ArrowRight } from "lucide-react";
 
@@ -141,16 +142,29 @@ export default function PricingTable() {
               </div>
 
               {/* CTA Button */}
-              <Link href={plan.ctaLink} className="mb-7">
-                <Button
-                  className="w-full"
-                  variant={plan.highlighted ? "default" : "outline"}
-                  size="lg"
-                >
-                  {plan.cta}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
+              {plan.price === 0 ? (
+                <GetStartedDialog>
+                  <Button
+                    className="w-full mb-7"
+                    variant={plan.highlighted ? "default" : "outline"}
+                    size="lg"
+                  >
+                    {plan.cta}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </GetStartedDialog>
+              ) : (
+                <Link href={plan.ctaLink} className="mb-7">
+                  <Button
+                    className="w-full"
+                    variant={plan.highlighted ? "default" : "outline"}
+                    size="lg"
+                  >
+                    {plan.cta}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              )}
 
               {/* Features list */}
               <div className="space-y-4 grow">
