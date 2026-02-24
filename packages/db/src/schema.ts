@@ -505,3 +505,58 @@ export const jobRunsRelations = relations(jobRuns, ({ one }) => ({
     references: [brands.id],
   }),
 }));
+
+// ============================================================================
+// ADMIN USERS TABLE
+// ============================================================================
+export const adminUsers = pgTable(
+  'admin_users',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    email: varchar('email', { length: 255 }).notNull().unique(),
+    passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+    fullName: varchar('full_name', { length: 255 }).notNull(),
+    role: varchar('role', { length: 50 }).notNull().default('admin'),
+    isActive: boolean('is_active').default(true),
+    lastLoginAt: timestamp('last_login_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+  },
+  (table) => {
+    return {
+      emailIdx: index('admin_users_email_idx').on(table.email),
+    };
+  }
+);
+
+// ============================================================================
+// ADMIN SESSIONS TABLE
+// ============================================================================
+export const adminSessions = pgTable(
+  'admin_sessions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    adminUserId: uuid('admin_user_id').notNull(),
+    tokenHash: varchar('token_hash', { length: 255 }).notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (table) => {
+    return {
+      adminUserIdIdx: index('admin_sessions_admin_user_id_idx').on(table.adminUserId),
+      tokenHashIdx: index('admin_sessions_token_hash_idx').on(table.tokenHash),
+      adminUserIdFk: foreignKey({
+        columns: [table.adminUserId],
+        foreignColumns: [adminUsers.id],
+        name: 'admin_sessions_admin_user_id_fk',
+      }).onDelete('cascade'),
+    };
+  }
+);
+
+export const adminSessionsRelations = relations(adminSessions, ({ one }) => ({
+  adminUser: one(adminUsers, {
+    fields: [adminSessions.adminUserId],
+    references: [adminUsers.id],
+  }),
+}));
