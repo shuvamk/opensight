@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "@/components/marketing/SectionHeading";
 import { site } from "@/lib/site-config";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, CheckCircle2, ExternalLink } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { TextShimmer } from "../ui/text-shimmer";
 
 export default function Hero() {
   return (
@@ -17,8 +18,6 @@ export default function Hero() {
             backgroundSize: "24px 24px",
           }}
         />
-        {/* Subtle radial fade from center */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(28,37,65,0.04),transparent)]" />
       </div>
 
       {/* Firecrawl-style floating decorative elements */}
@@ -34,61 +33,51 @@ export default function Hero() {
       <div className="absolute bottom-28 right-[8%] w-28 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center space-y-8 max-w-4xl mx-auto">
-          {/* Announcement badge — Firecrawl style pill */}
-          <Badge size="lg" variant="outline">
+        <div className="text-center space-y-4 max-w-4xl mx-auto">
+          <TextShimmer className='font-mono tracking-tight text-sm border rounded-md shadow-xs px-2 ' duration={2}>
             Open-source AI visibility platform
-            <ArrowRight className="w-3.5 h-3.5 text-text-tertiary" />
-          </Badge>
+          </TextShimmer>
 
           <SectionHeading
-            lead="See how AI talks about"
-            highlight="your brand"
+            lead={site.hero.headline.lead}
+            highlight={site.hero.headline.highlight}
             as="h1"
             size="lg"
             className="max-w-xl animate-slide-up"
           />
 
-          {/* Subheading */}
+          {/* Subheadline — transformation (where they are → where they'll be) */}
           <p className="max-w-2xl mx-auto text-base text-text-secondary leading-relaxed animate-slide-up">
-            Track your brand visibility across ChatGPT, Perplexity, and Google AI Overviews.
-            Open-source analytics for the AI-first web.
+            {site.hero.subheadline}
           </p>
 
-          {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2 animate-slide-up">
-            <Link href="/register">
-              <Button size="lg">
-                Start for free
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-            <a
-              href={site.links.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" size="lg">
-                View on GitHub
-                <ExternalLink className="w-4 h-4" />
-              </Button>
-            </a>
+          {/* CTAs: primary (outcome), secondary (low-commitment), tertiary (GitHub) */}
+          <div className="flex flex-col items-center gap-4 pt-2 animate-slide-up">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link href={site.hero.primaryCta.href}>
+                <Button size="lg">
+                  {site.hero.primaryCta.label}
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <Link href={site.hero.secondaryCta.href}>
+                <Button variant="outline" size="lg">
+                  {site.hero.secondaryCta.label}
+                </Button>
+              </Link>
+            </div>
           </div>
 
-          {/* Trust indicators */}
-          <div className="flex items-center justify-center gap-8 pt-8 text-sm text-text-tertiary animate-fade-in">
-            <span className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-              No credit card required
-            </span>
-            <span className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-              Self-host available
-            </span>
-            <span className="hidden sm:flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-              3 AI engines
-            </span>
+          {/* Trust bar — one number (formula: 5 logos or one specific number) */}
+          <div className="pt-8 text-sm text-text-tertiary animate-fade-in">
+            <div className="font-normal text-text-secondary flex items-center justify-center gap-4">
+              {site.hero.trustBar.map((item, index) => (
+                <div key={index} className="flex items-center justify-center gap-1.5">
+                  <CheckCircle2 className="size-4 text-text-tertiary" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

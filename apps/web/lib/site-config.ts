@@ -8,6 +8,19 @@ const siteConfig = {
     hello: "hello@opensight.ai",
     support: "support@opensight.ai",
   },
+  hero: {
+    headline: { lead: "See how AI talks about", highlight: "your brand" },
+    subheadline:
+      "Track your brand visibility across ChatGPT, Perplexity, and Google AI Overviews. Open-source analytics for the AI-first web.",
+    primaryCta: { label: "Try for free", href: "/register" },
+    secondaryCta: { label: "Book a demo", href: "/#features" },
+    githubCtaLabel: "View on GitHub",
+    trustBar: [
+      "No credit card required",
+      "Self-host your own instance",
+      "3 AI engines"
+    ],
+  },
 } as const;
 
 export const site = {

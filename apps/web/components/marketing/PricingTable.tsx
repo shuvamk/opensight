@@ -109,7 +109,7 @@ export default function PricingTable() {
             >
               {/* Recommended badge */}
               {plan.highlighted && (
-                <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-indigo-300 to-accent-400" />
+                <div className="absolute -top-px left-0 right-0 h-1 bg-linear-to-r from-indigo-300 to-accent-400" />
               )}
 
               {/* Plan name */}
