@@ -37,3 +37,9 @@ coverage/
 
 # Sentry
 .sentryclirc
+
+# ESLint
+.eslintcache
+
+.pnpm-store/
+

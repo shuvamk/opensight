@@ -99,15 +99,17 @@ export function CompetitorTable({
       <div className="p-4 border-b flex justify-between items-center">
         <h3 className="font-semibold">Tracked Competitors</h3>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button
-              size="sm"
-              disabled={!canAddMore}
-              title={!canAddMore ? `Maximum ${maxCompetitors} competitors allowed` : ""}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Competitor
-            </Button>
+          <DialogTrigger
+            render={
+              <Button
+                size="sm"
+                disabled={!canAddMore}
+                title={!canAddMore ? `Maximum ${maxCompetitors} competitors allowed` : ""}
+              />
+            }
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Competitor
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

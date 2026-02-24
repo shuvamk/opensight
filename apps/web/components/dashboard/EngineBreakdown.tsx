@@ -1,11 +1,23 @@
 "use client";
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { EngineMetric } from "@/lib/api/brands/types";
 import { useDashboard } from "@/hooks/useDashboard";
 import { useBrandStore } from "@/stores/brand-store";
 import { ArrowUp, ArrowDown } from "lucide-react";
+
+function buildEngineMetrics(dashboardData: {
+  chatgptScore?: number;
+  perplexityScore?: number;
+  googleAioScore?: number;
+}): EngineMetric[] {
+  return [
+    { engine: "ChatGPT", score: dashboardData.chatgptScore ?? 0, topPrompt: "—" },
+    { engine: "Perplexity", score: dashboardData.perplexityScore ?? 0, topPrompt: "—" },
+    { engine: "Google AI", score: dashboardData.googleAioScore ?? 0, topPrompt: "—" },
+  ];
+}
 
 export function EngineBreakdown() {
   const { activeBrandId } = useBrandStore();
@@ -30,7 +42,9 @@ export function EngineBreakdown() {
     );
   }
 
-  const metrics = dashboardData?.engineMetrics || [];
+  const metrics: EngineMetric[] = dashboardData
+    ? buildEngineMetrics(dashboardData)
+    : [];
 
   if (metrics.length === 0) {
     return (
@@ -74,9 +88,9 @@ export function EngineBreakdown() {
 
             {metric.sparklineData && metric.sparklineData.length > 0 && (
               <div className="h-6 flex items-end gap-0.5">
-                {metric.sparklineData.map((point, i) => {
+                {metric.sparklineData.map((point: { value: number }, i: number) => {
                   const maxValue = Math.max(
-                    ...metric.sparklineData.map((p) => p.value)
+                    ...metric.sparklineData!.map((p: { value: number }) => p.value)
                   );
                   const height =
                     maxValue > 0 ? (point.value / maxValue) * 100 : 0;

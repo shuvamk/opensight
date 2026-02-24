@@ -28,7 +28,10 @@ export default function PromptsPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isBulkAdding, setIsBulkAdding] = useState(false);
 
-  const prompts = promptsData?.prompts ?? [];
+  const prompts = useMemo(
+    () => promptsData?.prompts ?? [],
+    [promptsData?.prompts]
+  );
   const promptCount = prompts.length;
 
   const filteredPrompts = useMemo(() => {

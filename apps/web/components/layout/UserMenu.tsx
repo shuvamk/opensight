@@ -35,16 +35,21 @@ export default function UserMenu() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="relative rounded-full ring-2 ring-transparent hover:ring-indigo-200 transition-all">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="" alt={user.name} />
-            <AvatarFallback className="bg-indigo-100 text-accent-500 text-xs font-semibold">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
-        </button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={
+          <button
+            type="button"
+            className="relative rounded-full ring-2 ring-transparent hover:ring-indigo-200 transition-all"
+          >
+            <Avatar className="h-9 w-9">
+              <AvatarImage src="" alt={user.name} />
+              <AvatarFallback className="bg-indigo-100 text-accent-500 text-xs font-semibold">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+          </button>
+        }
+      />
       <DropdownMenuContent align="end" className="w-56 rounded-xl">
         <DropdownMenuLabel>
           <div className="flex flex-col">
@@ -53,15 +58,9 @@ export default function UserMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/settings/profile" className="cursor-pointer">Profile</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/settings/api-keys" className="cursor-pointer">API Keys</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/settings/billing" className="cursor-pointer">Billing</Link>
-        </DropdownMenuItem>
+        <DropdownMenuItem render={<Link href="/settings/profile" className="cursor-pointer">Profile</Link>} />
+        <DropdownMenuItem render={<Link href="/settings/api-keys" className="cursor-pointer">API Keys</Link>} />
+        <DropdownMenuItem render={<Link href="/settings/billing" className="cursor-pointer">Billing</Link>} />
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer focus:text-red-600">
           Sign out

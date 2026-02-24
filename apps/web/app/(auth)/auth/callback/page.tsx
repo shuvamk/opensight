@@ -1,12 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-export default function AuthCallbackPage() {
+const loadingFallback = (
+  <div className="flex h-screen flex-col items-center justify-center">
+    <div className="space-y-4 text-center">
+      <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+      <h1 className="text-xl font-semibold">Processing authentication...</h1>
+      <p className="text-sm text-muted-foreground">
+        Please wait while we complete your sign in
+      </p>
+    </div>
+  </div>
+);
+
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -45,15 +57,13 @@ export default function AuthCallbackPage() {
     processCallback();
   }, [searchParams, router]);
 
+  return loadingFallback;
+}
+
+export default function AuthCallbackPage() {
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
-      <div className="space-y-4 text-center">
-        <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-        <h1 className="text-xl font-semibold">Processing authentication...</h1>
-        <p className="text-sm text-muted-foreground">
-          Please wait while we complete your sign in
-        </p>
-      </div>
-    </div>
+    <Suspense fallback={loadingFallback}>
+      <AuthCallbackContent />
+    </Suspense>
   );
 }

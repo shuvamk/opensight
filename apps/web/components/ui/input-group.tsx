@@ -4,8 +4,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { Input, type InputProps } from "@duely/ui/components/input";
-import { Textarea, type TextareaProps } from "@duely/ui/components/textarea";
+import { Input, type InputProps } from "@/components/ui/input";
+import { Textarea, type TextareaProps } from "@/components/ui/textarea";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

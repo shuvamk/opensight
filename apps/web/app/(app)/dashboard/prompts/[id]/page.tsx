@@ -81,17 +81,27 @@ export default function PromptDetailPage() {
   }
 
   // Transform API results to PromptResponse format
-  const responses: PromptResponse[] = (results as any[]).map((r) => ({
-    engine: r.engine,
-    text: r.content || "",
-    position: r.position || 0,
-    sentiment: r.sentiment || "neutral",
-    citations: r.citations || [],
+  type RawResult = {
+    engine?: string;
+    content?: string;
+    position?: number;
+    sentiment?: "positive" | "neutral" | "negative";
+    citations?: Array<{ text: string; url: string }>;
+    brandMentions?: number;
+    competitorMentions?: number;
+    timestamp?: string;
+  };
+  const responses: PromptResponse[] = (results as RawResult[]).map((r) => ({
+    engine: r.engine ?? "",
+    text: r.content ?? "",
+    position: r.position ?? 0,
+    sentiment: r.sentiment ?? "neutral",
+    citations: r.citations ?? [],
     mentions: {
-      brand: r.brandMentions || 0,
-      competitors: r.competitorMentions || 0,
+      brand: r.brandMentions ?? 0,
+      competitors: r.competitorMentions ?? 0,
     },
-    timestamp: r.timestamp || new Date().toISOString(),
+    timestamp: r.timestamp ?? new Date().toISOString(),
   }));
 
   const sentimentColor = {
@@ -117,10 +127,10 @@ export default function PromptDetailPage() {
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <CardTitle className="text-2xl mb-4">
-                {(prompt as any).content || (prompt as any).title}
+                {prompt?.text ?? prompt?.id ?? "Prompt"}
               </CardTitle>
               <div className="flex flex-wrap gap-2">
-                {((prompt as any).tags || []).map((tag: string) => (
+                {(prompt?.tags ?? []).map((tag: string) => (
                   <Badge key={tag} variant="secondary">
                     {tag}
                   </Badge>

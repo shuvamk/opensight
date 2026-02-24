@@ -73,6 +73,8 @@ export default function NotificationsSettingsPage() {
         },
   });
 
+  // React Hook Form's watch() is not memoizable; acceptable for this form (see react-hooks/incompatible-library).
+  // eslint-disable-next-line react-hooks/incompatible-library -- React Hook Form API
   const emailFrequency = watch("emailFrequency");
 
   const handleSubmitSuccess = () => {

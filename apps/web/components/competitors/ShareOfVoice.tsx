@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,7 +16,7 @@ const COLORS = [
 
 export function ShareOfVoice() {
   const { activeBrandId } = useBrandStore();
-  const { data: shareData, isLoading } = useShareOfVoice(activeBrandId);
+  const { data: shareData, isLoading } = useShareOfVoice(activeBrandId ?? undefined);
 
   if (isLoading) {
     return (
@@ -71,7 +70,7 @@ export function ShareOfVoice() {
               dataKey="value"
               label={({ name, value }) => `${name}: ${value}%`}
             >
-              {data.map((entry, index) => (
+              {data.map((_entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

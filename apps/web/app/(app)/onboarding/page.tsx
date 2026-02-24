@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, useFieldArray, type FieldValues, type Resolver } from "react-hook-form";
 import { z } from "zod";
 import * as brandsApi from "@/lib/api/brands";
 import * as promptsApi from "@/lib/api/prompts";
@@ -50,6 +49,23 @@ const competitorFormSchema = z.object({
 
 type BrandFormInput = z.infer<typeof brandFormSchema>;
 type CompetitorFormInput = z.infer<typeof competitorFormSchema>;
+
+/** Resolver that works with Zod 4 (avoids @hookform/resolvers zod type mismatch). */
+function zod4Resolver<T extends z.ZodType<FieldValues>>(schema: T): Resolver<z.infer<T>> {
+  return (values) => {
+    const result = schema.safeParse(values);
+    if (result.success) {
+      return { values: result.data as z.infer<T>, errors: {} };
+    }
+    const flattened = result.error.flatten();
+    const errors: Record<string, { message: string }> = {};
+    for (const [path, messages] of Object.entries(flattened.fieldErrors)) {
+      const msg = Array.isArray(messages) ? messages[0] : messages;
+      if (msg != null) errors[path] = { message: String(msg) };
+    }
+    return { values: {}, errors: errors as import("react-hook-form").FieldErrors<z.infer<T>> };
+  };
+}
 
 interface OnboardingState {
   brandData: BrandFormInput | null;
@@ -99,7 +115,7 @@ export default function OnboardingPage() {
 
   // Step 1: Brand Info Form
   const brandForm = useForm<BrandFormInput>({
-    resolver: zodResolver(brandFormSchema as any),
+    resolver: zod4Resolver(brandFormSchema),
     defaultValues: {
       name: "",
       website_url: "",
@@ -109,7 +125,7 @@ export default function OnboardingPage() {
 
   // Step 3: Competitors Form
   const competitorForm = useForm<CompetitorFormInput>({
-    resolver: zodResolver(competitorFormSchema as any),
+    resolver: zod4Resolver(competitorFormSchema),
     defaultValues: {
       competitors: [{ name: "", website_url: "" }],
     },
@@ -133,7 +149,7 @@ export default function OnboardingPage() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setSuggestedPrompts(SAMPLE_PROMPTS);
       setStep(2);
-    } catch (error) {
+    } catch {
       toast.error("Failed to generate prompt suggestions");
     } finally {
       setIsGeneratingPrompts(false);

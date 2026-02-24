@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@duely/ui/components/button";
+import { buttonVariants } from "@/components/ui/button";
 
 const toastManager = Toast.createToastManager();
 const anchoredToastManager = Toast.createToastManager();

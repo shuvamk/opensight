@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { useCompetitors, useAddCompetitor, useRemoveCompetitor } from "@/hooks/useCompetitors";
+import type { Competitor } from "@/lib/api/competitors/types";
 import { useBrandStore } from "@/stores/brand-store";
 import { CompetitorTable, CompetitorTableItem } from "@/components/competitors/CompetitorTable";
+
+type CompetitorWithScore = Competitor & { latestScore?: number };
 import { ShareOfVoice } from "@/components/competitors/ShareOfVoice";
 import { GapAnalysis } from "@/components/competitors/GapAnalysis";
 import { Button } from "@/components/ui/button";
@@ -35,8 +38,8 @@ export default function CompetitorsPage() {
   const { activeBrandId } = useBrandStore();
   const brandId = activeBrandId ?? undefined;
   const { data: competitors = [], isLoading: isLoadingCompetitors } = useCompetitors(brandId);
-  const { mutateAsync: addCompetitor, isPending: _isAddingCompetitor } = useAddCompetitor(brandId);
-  const { mutateAsync: removeCompetitor, isPending: _isRemovingCompetitor } = useRemoveCompetitor(
+  const { mutateAsync: addCompetitor } = useAddCompetitor(brandId);
+  const { mutateAsync: removeCompetitor } = useRemoveCompetitor(
     brandId
   );
   const [selectedCompetitorId, setSelectedCompetitorId] = useState<string | null>(null);
@@ -77,12 +80,14 @@ export default function CompetitorsPage() {
     }
   };
 
-  const competitorItems: CompetitorTableItem[] = (competitors as any[]).map((c) => ({
-    id: c.id,
-    name: c.name,
-    url: c.url,
-    latestScore: c.latestScore || 0,
-  }));
+  const competitorItems: CompetitorTableItem[] = (competitors as CompetitorWithScore[]).map(
+    (c) => ({
+      id: c.id,
+      name: c.name,
+      url: c.websiteUrl,
+      latestScore: c.latestScore ?? 0,
+    })
+  );
 
   return (
     <div className="space-y-6">

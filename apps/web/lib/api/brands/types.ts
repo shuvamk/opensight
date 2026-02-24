@@ -49,6 +49,14 @@ export interface DashboardData {
   recent_changes?: RecentChange[];
 }
 
+export interface EngineMetric {
+  engine: string;
+  score: number;
+  trend?: number;
+  sparklineData?: Array<{ value: number }>;
+  topPrompt?: string;
+}
+
 export interface TrendDataPoint {
   date: string;
   overallScore: number;

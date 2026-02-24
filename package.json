@@ -13,6 +13,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "lint:fix": "turbo lint -- --fix",
     "db:generate": "npm run generate --workspace=@opensight/db",
     "db:migrate": "npm run migrate --workspace=@opensight/db",
     "db:seed": "npm run seed --workspace=@opensight/db"

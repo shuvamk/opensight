@@ -55,12 +55,14 @@ export function BulkAddDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          <Upload className="w-4 h-4 mr-2" />
-          Bulk Add
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button variant="outline">
+            <Upload className="w-4 h-4 mr-2" />
+            Bulk Add
+          </Button>
+        }
+      />
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Bulk Add Prompts</DialogTitle>

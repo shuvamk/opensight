@@ -6,11 +6,11 @@ import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { Separator } from "@duely/ui/components/separator";
+import { Separator } from "@/components/ui/separator";
 import {
   Toggle as ToggleComponent,
   type toggleVariants,
-} from "@duely/ui/components/toggle";
+} from "@/components/ui/toggle";
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useBrands } from "@/hooks/useBrand";
 import { useBrandStore } from "@/stores/brand-store";
 import {
@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SelectRootChangeEventDetails } from "@base-ui/react/select";
 
 interface BrandSwitcherProps {
   collapsed?: boolean;
@@ -18,7 +19,10 @@ interface BrandSwitcherProps {
 
 export default function BrandSwitcher({ collapsed }: BrandSwitcherProps) {
   const { data, isLoading } = useBrands();
-  const brands = Array.isArray(data) ? data : [];
+  const brands = useMemo(
+    () => (Array.isArray(data) ? data : []),
+    [data]
+  );
   const { activeBrandId, setActiveBrand } = useBrandStore();
 
   useEffect(() => {
@@ -36,7 +40,7 @@ export default function BrandSwitcher({ collapsed }: BrandSwitcherProps) {
   }
 
   return (
-    <Select value={activeBrandId || ""} onValueChange={setActiveBrand}>
+    <Select value={activeBrandId || ""} onValueChange={setActiveBrand as (value: string | null, eventDetails: SelectRootChangeEventDetails) => void}>
       <SelectTrigger className={collapsed ? "w-12" : "w-full"}>
         <SelectValue placeholder="Select a brand" />
       </SelectTrigger>

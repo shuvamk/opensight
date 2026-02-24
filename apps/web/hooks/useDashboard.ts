@@ -15,7 +15,7 @@ export function useDashboard(brandId?: string | null) {
   });
 }
 
-export function useTrends(brandId?: string, timeRange?: string) {
+export function useTrends(brandId?: string | null, timeRange?: string) {
   return useQuery({
     queryKey: ["brands", brandId, "trends", timeRange],
     queryFn: () => brandsApi.getBrandTrends(brandId!, timeRange),

@@ -35,7 +35,8 @@ export function VisibilityChart() {
     );
   }
 
-  if (!trends || trends.length === 0) {
+  const chartData = trends?.dataPoints ?? [];
+  if (!trends || chartData.length === 0) {
     return (
       <Card>
         <CardHeader>
@@ -68,7 +69,7 @@ export function VisibilityChart() {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={trends} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+          <LineChart data={chartData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
             <XAxis
               dataKey="date"
@@ -96,7 +97,7 @@ export function VisibilityChart() {
             <Legend />
             <Line
               type="monotone"
-              dataKey="chatgpt"
+              dataKey="chatgptScore"
               stroke="#6366F1"
               name="ChatGPT"
               dot={false}
@@ -104,7 +105,7 @@ export function VisibilityChart() {
             />
             <Line
               type="monotone"
-              dataKey="perplexity"
+              dataKey="perplexityScore"
               stroke="#A855F7"
               name="Perplexity"
               dot={false}
@@ -112,9 +113,9 @@ export function VisibilityChart() {
             />
             <Line
               type="monotone"
-              dataKey="googleAIO"
+              dataKey="googleAioScore"
               stroke="#10B981"
-              name="Google AIO"
+              name="Google AI"
               dot={false}
               strokeWidth={2}
             />

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   Table,
   TableBody,
@@ -12,13 +11,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGapAnalysis } from "@/hooks/useCompetitors";
+import { useGapAnalysis, type GapAnalysisItem } from "@/hooks/useCompetitors";
 import { useBrandStore } from "@/stores/brand-store";
 import { TrendingUp } from "lucide-react";
 
 export function GapAnalysis() {
   const { activeBrandId } = useBrandStore();
-  const { data: gaps = [], isLoading } = useGapAnalysis(activeBrandId);
+  const { data: gaps = [], isLoading } = useGapAnalysis(activeBrandId ?? undefined);
 
   if (isLoading) {
     return (
@@ -77,7 +76,7 @@ export function GapAnalysis() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {gaps.map((gap: any, idx: number) => {
+            {gaps.map((gap: GapAnalysisItem, idx: number) => {
               const severity = getOpportunitySeverity(gap.opportunityScore);
               return (
                 <TableRow key={idx}>

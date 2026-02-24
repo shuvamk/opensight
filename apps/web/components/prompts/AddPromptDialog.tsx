@@ -10,8 +10,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -66,12 +66,14 @@ export function AddPromptDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          Add Prompt
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Prompt
+          </Button>
+        }
+      />
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Add New Prompt</DialogTitle>
@@ -83,7 +85,7 @@ export function AddPromptDialog({
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="prompt-text">Prompt Text</Label>
-            <Input
+            <Textarea
               id="prompt-text"
               placeholder="e.g., How to use our product..."
               value={promptText}
@@ -95,7 +97,10 @@ export function AddPromptDialog({
 
           <div className="space-y-2">
             <Label htmlFor="tags">Tags</Label>
-            <Select value={tagInput} onValueChange={handleAddTag}>
+            <Select
+              value={tagInput}
+              onValueChange={(value) => value != null && handleAddTag(value)}
+            >
               <SelectTrigger id="tags">
                 <SelectValue placeholder="Select tags..." />
               </SelectTrigger>
