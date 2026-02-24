@@ -56,7 +56,7 @@ export default function GetStartedDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger render={children as any} />
+      <DialogTrigger render={children as React.ReactElement} />
       <DialogPopup>
         {status === "success" ? (
           <>

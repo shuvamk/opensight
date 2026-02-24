@@ -50,7 +50,7 @@ export const handleAnalyseRequest = inngest.createFunction(
       });
 
       const messageOutput = response.output.find(
-        (item: any) => item.type === "message",
+        (item: { type: string }) => item.type === "message",
       );
 
       if (!messageOutput || messageOutput.type !== "message") {
@@ -59,7 +59,7 @@ export const handleAnalyseRequest = inngest.createFunction(
 
       for (const item of messageOutput.content) {
         if (item.type === "refusal") {
-          throw new Error(`OpenAI refused the request: ${(item as any).refusal}`);
+          throw new Error(`OpenAI refused the request: ${(item as { refusal: string }).refusal}`);
         }
         if (item.type === "output_text") {
           return BrandAnalysisSchema.parse(JSON.parse(item.text));

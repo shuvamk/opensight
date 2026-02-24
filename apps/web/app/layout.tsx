@@ -7,6 +7,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "OpenSight | AI Visibility Analytics",
   description: "Monitor and optimize your brand's visibility across AI search engines",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

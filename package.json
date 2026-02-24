@@ -10,6 +10,7 @@
     }
   },
   "scripts": {
+    "prepare": "husky",
     "dev": "turbo dev",
     "dev:web": "pnpm --filter @opensight/web dev",
     "dev:inngest": "pnpm --filter @opensight/web dev:inngest",
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@types/node-cron": "^3.0.11",
+    "husky": "^9.1.7",
     "turbo": "^2.0.0",
     "typescript": "^5.5.0"
   }
