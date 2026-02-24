@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -29,7 +30,7 @@ const resetPasswordFormSchema = z
 
 type ResetPasswordFormInput = z.infer<typeof resetPasswordFormSchema>;
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -144,5 +145,13 @@ export default function ResetPasswordPage() {
         <Button variant="outline" className="w-full">Back to sign in</Button>
       </Link>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }

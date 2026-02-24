@@ -1,16 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const searchParams = useSearchParams();
   const message = searchParams.get("message") ?? "authentication_failed";
 
   const errorMessages: Record<string, string> = {
-    authentication_failed: "We couldn’t sign you in. Please try again or use your email and password.",
+    authentication_failed: "We couldn't sign you in. Please try again or use your email and password.",
   };
   const displayMessage = errorMessages[message] ?? message;
 
@@ -34,5 +35,13 @@ export default function AuthErrorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense>
+      <AuthErrorContent />
+    </Suspense>
   );
 }
