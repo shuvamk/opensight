@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Hero from "@/components/marketing/Hero";
 import Features from "@/components/marketing/Features";
 import PricingTable from "@/components/marketing/PricingTable";
 import SectionHeading from "@/components/marketing/SectionHeading";
 import SectionIndicator from "@/components/marketing/SectionIndicator";
+import GetStartedDialog from "@/components/marketing/GetStartedDialog";
 import { site } from "@/lib/site-config";
 import { TrendingUp, Users, Zap, ArrowRight, Github } from "lucide-react";
 
@@ -66,12 +66,12 @@ export default function HomePage() {
                   make, and where competitors outrank you.
                 </p>
               </div>
-              <Link href="/register">
+              <GetStartedDialog>
                 <Button>
                   Start tracking for free
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-              </Link>
+              </GetStartedDialog>
             </div>
 
             {/* Right: Stats cards — Firecrawl-style bordered grid */}
@@ -136,11 +136,11 @@ export default function HomePage() {
               and scale seamlessly as your project expands.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
-              <Link href="/register">
+              <GetStartedDialog>
                 <Button size="lg">
                   Start for free
                 </Button>
-              </Link>
+              </GetStartedDialog>
               <a
                 href={site.links.repo}
                 target="_blank"

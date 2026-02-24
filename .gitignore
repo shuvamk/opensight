@@ -43,3 +43,7 @@ coverage/
 
 .pnpm-store/
 
+# Claude / AI
+.agents/
+.claude/
+skills-lock.json

@@ -54,14 +54,14 @@ function formatEmailContent(
           </div>
           
           <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-            <a href="https://opensight.ai/dashboard" style="display: inline-block; background-color: #3b82f6; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+            <a href="https://opensight.dev/dashboard" style="display: inline-block; background-color: #3b82f6; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
               View Full Dashboard
             </a>
           </div>
           
           <p style="color: #9ca3af; font-size: 12px; margin-top: 24px;">
             You received this email because you're subscribed to ${frequency} digests. 
-            <a href="https://opensight.ai/settings/notifications" style="color: #3b82f6; text-decoration: none;">Manage preferences</a>
+            <a href="https://opensight.dev/settings/notifications" style="color: #3b82f6; text-decoration: none;">Manage preferences</a>
           </p>
         </div>
       </body>
@@ -111,7 +111,7 @@ export async function emailDigestProcessor(data: EmailDigestJobData): Promise<an
 
     try {
       await resend.emails.send({
-        from: 'noreply@opensight.ai',
+        from: 'noreply@opensight.dev',
         to: userRecord.email,
         subject,
         html,

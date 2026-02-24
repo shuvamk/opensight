@@ -1,98 +1,11 @@
 {
-  "id": "43d64bbe-d0d5-44cf-86a4-34b727af89d0",
+  "id": "6df9203d-adf2-4d9b-88e7-7eb981a3c08f",
   "prevId": "8943dfec-ba66-43da-b93b-d61db7728af7",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.admin_sessions": {
-      "name": "admin_sessions",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "admin_user_id": {
-          "name": "admin_user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "token_hash": {
-          "name": "token_hash",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "expires_at": {
-          "name": "expires_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "admin_sessions_admin_user_id_idx": {
-          "name": "admin_sessions_admin_user_id_idx",
-          "columns": [
-            {
-              "expression": "admin_user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "admin_sessions_token_hash_idx": {
-          "name": "admin_sessions_token_hash_idx",
-          "columns": [
-            {
-              "expression": "token_hash",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "admin_sessions_admin_user_id_fk": {
-          "name": "admin_sessions_admin_user_id_fk",
-          "tableFrom": "admin_sessions",
-          "tableTo": "admin_users",
-          "columnsFrom": [
-            "admin_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.admin_users": {
-      "name": "admin_users",
+    "public.analysis_requests": {
+      "name": "analysis_requests",
       "schema": "",
       "columns": {
         "id": {
@@ -108,35 +21,28 @@
           "primaryKey": false,
           "notNull": true
         },
-        "password_hash": {
-          "name": "password_hash",
+        "domain": {
+          "name": "domain",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "full_name": {
-          "name": "full_name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role": {
-          "name": "role",
-          "type": "varchar(50)",
+        "status": {
+          "name": "status",
+          "type": "varchar(20)",
           "primaryKey": false,
           "notNull": true,
-          "default": "'admin'"
+          "default": "'pending'"
         },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
+        "result": {
+          "name": "result",
+          "type": "jsonb",
           "primaryKey": false,
-          "notNull": false,
-          "default": true
+          "notNull": false
         },
-        "last_login_at": {
-          "name": "last_login_at",
-          "type": "timestamp with time zone",
+        "error_message": {
+          "name": "error_message",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -147,20 +53,34 @@
           "notNull": false,
           "default": "now()"
         },
-        "updated_at": {
-          "name": "updated_at",
+        "completed_at": {
+          "name": "completed_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {
-        "admin_users_email_idx": {
-          "name": "admin_users_email_idx",
+        "analysis_requests_email_idx": {
+          "name": "analysis_requests_email_idx",
           "columns": [
             {
               "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "analysis_requests_status_idx": {
+          "name": "analysis_requests_status_idx",
+          "columns": [
+            {
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -174,15 +94,7 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "admin_users_email_unique": {
-          "name": "admin_users_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "public.api_keys": {
       "name": "api_keys",
@@ -1068,7 +980,7 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{}'::text[]"
+          "default": "'{}'"
         },
         "competitor_mentions": {
           "name": "competitor_mentions",
@@ -1219,7 +1131,7 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{}'::text[]"
+          "default": "'{}'"
         },
         "is_active": {
           "name": "is_active",

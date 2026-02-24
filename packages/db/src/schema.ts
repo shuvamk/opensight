@@ -560,3 +560,26 @@ export const adminSessionsRelations = relations(adminSessions, ({ one }) => ({
     references: [adminUsers.id],
   }),
 }));
+
+// ============================================================================
+// ANALYSIS REQUESTS TABLE
+// ============================================================================
+export const analysisRequests = pgTable(
+  'analysis_requests',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    email: varchar('email', { length: 255 }).notNull(),
+    domain: varchar('domain', { length: 255 }).notNull(),
+    status: varchar('status', { length: 20 }).notNull().default('pending'),
+    result: jsonb('result'),
+    errorMessage: text('error_message'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+  },
+  (table) => {
+    return {
+      emailIdx: index('analysis_requests_email_idx').on(table.email),
+      statusIdx: index('analysis_requests_status_idx').on(table.status),
+    };
+  }
+);

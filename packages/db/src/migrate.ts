@@ -1,9 +1,15 @@
+import net from 'net';
+import dns from 'dns';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+
+// Fix: Node.js happy eyeballs fails with Neon's unreachable IPv6
+dns.setDefaultResultOrder('ipv4first');
+net.setDefaultAutoSelectFamily(false);
 
 dotenv.config({ path: '../../.env' });
 

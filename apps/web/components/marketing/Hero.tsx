@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import SectionHeading from "@/components/marketing/SectionHeading";
+import GetStartedDialog from "@/components/marketing/GetStartedDialog";
 import { site } from "@/lib/site-config";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Badge } from "../ui/badge";
@@ -57,12 +57,12 @@ export default function Hero() {
 
           {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2 animate-slide-up">
-            <Link href="/register">
+            <GetStartedDialog>
               <Button size="lg">
                 Start for free
                 <ArrowRight className="w-4 h-4" />
               </Button>
-            </Link>
+            </GetStartedDialog>
             <a
               href={site.links.repo}
               target="_blank"
