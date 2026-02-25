@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, Upload } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 const profileSchema = z.object({
   displayName: z.string().min(1, "Display name is required").max(100),
@@ -95,12 +95,12 @@ export default function ProfileSettingsPage() {
       .toUpperCase() || "U";
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Settings</h1>
-          <p className="text-gray-600 mt-2">Manage your account settings</p>
+          <p className="text-muted-foreground mt-2">Manage your account settings</p>
         </div>
 
         {/* Layout */}
@@ -115,7 +115,7 @@ export default function ProfileSettingsPage() {
           {/* Content */}
           <div className="md:col-span-3 space-y-6">
             {isLoading ? (
-              <Card className="p-8 text-center text-gray-600">
+              <Card className="p-8 text-center text-muted-foreground">
                 Loading profile...
               </Card>
             ) : (
@@ -169,9 +169,9 @@ export default function ProfileSettingsPage() {
                         placeholder="your@email.com"
                         {...profileForm.register("email")}
                         disabled
-                        className="bg-gray-50 cursor-not-allowed"
+                        className="bg-muted cursor-not-allowed"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Email cannot be changed
                       </p>
                     </div>
@@ -283,8 +283,8 @@ export default function ProfileSettingsPage() {
                 )}
 
                 {profile?.authMethod === "oauth" && (
-                  <Card className="p-6 bg-blue-50 border-blue-200">
-                    <p className="text-sm text-blue-800">
+                  <Card className="p-6 bg-primary/10 border-primary/30">
+                    <p className="text-sm text-primary">
                       Your account uses single sign-on. Password changes are not available.
                     </p>
                   </Card>

@@ -28,7 +28,12 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
     req.user = decoded as Express.User;
     next();
   } catch (err) {
-    logger.error(err, 'JWT verification failed');
+    const isExpired = err && typeof err === 'object' && 'name' in err && (err as { name?: string }).name === 'TokenExpiredError';
+    if (isExpired) {
+      logger.debug(err, 'JWT expired');
+    } else {
+      logger.error(err, 'JWT verification failed');
+    }
     res.status(401).json({ error: 'Unauthorized' });
   }
 }

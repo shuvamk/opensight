@@ -70,24 +70,24 @@ export function VisibilityChart() {
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
             <XAxis
               dataKey="date"
-              stroke="#94A3B8"
+              stroke="var(--color-muted-foreground)"
               style={{ fontSize: "12px" }}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
-              stroke="#94A3B8"
+              stroke="var(--color-muted-foreground)"
               style={{ fontSize: "12px" }}
               tickLine={false}
               axisLine={false}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#fff",
-                border: "1px solid #E2E8F0",
+                backgroundColor: "var(--popover)",
+                border: "1px solid var(--border)",
                 borderRadius: "12px",
                 boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)",
                 padding: "12px",
@@ -98,7 +98,7 @@ export function VisibilityChart() {
             <Line
               type="monotone"
               dataKey="chatgptScore"
-              stroke="#6366F1"
+              stroke="var(--color-chart-1)"
               name="ChatGPT"
               dot={false}
               strokeWidth={2}
@@ -106,7 +106,7 @@ export function VisibilityChart() {
             <Line
               type="monotone"
               dataKey="perplexityScore"
-              stroke="#A855F7"
+              stroke="var(--color-chart-2)"
               name="Perplexity"
               dot={false}
               strokeWidth={2}
@@ -114,7 +114,7 @@ export function VisibilityChart() {
             <Line
               type="monotone"
               dataKey="googleAioScore"
-              stroke="#10B981"
+              stroke="var(--color-chart-3)"
               name="Google AI"
               dot={false}
               strokeWidth={2}

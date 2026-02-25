@@ -26,7 +26,7 @@ export default function OnboardingLayout({
   }
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+    <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-background to-muted p-4">
       {children}
     </div>
   );

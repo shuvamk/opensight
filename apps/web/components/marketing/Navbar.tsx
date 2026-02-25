@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { site } from "@/lib/site-config";
 import { useGitHubRepo } from "@/hooks/useGitHubRepo";
 import { Github, Menu, X } from "lucide-react";
@@ -20,7 +21,7 @@ export default function Navbar() {
   const { data: repo } = useGitHubRepo();
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border/40">
+    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -51,8 +52,9 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Right side — GitHub stars + Sign up like Firecrawl */}
+          {/* Right side — Theme + GitHub + Sign up */}
           <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
             <Button render={<Link href={site.links.repo} target="_blank" />} variant="outline" size="sm">
               <Github className="w-4 h-4" />
               Star
@@ -82,6 +84,10 @@ export default function Navbar() {
         {mobileOpen && (
           <div className="md:hidden py-4 border-t border-border/40 animate-fade-in">
             <div className="flex flex-col gap-1">
+              <div className="flex items-center justify-between px-3 py-2">
+                <span className="text-sm font-medium text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
               {navLinks.map(({ label, href, external }) =>
                 external ? (
                   <a

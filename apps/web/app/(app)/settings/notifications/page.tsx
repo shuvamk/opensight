@@ -23,7 +23,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 const notificationsSettingsSchema = z.object({
   visibilityDrop: z.boolean(),
@@ -104,12 +104,12 @@ export default function NotificationsSettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Settings</h1>
-          <p className="text-gray-600 mt-2">Manage your account settings</p>
+          <p className="text-muted-foreground mt-2">Manage your account settings</p>
         </div>
 
         {/* Layout */}
@@ -124,14 +124,14 @@ export default function NotificationsSettingsPage() {
           {/* Content */}
           <div className="md:col-span-3 space-y-6">
             {isLoading ? (
-              <Card className="p-8 text-center text-gray-600">
+              <Card className="p-8 text-center text-muted-foreground">
                 Loading notification settings...
               </Card>
             ) : (
               <>
                 <div>
                   <h2 className="text-2xl font-bold">Notifications</h2>
-                  <p className="text-gray-600 text-sm mt-1">
+                  <p className="text-muted-foreground text-sm mt-1">
                     Configure how you receive alerts and updates
                   </p>
                 </div>
@@ -151,7 +151,7 @@ export default function NotificationsSettingsPage() {
                           className="font-normal cursor-pointer"
                         >
                           Visibility Drop
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             Get notified when your page visibility decreases
                           </p>
                         </Label>
@@ -169,7 +169,7 @@ export default function NotificationsSettingsPage() {
                           className="font-normal cursor-pointer"
                         >
                           New Mention
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             Get notified when your content is mentioned
                           </p>
                         </Label>
@@ -187,7 +187,7 @@ export default function NotificationsSettingsPage() {
                           className="font-normal cursor-pointer"
                         >
                           Sentiment Shift
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             Get notified when sentiment analysis changes significantly
                           </p>
                         </Label>
@@ -205,7 +205,7 @@ export default function NotificationsSettingsPage() {
                           className="font-normal cursor-pointer"
                         >
                           New Competitor
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             Get notified when new competitors are detected
                           </p>
                         </Label>
@@ -231,7 +231,7 @@ export default function NotificationsSettingsPage() {
                         <SelectItem value="none">No Email Digest</SelectItem>
                       </SelectContent>
                     </Select>
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-sm text-muted-foreground mt-2">
                       Choose how often you want to receive email notifications
                     </p>
                   </Card>
@@ -252,7 +252,7 @@ export default function NotificationsSettingsPage() {
                           {errors.webhookUrl.message}
                         </p>
                       )}
-                      <p className="text-sm text-gray-600 mt-2">
+                      <p className="text-sm text-muted-foreground mt-2">
                         Receive real-time notifications via webhook
                       </p>
                     </div>

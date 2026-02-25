@@ -52,10 +52,10 @@ export function GapAnalysis() {
   }
 
   const getOpportunitySeverity = (score: number) => {
-    if (score >= 80) return { color: "bg-red-100 text-red-800", label: "Critical" };
-    if (score >= 60) return { color: "bg-orange-100 text-orange-800", label: "High" };
-    if (score >= 40) return { color: "bg-yellow-100 text-yellow-800", label: "Medium" };
-    return { color: "bg-blue-100 text-blue-800", label: "Low" };
+    if (score >= 80) return { color: "bg-destructive/15 text-destructive-foreground", label: "Critical" };
+    if (score >= 60) return { color: "bg-warning/15 text-warning-foreground", label: "High" };
+    if (score >= 40) return { color: "bg-warning/10 text-warning-foreground", label: "Medium" };
+    return { color: "bg-primary/20 text-primary", label: "Low" };
   };
 
   return (
@@ -68,7 +68,7 @@ export function GapAnalysis() {
       </CardHeader>
       <CardContent>
         <Table>
-          <TableHeader className="bg-gray-50">
+          <TableHeader className="bg-muted">
             <TableRow>
               <TableHead>Prompt</TableHead>
               <TableHead>Competitors Present</TableHead>

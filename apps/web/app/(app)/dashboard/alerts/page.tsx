@@ -19,7 +19,7 @@ import {
   CheckCircle2,
   Clock,
 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 
 const getNotificationIcon = (
@@ -29,7 +29,7 @@ const getNotificationIcon = (
     case "visibility_drop":
       return <TrendingDown className="h-5 w-5 text-red-500" />;
     case "mention":
-      return <MessageSquare className="h-5 w-5 text-blue-500" />;
+      return <MessageSquare className="h-5 w-5 text-primary" />;
     case "sentiment":
       return <BarChart3 className="h-5 w-5 text-orange-500" />;
     case "competitor":
@@ -91,7 +91,7 @@ export default function AlertsPage() {
             <Bell className="h-8 w-8" />
             Notifications
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-muted-foreground mt-2">
             {unreadCount > 0
               ? `You have ${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`
               : "All caught up!"}
@@ -132,14 +132,14 @@ export default function AlertsPage() {
 
         <TabsContent value={filter} className="mt-6 space-y-4">
           {isLoading ? (
-            <Card className="p-8 text-center text-gray-600">
+            <Card className="p-8 text-center text-muted-foreground">
               Loading notifications...
             </Card>
           ) : filteredNotifications.length === 0 ? (
             <Card className="p-8">
               <div className="flex flex-col items-center justify-center text-center">
-                <CheckCircle2 className="h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-gray-600">
+                <CheckCircle2 className="h-12 w-12 text-muted-foreground mb-4" />
+                <p className="text-muted-foreground">
                   {filter === "unread"
                     ? "No unread notifications"
                     : "No notifications yet"}
@@ -152,8 +152,8 @@ export default function AlertsPage() {
                 key={notification.id}
                 className={`p-4 cursor-pointer transition-colors ${
                   !notification.isRead
-                    ? "bg-blue-50 border-blue-200"
-                    : "hover:bg-gray-50"
+                    ? "bg-primary/10 border-primary/30"
+                    : "hover:bg-muted"
                 }`}
                 onClick={() => {
                   if (!notification.isRead) {
@@ -173,7 +173,7 @@ export default function AlertsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-foreground">
                           {notification.title}
                         </h3>
                         <Badge
@@ -185,15 +185,15 @@ export default function AlertsPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         {!notification.isRead && (
-                          <div className="h-2 w-2 bg-blue-600 rounded-full flex-shrink-0" />
+                          <div className="h-2 w-2 bg-primary rounded-full flex-shrink-0" />
                         )}
-                        <span className="text-xs text-gray-500 whitespace-nowrap flex items-center gap-1">
+                        <span className="text-xs text-muted-foreground whitespace-nowrap flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {formatDate(notification.createdAt)}
                         </span>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-700">{notification.body}</p>
+                    <p className="text-sm text-foreground">{notification.body}</p>
                   </div>
                 </div>
               </Card>

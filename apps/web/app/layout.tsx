@@ -1,3 +1,5 @@
+import { ThemeProvider } from "@/components/theme-provider";
+import { ToastProvider } from "@/components/ui/toast";
 import { geist, geistMono, geistPixelSquare } from "@/lib/fonts";
 import QueryProvider from "@/lib/query-provider";
 import { cn } from "@/lib/utils";
@@ -18,11 +20,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn(geist.variable, geistMono.variable, geistPixelSquare.variable)}>
+    <html lang="en" className={cn(geist.variable, geistMono.variable, geistPixelSquare.variable)} suppressHydrationWarning>
       <body className={geist.className}>
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <ToastProvider position="top-right">
+              {children}
+            </ToastProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

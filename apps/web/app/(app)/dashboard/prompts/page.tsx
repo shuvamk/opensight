@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import * as promptsApi from "@/lib/api/prompts";
 import { Search, X } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 const TAGS = ["AI", "Search", "Content", "Brand", "Competitor", "Feature", "FAQ", "General"];
 const PROMPT_LIMIT = 100;

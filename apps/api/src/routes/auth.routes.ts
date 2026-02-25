@@ -11,6 +11,7 @@ import {
   logoutHandler,
   githubCallbackHandler,
   googleCallbackHandler,
+  googleTokenHandler,
 } from '../controllers/auth.controller.js';
 import {
   registerSchema,
@@ -108,6 +109,29 @@ router.get(
  *         description: Redirect to Google
  */
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+/**
+ * @swagger
+ * /auth/google/token:
+ *   post:
+ *     summary: Exchange Google id_token for app JWT (web callback flow)
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Returns user and accessToken
+ *       400:
+ *         description: Invalid or missing idToken
+ */
+router.post('/google/token', googleTokenHandler);
 
 /**
  * @swagger

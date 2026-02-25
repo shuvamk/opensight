@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 import { ChevronLeft, ChevronRight, X, Plus, Loader2 } from "lucide-react";
 
 const INDUSTRIES = [
@@ -360,7 +360,7 @@ export default function OnboardingPage() {
               <>
                 <div className="max-h-[300px] space-y-3 overflow-y-auto">
                   {suggestedPrompts.map((prompt, index) => (
-                    <div key={index} className="flex items-start space-x-3 rounded-lg border p-3 hover:bg-slate-50">
+                    <div key={index} className="flex items-start space-x-3 rounded-lg border p-3 hover:bg-muted">
                       <input
                         type="checkbox"
                         id={`prompt-${index}`}
@@ -412,12 +412,12 @@ export default function OnboardingPage() {
                       {state.customPrompts.map((prompt, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50 p-3"
+                          className="flex items-center justify-between rounded-lg border border-primary/30 bg-primary/10 p-3"
                         >
-                          <span className="text-sm text-blue-900">{prompt}</span>
+                          <span className="text-sm text-primary">{prompt}</span>
                           <button
                             onClick={() => handleRemoveCustomPrompt(index)}
-                            className="text-blue-600 hover:text-blue-700"
+                            className="text-primary hover:text-primary/80"
                           >
                             <X className="h-4 w-4" />
                           </button>
@@ -580,12 +580,12 @@ export default function OnboardingPage() {
                 </p>
                 <div className="max-h-[150px] space-y-2 overflow-y-auto">
                   {state.selectedPrompts.map((prompt, index) => (
-                    <div key={index} className="text-xs text-gray-600">
+                    <div key={index} className="text-xs text-muted-foreground">
                       <span className="font-medium">•</span> {prompt}
                     </div>
                   ))}
                   {state.customPrompts.map((prompt, index) => (
-                    <div key={`custom-${index}`} className="text-xs text-blue-600">
+                    <div key={`custom-${index}`} className="text-xs text-primary">
                       <span className="font-medium">•</span> {prompt}
                     </div>
                   ))}
@@ -601,7 +601,7 @@ export default function OnboardingPage() {
                     {state.competitors.map((competitor, index) => (
                       <div key={index} className="text-xs">
                         <p className="font-medium">{competitor.name}</p>
-                        <p className="text-gray-600">{competitor.website_url}</p>
+                        <p className="text-muted-foreground">{competitor.website_url}</p>
                       </div>
                     ))}
                   </div>

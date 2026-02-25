@@ -386,7 +386,7 @@ export class AuthService {
   /**
    * Format user for response
    */
-  private formatUserResponse(user: typeof users.$inferSelect) {
+  formatUserResponse(user: typeof users.$inferSelect) {
     return {
       id: user.id,
       email: user.email,

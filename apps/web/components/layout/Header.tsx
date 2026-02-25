@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import NotificationBell from "./NotificationBell";
 import UserMenu from "./UserMenu";
 
@@ -25,7 +26,7 @@ export default function Header({ pageTitle, onMenuClick }: HeaderProps) {
   const title = pageTitle || defaultTitle;
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-white/80 backdrop-blur-xl px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-xl px-6">
       <div className="flex items-center gap-4">
         <Button
           variant="ghost"
@@ -35,10 +36,11 @@ export default function Header({ pageTitle, onMenuClick }: HeaderProps) {
         >
           <Menu className="h-4 w-4" />
         </Button>
-        <h1 className="text-lg font-semibold text-primary-500">{title}</h1>
+        <h1 className="text-lg font-semibold text-primary">{title}</h1>
       </div>
 
       <div className="flex items-center gap-2">
+        <ThemeToggle />
         <NotificationBell />
         <UserMenu />
       </div>

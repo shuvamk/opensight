@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { OAuth2Client } from 'google-auth-library';
 import { authService } from '../services/auth.service.js';
 import { env } from '../config/env.js';
 import { logger } from '../utils/logger.js';
@@ -231,5 +232,61 @@ export async function googleCallbackHandler(req: Request, res: Response, next: N
     logger.error(err, 'Google callback failed');
     const errorUrl = `${env.FRONTEND_URL}/auth/error?message=authentication_failed`;
     res.redirect(errorUrl);
+  }
+}
+
+
+export async function googleTokenHandler(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { idToken } = req.body as { idToken?: string };
+
+    if (!idToken || typeof idToken !== 'string') {
+      res.status(400).json({ error: 'idToken is required' });
+      return;
+    }
+
+    if (!env.GOOGLE_CLIENT_ID) {
+      res.status(503).json({ error: 'Google OAuth is not configured' });
+      return;
+    }
+
+    const client = new OAuth2Client(env.GOOGLE_CLIENT_ID);
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    if (!payload?.sub || !payload.email) {
+      res.status(400).json({ error: 'Invalid Google token' });
+      return;
+    }
+
+    const user = await authService.findOrCreateOAuthUser('google', {
+      id: payload.sub,
+      email: payload.email,
+      name: payload.name ?? payload.email,
+      avatar: payload.picture,
+    });
+
+    if (!user) {
+      res.status(401).json({ error: 'Authentication failed' });
+      return;
+    }
+
+    const tokens = await authService.generateTokens(user.id);
+    res.cookie('refresh_token', tokens.refreshToken, COOKIE_OPTIONS);
+
+    res.status(200).json({
+      user: authService.formatUserResponse(user),
+      accessToken: tokens.accessToken,
+    });
+  } catch (err) {
+    logger.error(err, 'Google token exchange failed');
+    const error = err as Error;
+    if (String(error.message).includes('Token used too late') || String(error.message).includes('invalid')) {
+      res.status(400).json({ error: 'Invalid or expired Google token' });
+      return;
+    }
+    next(err);
   }
 }

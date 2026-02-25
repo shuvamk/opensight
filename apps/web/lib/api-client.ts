@@ -1,9 +1,18 @@
-import { getAuthToken } from "./auth-token";
+import { getAuthToken, setAuthToken, clearAuthToken } from "./auth-token";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 const API_URL = API_BASE.endsWith("/api") ? API_BASE : `${API_BASE}/api`;
 
+const WEB_ORIGIN =
+  typeof window !== "undefined"
+    ? window.location.origin
+    : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
 export function getOAuthUrl(provider: "github" | "google"): string {
+  // Google callback is on the web app (Authorized redirect URI: .../api/auth/callback/google)
+  if (provider === "google") {
+    return `${WEB_ORIGIN}/api/auth/google`;
+  }
   return `${API_BASE.endsWith("/api") ? API_BASE.replace(/\/api$/, "") : API_BASE}/api/auth/${provider}`;
 }
 
@@ -30,11 +39,23 @@ async function handleResponse(response: Response) {
   return response.text();
 }
 
+async function refreshAccessToken(): Promise<string | null> {
+  const res = await fetch(`${API_URL}/auth/refresh`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) return null;
+  const data = (await res.json()) as { accessToken?: string };
+  return data.accessToken ?? null;
+}
+
 async function request<T>(
   method: string,
   path: string,
   body?: unknown,
   options?: RequestOptions,
+  retried = false,
 ): Promise<T> {
   const url = `${API_URL}${path}`;
   const token = getAuthToken();
@@ -56,6 +77,16 @@ async function request<T>(
   }
 
   const response = await fetch(url, config);
+
+  if (response.status === 401 && !retried && !path.startsWith("/auth/")) {
+    const newToken = await refreshAccessToken();
+    if (newToken) {
+      setAuthToken(newToken);
+      return request<T>(method, path, body, options, true);
+    }
+    clearAuthToken();
+  }
+
   return handleResponse(response);
 }
 

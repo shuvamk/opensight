@@ -35,8 +35,8 @@ export function MetricCard({
             <div
               className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
                 isPositive
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "bg-red-50 text-red-700"
+                  ? "bg-success/15 text-success-foreground"
+                  : "bg-destructive/15 text-destructive-foreground"
               }`}
             >
               {isPositive ? (
@@ -49,7 +49,7 @@ export function MetricCard({
           )}
         </div>
 
-        <div className="text-3xl font-bold text-primary-500">
+        <div className="text-3xl font-bold text-primary">
           {displayValue}
           {suffix && <span className="text-lg ml-0.5 text-text-secondary">{suffix}</span>}
         </div>
@@ -63,7 +63,7 @@ export function MetricCard({
               return (
                 <div
                   key={i}
-                  className="flex-1 bg-indigo-200 rounded-sm hover:bg-indigo-300 transition-colors"
+                  className="flex-1 bg-primary/30 rounded-sm hover:bg-primary/50 transition-colors"
                   style={{ height: `${height}%`, minHeight: "2px" }}
                 />
               );

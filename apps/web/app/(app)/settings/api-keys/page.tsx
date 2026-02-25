@@ -31,7 +31,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Loader2, Copy, Check, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 const apiKeyFormSchema = z.object({
   name: z.string().min(1, "API key name is required").max(100),
