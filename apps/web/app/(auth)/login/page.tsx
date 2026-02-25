@@ -11,7 +11,7 @@ import { getOAuthUrl } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 import { Github } from "lucide-react";
 
 export default function LoginPage() {
@@ -99,7 +99,7 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-indigo-500">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-primary-500">Email</Label>
           <Input
             id="email"
             type="email"
@@ -114,10 +114,10 @@ export default function LoginPage() {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password" className="text-sm font-medium text-indigo-500">Password</Label>
+            <Label htmlFor="password" className="text-sm font-medium text-primary-500">Password</Label>
             <Link
               href="/forgot-password"
-              className="text-xs text-indigo-400 hover:text-indigo-500 font-medium"
+              className="text-xs text-primary-500 hover:text-primary-600 font-medium"
             >
               Forgot password?
             </Link>
@@ -146,7 +146,7 @@ export default function LoginPage() {
 
       <p className="text-center text-sm text-text-secondary">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-indigo-400 hover:text-indigo-500 font-medium">
+        <Link href="/register" className="text-primary-500 hover:text-primary-600 font-medium">
           Sign up
         </Link>
       </p>

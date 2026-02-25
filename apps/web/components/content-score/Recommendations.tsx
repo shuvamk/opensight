@@ -42,7 +42,7 @@ const getSeverityBadge = (severity: "high" | "medium" | "low") => {
       );
     case "low":
       return (
-        <Badge className="bg-blue-100 text-blue-800 border-0 hover:bg-blue-100">
+        <Badge className="bg-primary/20 text-primary border-0 hover:bg-primary/20">
           Low Priority
         </Badge>
       );
@@ -53,7 +53,7 @@ export function Recommendations({ recommendations }: RecommendationsProps) {
   if (recommendations.length === 0) {
     return (
       <Card className="p-6">
-        <p className="text-center text-gray-600">
+        <p className="text-center text-muted-foreground">
           No recommendations at this time. Great job!
         </p>
       </Card>
@@ -73,7 +73,7 @@ export function Recommendations({ recommendations }: RecommendationsProps) {
         {sorted.map((rec) => (
           <div
             key={rec.id}
-            className="flex gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex gap-4 p-4 border border-border rounded-lg hover:bg-muted transition-colors"
           >
             <div className="flex-shrink-0 mt-1">
               {getSeverityIcon(rec.severity)}
@@ -83,7 +83,7 @@ export function Recommendations({ recommendations }: RecommendationsProps) {
                 <Badge variant="secondary">{rec.dimension}</Badge>
                 {getSeverityBadge(rec.severity)}
               </div>
-              <p className="text-sm text-gray-700">{rec.action}</p>
+              <p className="text-sm text-foreground">{rec.action}</p>
             </div>
           </div>
         ))}

@@ -10,7 +10,6 @@ import {
   useRevokeApiKey,
 } from "@/hooks/useApiKeys";
 import type { CreateApiKeyResponse } from "@/lib/api/api-keys/types";
-import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Loader2, Copy, Check, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 const apiKeyFormSchema = z.object({
   name: z.string().min(1, "API key name is required").max(100),
@@ -108,26 +107,8 @@ export default function ApiKeysPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Settings</h1>
-          <p className="text-gray-600 mt-2">Manage your account settings</p>
-        </div>
-
-        {/* Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <div>
-            <Card className="p-4">
-              <SettingsSidebar />
-            </Card>
-          </div>
-
-          {/* Content */}
-          <div className="md:col-span-3 space-y-6">
-            {/* Header with Button */}
+    <div className="space-y-6">
+      {/* Header with Button */}
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">API Keys</h2>
@@ -205,9 +186,6 @@ export default function ApiKeysPage() {
                 </div>
               )}
             </Card>
-          </div>
-        </div>
-      </div>
 
       {/* Create API Key Dialog */}
       <Dialog open={showDialog} onOpenChange={handleDialogOpenChange}>

@@ -3,7 +3,7 @@
 import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 import { Loader2 } from "lucide-react";
 
 const loadingFallback = (
@@ -39,6 +39,7 @@ function AuthCallbackContent() {
         if (accessToken) {
           const { setAuthToken } = await import("@/lib/auth-token");
           setAuthToken(accessToken);
+          console.log("accessToken", accessToken);
 
           // Determine where to redirect
           const destination = redirectTo === "onboarding" ? "/onboarding" : "/dashboard";

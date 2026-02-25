@@ -85,7 +85,7 @@ export default function HomePage() {
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0">
-                        <Icon className="w-5 h-5 text-indigo-300" />
+                        <Icon className="w-5 h-5 text-primary-500" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-primary-500 mb-1">

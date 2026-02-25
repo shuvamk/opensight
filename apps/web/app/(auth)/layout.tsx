@@ -29,20 +29,20 @@ export default function AuthLayout({
             <h2 className="text-4xl font-bold leading-tight text-balance">
               Track your brand&apos;s AI visibility across every engine.
             </h2>
-            <p className="text-indigo-100 text-lg leading-relaxed max-w-md">
+            <p className="text-primary-500/80 text-lg leading-relaxed max-w-md">
               Monitor ChatGPT, Perplexity, and Google AI Overviews.
               Know exactly how AI talks about your brand.
             </p>
           </div>
 
-          <p className="text-indigo-200 text-sm">
+          <p className="text-primary-500/70 text-sm">
             &copy; {new Date().getFullYear()} OpenSight. All rights reserved.
           </p>
         </div>
       </div>
 
       {/* Right panel - form */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 bg-white">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 bg-background">
         <div className="w-full max-w-[420px]">
           {children}
         </div>

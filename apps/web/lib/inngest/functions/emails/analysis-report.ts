@@ -1,7 +1,7 @@
 import type { z } from "zod";
 import type { BrandAnalysisSchema } from "../prompts/brand-analysis";
 
-type BrandAnalysis = z.infer<typeof BrandAnalysisSchema>;
+export type BrandAnalysis = z.infer<typeof BrandAnalysisSchema>;
 
 export function buildAnalysisEmail(
   domain: string,

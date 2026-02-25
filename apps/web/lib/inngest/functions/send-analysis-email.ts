@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import { inngest } from "../client";
-import { buildAnalysisEmail } from "./emails/analysis-report";
+import { buildAnalysisEmail, type BrandAnalysis } from "./emails/analysis-report";
 
 export const sendAnalysisEmail = inngest.createFunction(
   {
@@ -14,7 +14,7 @@ export const sendAnalysisEmail = inngest.createFunction(
 
     await step.run("send-email", async () => {
       const resend = new Resend(process.env.RESEND_API_KEY);
-      const html = buildAnalysisEmail(domain, analysisResult);
+      const html = buildAnalysisEmail(domain, analysisResult as BrandAnalysis);
 
       const { error } = await resend.emails.send({
         from: "OpenSight <noreply@opensight.dev>",

@@ -13,9 +13,9 @@ export default function SectionIndicator({
 }: SectionIndicatorProps) {
   return (
     <div className={`flex items-center gap-2 mb-4 ${className}`.trim()}>
-      <div className="w-0.5 h-5 bg-indigo-300 rounded-full" />
+      <div className="w-0.5 h-5 bg-primary-500 rounded-full" />
       <span className="section-indicator">
-        <span className="text-indigo-300">{number}</span> / {total}
+        <span className="text-primary-500">{number}</span> / {total}
       </span>
       <span className="text-sm font-mono uppercase text-text-tertiary">
         {label}

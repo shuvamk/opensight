@@ -110,7 +110,7 @@ export default function PricingTable() {
             >
               {/* Recommended badge */}
               {plan.highlighted && (
-                <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-indigo-300 to-accent-400" />
+                <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-primary-500 to-accent-400" />
               )}
 
               {/* Plan name */}
@@ -119,7 +119,7 @@ export default function PricingTable() {
                   {plan.name}
                 </h3>
                 {plan.highlighted && (
-                  <span className="text-[10px] font-semibold uppercase tracking-wider bg-indigo-50 text-indigo-300 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider bg-primary-500/10 text-primary-500 px-2 py-0.5 rounded-full">
                     Popular
                   </span>
                 )}

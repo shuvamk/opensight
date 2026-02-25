@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, Edit2, Trash2, Clock, MapPin } from "lucide-react";
 import Link from "next/link";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 interface PromptResponse {
   engine: string;
@@ -56,7 +56,7 @@ export default function PromptDetailPage() {
   if (isPromptLoading) {
     return (
       <div className="space-y-6">
-        <Link href="/dashboard/prompts" className="flex items-center gap-2 text-blue-600 hover:underline">
+        <Link href="/dashboard/prompts" className="flex items-center gap-2 text-primary hover:underline">
           <ArrowLeft className="w-4 h-4" />
           Back to Prompts
         </Link>
@@ -69,7 +69,7 @@ export default function PromptDetailPage() {
   if (!prompt) {
     return (
       <div className="space-y-6">
-        <Link href="/dashboard/prompts" className="flex items-center gap-2 text-blue-600 hover:underline">
+        <Link href="/dashboard/prompts" className="flex items-center gap-2 text-primary hover:underline">
           <ArrowLeft className="w-4 h-4" />
           Back to Prompts
         </Link>
@@ -106,7 +106,7 @@ export default function PromptDetailPage() {
 
   const sentimentColor = {
     positive: "bg-green-100 text-green-800",
-    neutral: "bg-gray-100 text-gray-800",
+    neutral: "bg-muted text-muted-foreground",
     negative: "bg-red-100 text-red-800",
   };
 
@@ -115,7 +115,7 @@ export default function PromptDetailPage() {
       {/* Back Link */}
       <Link
         href="/dashboard/prompts"
-        className="flex items-center gap-2 text-blue-600 hover:underline"
+        className="flex items-center gap-2 text-primary hover:underline"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Prompts
@@ -221,7 +221,7 @@ export default function PromptDetailPage() {
                   {/* Response Text */}
                   <div className="space-y-2">
                     <p className="text-sm text-text-secondary">Response</p>
-                    <div className="bg-gray-50 p-4 rounded-lg min-h-48 text-sm leading-relaxed max-h-96 overflow-y-auto">
+                    <div className="bg-muted p-4 rounded-lg min-h-48 text-sm leading-relaxed max-h-96 overflow-y-auto">
                       {response.text || "No response text available"}
                     </div>
                   </div>
@@ -249,7 +249,7 @@ export default function PromptDetailPage() {
                               href={citation.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline break-all"
+                              className="text-primary hover:underline break-all"
                             >
                               {citation.text || citation.url}
                             </a>

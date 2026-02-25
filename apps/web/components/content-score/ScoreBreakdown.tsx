@@ -15,21 +15,21 @@ interface ScoreBreakdownProps {
 }
 
 const getScoreColor = (score: number): string => {
-  if (score >= 80) return "text-green-600";
-  if (score >= 60) return "text-amber-600";
-  return "text-red-600";
+  if (score >= 80) return "text-success-foreground";
+  if (score >= 60) return "text-warning-foreground";
+  return "text-destructive-foreground";
 };
 
 const getScoreBackgroundColor = (score: number): string => {
-  if (score >= 80) return "bg-green-100";
-  if (score >= 60) return "bg-amber-100";
-  return "bg-red-100";
+  if (score >= 80) return "bg-success/15";
+  if (score >= 60) return "bg-warning/15";
+  return "bg-destructive/15";
 };
 
 const getBarColor = (score: number): string => {
-  if (score >= 80) return "#16a34a";
-  if (score >= 60) return "#d97706";
-  return "#dc2626";
+  if (score >= 80) return "var(--color-success)";
+  if (score >= 60) return "var(--color-warning)";
+  return "var(--color-destructive)";
 };
 
 const CircularScore = ({ score }: { score: number }) => {
@@ -45,7 +45,7 @@ const CircularScore = ({ score }: { score: number }) => {
             cy="60"
             r="45"
             fill="none"
-            stroke="#e5e7eb"
+            stroke="var(--color-border)"
             strokeWidth="8"
           />
           <circle
@@ -65,7 +65,7 @@ const CircularScore = ({ score }: { score: number }) => {
           <div className={`text-4xl font-bold ${getScoreColor(score)}`}>
             {score}
           </div>
-          <div className="text-xs text-gray-500">out of 100</div>
+          <div className="text-xs text-muted-foreground">out of 100</div>
         </div>
       </div>
       <Badge
@@ -105,7 +105,7 @@ export function ScoreBreakdown({
                   {dimension.score}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-muted rounded-full h-2">
                 <div
                   className="h-2 rounded-full transition-all"
                   style={{
@@ -132,8 +132,8 @@ export function ScoreBreakdown({
             <YAxis domain={[0, 100]} />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#ffffff",
-                border: "1px solid #e5e7eb",
+                backgroundColor: "var(--popover)",
+                border: "1px solid var(--border)",
                 borderRadius: "6px",
               }}
               formatter={(value) => `${value}`}

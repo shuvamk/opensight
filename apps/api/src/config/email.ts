@@ -7,6 +7,7 @@ export async function sendVerificationEmail(
   email: string,
   verificationUrl: string
 ): Promise<void> {
+  if (!resend) return;
   await resend.emails.send({
     from: 'noreply@opensight.dev',
     to: email,
@@ -23,6 +24,7 @@ export async function sendPasswordResetEmail(
   email: string,
   resetUrl: string
 ): Promise<void> {
+  if (!resend) return;
   await resend.emails.send({
     from: 'noreply@opensight.dev',
     to: email,
@@ -43,6 +45,7 @@ export async function sendAlertDigest(
     .map((alert) => `<li>${alert.title}: ${alert.description}</li>`)
     .join('');
 
+  if (!resend) return;
   await resend.emails.send({
     from: 'noreply@opensight.dev',
     to: email,

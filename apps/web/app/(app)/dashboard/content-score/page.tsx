@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 interface ScoreResult {
   id: string;
@@ -73,10 +73,10 @@ function mapScoreToResult(row: {
 }
 
 const getTrendIndicator = (current: number, previous?: number) => {
-  if (!previous) return <Minus className="h-4 w-4 text-gray-400" />;
+  if (!previous) return <Minus className="h-4 w-4 text-muted-foreground" />;
   if (current > previous) return <TrendingUp className="h-4 w-4 text-green-600" />;
   if (current < previous) return <TrendingDown className="h-4 w-4 text-red-600" />;
-  return <Minus className="h-4 w-4 text-gray-400" />;
+  return <Minus className="h-4 w-4 text-muted-foreground" />;
 };
 
 const formatDate = (date: string) => {
@@ -114,7 +114,7 @@ export default function ContentScorePage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">Content Score</h1>
-        <p className="text-gray-600 mt-2">
+        <p className="text-muted-foreground mt-2">
           Analyze your page content quality and get actionable recommendations
         </p>
       </div>
@@ -149,9 +149,9 @@ export default function ContentScorePage() {
         <h2 className="text-lg font-semibold mb-4">Score History</h2>
 
         {historyLoading ? (
-          <div className="text-center py-8 text-gray-600">Loading history...</div>
+          <div className="text-center py-8 text-muted-foreground">Loading history...</div>
         ) : history.length === 0 ? (
-          <div className="text-center py-8 text-gray-600">
+          <div className="text-center py-8 text-muted-foreground">
             No scores yet. Analyze a page to get started.
           </div>
         ) : (
@@ -187,7 +187,7 @@ export default function ContentScorePage() {
                     <TableCell className="text-center">
                       {getTrendIndicator(item.score, item.previousScore)}
                     </TableCell>
-                    <TableCell className="text-sm text-gray-600">
+                    <TableCell className="text-sm text-muted-foreground">
                       {formatDate(item.createdAt)}
                     </TableCell>
                   </TableRow>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -28,7 +29,7 @@ export default function NotificationBell() {
           >
             <Bell className="h-[18px] w-[18px]" />
             {unreadCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 h-4 w-4 flex items-center justify-center rounded-full bg-indigo-300 text-[10px] font-bold text-white">
+              <span className="absolute -right-0.5 -top-0.5 h-4 w-4 flex items-center justify-center rounded-full bg-primary-500 text-[10px] font-bold text-primary-foreground">
                 {unreadCount}
               </span>
             )}
@@ -36,9 +37,11 @@ export default function NotificationBell() {
         }
       />
       <DropdownMenuContent align="end" className="w-80 rounded-xl">
-        <DropdownMenuLabel className="font-semibold">
-          Notifications
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-semibold">
+            Notifications
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {isLoading ? (
           <DropdownMenuItem disabled>Loading...</DropdownMenuItem>

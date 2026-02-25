@@ -114,6 +114,62 @@ export default function Hero() {
 
         {/* AI network visual */}
         <AIBeamNetwork />
+        {/* Dashboard preview — Firecrawl-style browser mockup with dashed outlines */}
+        <div className="mt-20 mx-auto max-w-7xl animate-slide-up">
+          <div className="relative group">
+            {/* Screenshot container */}
+            <div className="relative bg-white rounded-2xl border shadow-large overflow-hidden">
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface/50">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-300/80" />
+                  <div className="w-3 h-3 rounded-full bg-amber-300/80" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-300/80" />
+                </div>
+                <div className="flex-1 mx-4">
+                  <div className="bg-white rounded-full border px-3 py-1.5 text-xs text-text-tertiary max-w-md mx-auto">
+                    {site.display.appDashboardUrl}
+                  </div>
+                </div>
+              </div>
+
+              {/* Dashboard mockup */}
+              <div className="p-6 bg-surface/30 aspect-[16/9]">
+                <div className="space-y-4">
+                  {/* Metric cards row */}
+                  <div className="grid grid-cols-4 gap-3">
+                    {[
+                      { label: "Visibility Score", value: "78.5%", color: "bg-primary-500/10" },
+                      { label: "Total Mentions", value: "1,247", color: "bg-emerald-50" },
+                      { label: "Sentiment", value: "92.1%", color: "bg-amber-50" },
+                      { label: "Active Prompts", value: "48", color: "bg-purple-50" },
+                    ].map((card, i) => (
+                      <div key={i} className="bg-white rounded-xl border border-border p-4">
+                        <div className="text-[10px] text-text-tertiary font-medium">{card.label}</div>
+                        <div className="text-lg font-bold text-primary-500 mt-1">{card.value}</div>
+                        <div className={`h-1 ${card.color} rounded-full mt-2 w-3/4`} />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Chart area */}
+                  <div className="bg-white rounded-xl border border-border p-4 h-40">
+                    <div className="text-xs font-medium text-primary-500 mb-3">Visibility Over Time</div>
+                    <div className="h-24 flex items-end gap-1">
+                      {[40, 45, 42, 58, 55, 62, 68, 65, 72, 78, 75, 82, 85, 80, 88, 92].map((h, i) => (
+                        <div
+                          key={i}
+                          className="flex-1 bg-primary-500/15 rounded-t transition-all hover:bg-primary-500/25"
+                          style={{ height: `${h}%` }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
