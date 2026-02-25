@@ -76,7 +76,7 @@
 
   --radius: 0.275rem;
   --background: var(--color-white);
-  --foreground: var(--color-gray-300);
+  --foreground: var(--color-neutral-800);
   --card: var(--color-white);
   --card-foreground: var(--color-neutral-800);
   --popover: var(--color-white);

@@ -41,8 +41,8 @@ export default function ForgotPasswordPage() {
       <div className="space-y-8">
         <div className="space-y-4 text-center">
           <div className="flex justify-center">
-            <div className="rounded-2xl bg-indigo-50 p-3.5">
-              <Mail className="h-6 w-6 text-indigo-400" />
+            <div className="rounded-2xl bg-primary-500/10 p-3.5">
+              <Mail className="h-6 w-6 text-primary-500" />
             </div>
           </div>
           <h1 className="text-2xl font-bold text-primary-500">Check your email</h1>
@@ -51,8 +51,8 @@ export default function ForgotPasswordPage() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4">
-          <p className="text-sm text-indigo-700">
+        <div className="rounded-xl border border-primary-500/25 bg-primary-500/10 p-4">
+          <p className="text-sm text-primary-500">
             The link will expire in 24 hours. If you don&apos;t see the email, check your spam folder.
           </p>
         </div>
@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
           Didn&apos;t receive the email?{" "}
           <button
             onClick={() => setIsSubmitted(false)}
-            className="text-indigo-400 hover:text-indigo-500 font-medium"
+            className="text-primary-500 hover:text-primary-600 font-medium"
           >
             Try again
           </button>
@@ -98,7 +98,7 @@ export default function ForgotPasswordPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-indigo-500">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-primary-500">Email</Label>
           <Input
             id="email"
             type="email"

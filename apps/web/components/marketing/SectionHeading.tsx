@@ -28,7 +28,7 @@ export default function SectionHeading({
   return (
     <Tag
       className={cn(
-        "tracking-tighter font-heading leading-[0.9] text-balance text-primary-500",
+        "tracking-tighter font-heading leading-[0.9] text-balance text-foreground",
         sizeClasses[size],
         centered && "text-center mx-auto",
         !centered && "max-w-xl mx-auto",

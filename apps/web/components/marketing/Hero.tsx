@@ -117,7 +117,7 @@ export default function Hero() {
                   {/* Metric cards row */}
                   <div className="grid grid-cols-4 gap-3">
                     {[
-                      { label: "Visibility Score", value: "78.5%", color: "bg-indigo-50" },
+                      { label: "Visibility Score", value: "78.5%", color: "bg-primary-500/10" },
                       { label: "Total Mentions", value: "1,247", color: "bg-emerald-50" },
                       { label: "Sentiment", value: "92.1%", color: "bg-amber-50" },
                       { label: "Active Prompts", value: "48", color: "bg-purple-50" },
@@ -137,7 +137,7 @@ export default function Hero() {
                       {[40, 45, 42, 58, 55, 62, 68, 65, 72, 78, 75, 82, 85, 80, 88, 92].map((h, i) => (
                         <div
                           key={i}
-                          className="flex-1 bg-indigo-100 rounded-t transition-all hover:bg-indigo-200"
+                          className="flex-1 bg-primary-500/15 rounded-t transition-all hover:bg-primary-500/25"
                           style={{ height: `${h}%` }}
                         />
                       ))}

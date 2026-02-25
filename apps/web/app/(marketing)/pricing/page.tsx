@@ -151,7 +151,7 @@ export default function PricingPage() {
               Our team is happy to help. Reach out to us at{" "}
               <a
                 href={site.links.support}
-                className="text-indigo-300 hover:text-indigo-400 font-medium"
+                className="text-primary-500 hover:text-primary-600 font-medium"
               >
                 {site.display.supportEmail}
               </a>

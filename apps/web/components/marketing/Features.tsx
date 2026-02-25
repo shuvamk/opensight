@@ -88,7 +88,7 @@ export default function Features() {
               >
                 {/* Label tag */}
                 <div className="flex items-center gap-2 mb-4">
-                  <Icon className="w-4 h-4 text-indigo-300" />
+                  <Icon className="w-4 h-4 text-primary-500" />
                   <span className="text-xs font-mono uppercase tracking-wider text-text-tertiary">
                     {feature.label}
                   </span>

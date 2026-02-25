@@ -2,7 +2,6 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useBilling } from "@/hooks/useBilling";
-import { SettingsSidebar } from "@/components/settings/SettingsSidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -60,26 +59,8 @@ export default function BillingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted">
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Settings</h1>
-          <p className="text-muted-foreground mt-2">Manage your account settings</p>
-        </div>
-
-        {/* Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <div>
-            <Card className="p-4">
-              <SettingsSidebar />
-            </Card>
-          </div>
-
-          {/* Content */}
-          <div className="md:col-span-3 space-y-6">
-            {isLoading ? (
+    <div className="space-y-6">
+      {isLoading ? (
               <Card className="p-8 text-center text-muted-foreground">
                 Loading billing information...
               </Card>
@@ -266,9 +247,6 @@ export default function BillingPage() {
                 Unable to load billing information
               </Card>
             )}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

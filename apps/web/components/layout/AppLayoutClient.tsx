@@ -56,7 +56,7 @@ export default function AppLayoutClient({
       <div className="flex flex-1 flex-col md:ml-60">
         <Header onMenuClick={() => setMobileMenuOpen(true)} />
         <main className="flex-1 overflow-y-auto">
-          <div className="p-6 max-w-7xl mx-auto">
+          <div className="p-3">
             {children}
           </div>
         </main>

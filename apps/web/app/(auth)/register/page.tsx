@@ -121,7 +121,7 @@ export default function RegisterPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-sm font-medium text-indigo-500">Full Name</Label>
+          <Label htmlFor="name" className="text-sm font-medium text-primary-500">Full Name</Label>
           <Input
             id="name"
             type="text"
@@ -135,7 +135,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-sm font-medium text-indigo-500">Email</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-primary-500">Email</Label>
           <Input
             id="email"
             type="email"
@@ -149,7 +149,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-sm font-medium text-indigo-500">Password</Label>
+          <Label htmlFor="password" className="text-sm font-medium text-primary-500">Password</Label>
           <Input
             id="password"
             type="password"
@@ -163,7 +163,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword" className="text-sm font-medium text-indigo-500">Confirm Password</Label>
+          <Label htmlFor="confirmPassword" className="text-sm font-medium text-primary-500">Confirm Password</Label>
           <Input
             id="confirmPassword"
             type="password"
@@ -188,7 +188,7 @@ export default function RegisterPage() {
 
       <p className="text-center text-sm text-text-secondary">
         Already have an account?{" "}
-        <Link href="/login" className="text-indigo-400 hover:text-indigo-500 font-medium">
+        <Link href="/login" className="text-primary-500 hover:text-primary-600 font-medium">
           Sign in
         </Link>
       </p>
