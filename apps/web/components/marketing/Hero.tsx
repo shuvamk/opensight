@@ -170,6 +170,8 @@ export default function Hero() {
             </div>
           </div>
         </div>
+        {/* AI network visual */}
+        <AIBeamNetwork />
       </div>
     </section>
   );
