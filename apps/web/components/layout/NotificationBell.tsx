@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -36,9 +37,11 @@ export default function NotificationBell() {
         }
       />
       <DropdownMenuContent align="end" className="w-80 rounded-xl">
-        <DropdownMenuLabel className="font-semibold">
-          Notifications
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-semibold">
+            Notifications
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {isLoading ? (
           <DropdownMenuItem disabled>Loading...</DropdownMenuItem>
