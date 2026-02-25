@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { site } from "@/lib/site-config";
+import { useGitHubRepo } from "@/hooks/useGitHubRepo";
 import { Github, Menu, X } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -16,6 +17,7 @@ const navLinks = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: repo } = useGitHubRepo();
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-border/40">
@@ -51,9 +53,14 @@ export default function Navbar() {
 
           {/* Right side — GitHub stars + Sign up like Firecrawl */}
           <div className="hidden md:flex items-center gap-3">
-            <Button render={<Link href={site.links.repo} />} variant="outline" size="sm">
+            <Button render={<Link href={site.links.repo} target="_blank" />} variant="outline" size="sm">
               <Github className="w-4 h-4" />
               Star
+              {repo?.stargazers_count != null && (
+                <span>
+                  {repo.stargazers_count.toLocaleString()}
+                </span>
+              )}
             </Button>
             <Link href="/register">
               <Button size="sm">
@@ -100,7 +107,12 @@ export default function Navbar() {
               )}
               <Button render={<Link href={site.links.repo} />} variant="outline" className="w-full" size="sm">
                 <Github className="w-4 h-4" />
-                GitHub
+                Star
+                {repo?.stargazers_count != null && (
+                  <span className="ml-1.5 font-medium tabular-nums">
+                    {repo.stargazers_count.toLocaleString()}
+                  </span>
+                )}
               </Button>
               <div className="flex gap-2 mt-2">
                 <Link href="/login" className="flex-1">
