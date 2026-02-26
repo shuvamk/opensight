@@ -4,7 +4,6 @@ import GetStartedDialog from "@/components/marketing/GetStartedDialog";
 import { site } from "@/lib/site-config";
 import { BorderBeam } from "@/registry/magicui/border-beam";
 import { ArrowRight, ExternalLink } from "lucide-react";
-import AIBeamNetwork from "@/components/marketing/AIBeamNetwork";
 import { Badge } from "../ui/badge";
 
 export default function Hero() {
@@ -112,8 +111,6 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* AI network visual */}
-        <AIBeamNetwork />
         {/* Dashboard preview — Firecrawl-style browser mockup with dashed outlines */}
         <div className="mt-20 mx-auto max-w-7xl animate-slide-up">
           <div className="relative group">
@@ -170,8 +167,6 @@ export default function Hero() {
             </div>
           </div>
         </div>
-        {/* AI network visual */}
-        <AIBeamNetwork />
       </div>
     </section>
   );
