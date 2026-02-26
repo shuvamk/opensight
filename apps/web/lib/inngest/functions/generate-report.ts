@@ -52,7 +52,7 @@ export const generateReport = inngest.createFunction(
       });
 
       const messageOutput = response.output.find(
-        (item: any) => item.type === "message",
+        (item) => item.type === "message",
       );
 
       if (!messageOutput || messageOutput.type !== "message") {
@@ -62,7 +62,7 @@ export const generateReport = inngest.createFunction(
       for (const item of messageOutput.content) {
         if (item.type === "refusal") {
           throw new Error(
-            `OpenAI refused the request: ${(item as any).refusal}`,
+            `OpenAI refused the request: ${item.refusal}`,
           );
         }
         if (item.type === "output_text") {
