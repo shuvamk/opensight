@@ -1,19 +1,11 @@
 import { EventSchemas, Inngest } from "inngest";
 
 type Events = {
-  "analyse-request": {
+  "report/request": {
     data: {
+      reportId: string;
       domain: string;
       email: string;
-      requestId: string;
-    };
-  };
-  "analysis/completed": {
-    data: {
-      domain: string;
-      email: string;
-      requestId: string;
-      analysisResult: Record<string, unknown>;
     };
   };
 };

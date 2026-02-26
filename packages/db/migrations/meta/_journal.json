@@ -22,6 +22,20 @@
       "when": 1771945517108,
       "tag": "0002_empty_chamber",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1772025890069,
+      "tag": "0003_add-reports-table",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1772027551784,
+      "tag": "0004_add-tracking-prompts-table",
+      "breakpoints": true
     }
   ]
 }

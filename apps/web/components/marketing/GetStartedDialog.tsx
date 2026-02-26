@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Loader2, CheckCircle2, Sparkles, ExternalLink } from "lucide-react";
 import { submitGetStarted } from "@/app/actions/get-started";
 
 export default function GetStartedDialog({
@@ -24,7 +24,8 @@ export default function GetStartedDialog({
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [domain, setDomain] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [reportSlug, setReportSlug] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "limit" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -33,8 +34,13 @@ export default function GetStartedDialog({
     setErrorMsg("");
 
     try {
-      await submitGetStarted({ email, domain });
-      setStatus("success");
+      const result = await submitGetStarted({ email, domain });
+      if (result.success) {
+        setReportSlug(result.reportSlug);
+        setStatus("success");
+      } else if (result.reason === "limit_reached") {
+        setStatus("limit");
+      }
     } catch {
       setStatus("error");
       setErrorMsg("Something went wrong. Please try again.");
@@ -48,6 +54,7 @@ export default function GetStartedDialog({
       setTimeout(() => {
         setEmail("");
         setDomain("");
+        setReportSlug("");
         setStatus("idle");
         setErrorMsg("");
       }, 200);
@@ -65,30 +72,72 @@ export default function GetStartedDialog({
                 <CheckCircle2 className="w-12 h-12 text-emerald-500" />
               </div>
               <DialogTitle className="text-center">
-                Analysis started
+                Report is being generated
               </DialogTitle>
               <DialogDescription className="text-center">
                 We&apos;re analyzing <span className="font-medium text-foreground">{domain}</span>.
-                You&apos;ll receive results at <span className="font-medium text-foreground">{email}</span> once complete.
+                You&apos;ll receive an email at <span className="font-medium text-foreground">{email}</span> with the report link once it&apos;s ready.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter variant="bare">
-              <Button
-                className="w-full"
-                variant="outline"
-                onClick={() => handleOpenChange(false)}
-              >
-                Close
-              </Button>
+              <div className="flex flex-col gap-2 w-full">
+                <a href={`/report/${reportSlug}`}>
+                  <Button className="w-full">
+                    View report status
+                    <ExternalLink className="w-4 h-4" />
+                  </Button>
+                </a>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => handleOpenChange(false)}
+                >
+                  Close
+                </Button>
+              </div>
+            </DialogFooter>
+          </>
+        ) : status === "limit" ? (
+          <>
+            <DialogHeader>
+              <div className="flex justify-center pt-2">
+                <Sparkles className="w-12 h-12 text-amber-500" />
+              </div>
+              <DialogTitle className="text-center">
+                Free analysis already used
+              </DialogTitle>
+              <DialogDescription className="text-center">
+                A free analysis has already been run for{" "}
+                <span className="font-medium text-foreground">{email}</span>.
+                Upgrade to a paid plan to run unlimited analyses across
+                multiple domains.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter variant="bare">
+              <div className="flex flex-col gap-2 w-full">
+                <a href="#pricing">
+                  <Button className="w-full">
+                    View pricing
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </a>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => handleOpenChange(false)}
+                >
+                  Close
+                </Button>
+              </div>
             </DialogFooter>
           </>
         ) : (
           <form onSubmit={handleSubmit}>
             <DialogHeader>
-              <DialogTitle>Get started free</DialogTitle>
+              <DialogTitle>Get your free AI visibility report</DialogTitle>
               <DialogDescription>
-                Enter your email and domain to get a free AI visibility analysis
-                of your brand.
+                Enter your email and domain. We&apos;ll analyze your brand across
+                AI engines and send you a detailed report.
               </DialogDescription>
             </DialogHeader>
 
@@ -136,11 +185,11 @@ export default function GetStartedDialog({
                 {status === "loading" ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Analyzing...
+                    Starting analysis...
                   </>
                 ) : (
                   <>
-                    Start analysis
+                    Generate report
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}

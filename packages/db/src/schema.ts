@@ -55,6 +55,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   notifications: many(notifications),
   notificationSettings: many(notificationSettings),
   jobRuns: many(jobRuns),
+  reports: many(reports),
 }));
 
 // ============================================================================
@@ -198,6 +199,7 @@ export const brandsRelations = relations(brands, ({ one, many }) => ({
   promptResults: many(promptResults),
   visibilitySnapshots: many(visibilitySnapshots),
   jobRuns: many(jobRuns),
+  reports: many(reports),
 }));
 
 // ============================================================================
@@ -583,3 +585,97 @@ export const analysisRequests = pgTable(
     };
   }
 );
+
+// ============================================================================
+// REPORTS TABLE
+// ============================================================================
+export const reports = pgTable(
+  'reports',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    slug: varchar('slug', { length: 32 }).notNull().unique(),
+    email: varchar('email', { length: 255 }).notNull(),
+    domain: varchar('domain', { length: 255 }).notNull(),
+    brandId: uuid('brand_id'),
+    userId: uuid('user_id'),
+    title: varchar('title', { length: 255 }).notNull(),
+    reportType: varchar('report_type', { length: 50 }).notNull().default('analysis'),
+    status: varchar('status', { length: 20 }).notNull().default('pending'),
+    data: jsonb('data'),
+    summary: text('summary'),
+    errorMessage: text('error_message'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+  },
+  (table) => {
+    return {
+      slugIdx: uniqueIndex('reports_slug_idx').on(table.slug),
+      emailIdx: index('reports_email_idx').on(table.email),
+      statusIdx: index('reports_status_idx').on(table.status),
+      brandIdFk: foreignKey({
+        columns: [table.brandId],
+        foreignColumns: [brands.id],
+        name: 'reports_brand_id_fk',
+      }).onDelete('set null'),
+      userIdFk: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [users.id],
+        name: 'reports_user_id_fk',
+      }).onDelete('set null'),
+    };
+  }
+);
+
+export const reportsRelations = relations(reports, ({ one, many }) => ({
+  brand: one(brands, {
+    fields: [reports.brandId],
+    references: [brands.id],
+  }),
+  user: one(users, {
+    fields: [reports.userId],
+    references: [users.id],
+  }),
+  trackingPrompts: many(trackingPrompts),
+}));
+
+// ============================================================================
+// TRACKING PROMPTS TABLE
+// ============================================================================
+export const trackingPrompts = pgTable(
+  'tracking_prompts',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    reportId: uuid('report_id').notNull(),
+    domain: varchar('domain', { length: 255 }).notNull(),
+    discovery: jsonb('discovery').notNull().default('[]'),
+    comparison: jsonb('comparison').notNull().default('[]'),
+    recommendation: jsonb('recommendation').notNull().default('[]'),
+    buyingDecision: jsonb('buying_decision').notNull().default('[]'),
+    problemSolution: jsonb('problem_solution').notNull().default('[]'),
+    reviewSentiment: jsonb('review_sentiment').notNull().default('[]'),
+    featureDeepDive: jsonb('feature_deep_dive').notNull().default('[]'),
+    useCaseSpecific: jsonb('use_case_specific').notNull().default('[]'),
+    industryLandscape: jsonb('industry_landscape').notNull().default('[]'),
+    reputationRisks: jsonb('reputation_risks').notNull().default('[]'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (table) => {
+    return {
+      reportIdIdx: index('tracking_prompts_report_id_idx').on(table.reportId),
+      domainIdx: index('tracking_prompts_domain_idx').on(table.domain),
+      reportIdFk: foreignKey({
+        columns: [table.reportId],
+        foreignColumns: [reports.id],
+        name: 'tracking_prompts_report_id_fk',
+      }).onDelete('cascade'),
+    };
+  }
+);
+
+export const trackingPromptsRelations = relations(trackingPrompts, ({ one }) => ({
+  report: one(reports, {
+    fields: [trackingPrompts.reportId],
+    references: [reports.id],
+  }),
+}));
