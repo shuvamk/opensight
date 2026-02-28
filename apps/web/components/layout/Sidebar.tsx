@@ -1,25 +1,26 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useBrands } from "@/hooks/useBrand";
 import { cn } from "@/lib/utils";
+import { useBrandStore } from "@/stores/brand-store";
 import {
-  LayoutDashboard,
-  Zap,
-  TrendingUp,
   BarChart3,
   Bell,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
   ChevronsUpDown,
+  LayoutDashboard,
+  Settings,
+  SidebarCloseIcon,
+  SidebarOpenIcon,
+  TrendingUp,
+  Zap
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useMemo } from "react";
+import { Button } from "../ui/button";
+import { BrandAvatar } from "./BrandAvatar";
 import BrandPopover from "./BrandPopover";
 import UserMenu from "./UserMenu";
-import { useBrands } from "@/hooks/useBrand";
-import { useBrandStore } from "@/stores/brand-store";
-import { BrandAvatar } from "./BrandPopover";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -30,8 +31,7 @@ const navItems = [
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+export default function Sidebar({ collapsed, setCollapsed }: { collapsed: boolean, setCollapsed: (collapsed: boolean) => void }) {
   const pathname = usePathname();
   const { data: brandsData } = useBrands();
   const { activeBrandId, setActiveBrand } = useBrandStore();
@@ -54,36 +54,43 @@ export default function Sidebar() {
     <aside
       className={cn(
         "fixed left-0 top-0 z-40 h-screen border-r border-border bg-background transition-all duration-300",
-        collapsed ? "w-[72px]" : "w-[200px]"
+        collapsed ? "w-[56px]" : "w-[200px]"
       )}
     >
       <div className="flex h-full flex-col">
         {/* Logo / Brand (click opens brand popover) */}
-        <div className="flex items-center justify-between border-b border-border px-2 h-10">
-          {!collapsed && (
-            <BrandPopover
-              brands={brands}
-              activeBrand={activeBrand ?? null}
-              onSelectBrand={(id) => setActiveBrand(id)}
-              collapsed={false}
+        <div className={cn("flex items-center border-b border-border px-1.5 h-10 group", collapsed ? "justify-center" : "justify-between")}>
+          <BrandPopover
+            brands={brands}
+            activeBrand={activeBrand ?? null}
+            onSelectBrand={(id) => setActiveBrand(id)}
+            collapsed={false}
+          >
+            <Button
+              type="button"
+              variant="ghost"
+              className={cn("px-1 font-sans text-left normal-case", collapsed && "group-hover:opacity-0")}
             >
-              <div className="flex items-center gap-1.5 hover:bg-muted py-1 px-2 rounded-sm">
-                <BrandAvatar className="size-5" name={logoLabel} id={activeBrandId ?? ""} />
-                <span className="font-semibold text-primary truncate">{logoLabel}</span>
-                <ChevronsUpDown className="size-4 ml-6" />
-              </div>
-
-            </BrandPopover>
-          )}
-          <button
+              <BrandAvatar size={24} name={logoLabel} id={activeBrandId ?? ""} />
+              {!collapsed &&
+                <>
+                  <span className="font-medium truncate flex-1">{logoLabel}</span>
+                  <ChevronsUpDown className="size-4 ml-6" />
+                </>
+              }
+            </Button>
+          </BrandPopover>
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              "rounded-lg p-1.5 hover:bg-surface text-text-secondary hover:text-primary transition-colors",
-              collapsed && "hidden"
+              "rounded-lg p-1.5 group-hover:bg-surface text-text-secondary hover:text-primary transition-colors",
+              collapsed && "absolute group-hover:opacity-100 opacity-0"
             )}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
+          >            {collapsed ? <SidebarOpenIcon className="h-4 w-4" /> : <SidebarCloseIcon className="h-4 w-4" />}
+
+          </Button>
         </div>
 
         {/* Navigation */}
@@ -100,10 +107,11 @@ export default function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200",
+                  "flex items-center gap-3 rounded-md py-1.5 text-sm font-medium transition-all duration-200",
                   isActive
                     ? "bg-primary text-primary-foreground shadow-soft"
-                    : "text-text-secondary hover:bg-surface hover:text-primary"
+                    : "text-text-secondary hover:bg-surface hover:text-primary",
+                  collapsed ? "px-0" : "px-3"
                 )}
                 title={collapsed ? item.label : undefined}
               >
@@ -114,22 +122,9 @@ export default function Sidebar() {
           })}
         </nav>
 
-        {/* User account - bottom left */}
         <div className="border-t border-border p-3">
           <UserMenu variant="sidebar" collapsed={collapsed} />
         </div>
-
-        {/* Collapse toggle at bottom (when collapsed) */}
-        {collapsed && (
-          <div className="border-t border-border p-3">
-            <button
-              onClick={() => setCollapsed(false)}
-              className="w-full flex items-center justify-center rounded-xl p-2 hover:bg-surface text-text-secondary hover:text-primary transition-colors"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        )}
       </div>
     </aside>
   );

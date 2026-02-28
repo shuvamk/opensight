@@ -9,23 +9,10 @@ import {
 } from "@/components/ui/popover";
 import type { Brand } from "@/lib/api/brands/types";
 import { cn } from "@/lib/utils";
-import Avatar from "boring-avatars";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
-
-export function BrandAvatar({ name, id, className = "" }: { name: string; id: string; className?: string }) {
-  return (
-    <div className={cn("size-8 rounded-lg overflow-hidden shrink-0 ring-1 ring-border/50", className)}>
-      <Avatar
-        name={id || name}
-        size={32}
-        variant="marble"
-        square
-      />
-    </div>
-  );
-}
+import { BrandAvatar } from "./BrandAvatar";
 
 interface BrandPopoverProps {
   brands: Brand[];

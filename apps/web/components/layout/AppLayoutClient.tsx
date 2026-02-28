@@ -8,6 +8,7 @@ import { useBrands } from "@/hooks/useBrand";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 export default function AppLayoutClient({
   children,
@@ -19,6 +20,7 @@ export default function AppLayoutClient({
   const { data: user, isLoading: authLoading } = useAuthProfile();
   const { data: brandsData, isLoading: brandsLoading } = useBrands();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   const brands = useMemo(
     () => (Array.isArray(brandsData) ? brandsData : []),
@@ -57,18 +59,18 @@ export default function AppLayoutClient({
   return (
     <div className="flex h-screen bg-surface">
       <div className="hidden md:block">
-        <Sidebar />
+        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       </div>
 
       <div className="md:hidden">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetContent side="left" className="p-0 w-60">
-            <Sidebar />
+          <SheetContent side="left" className="p-0">
+            <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
           </SheetContent>
         </Sheet>
       </div>
 
-      <div className="flex flex-1 flex-col md:ml-60">
+      <div className={cn("flex flex-1 flex-col", collapsed ? "md:ml-[56px]" : "md:ml-[200px]")}>
         <Header onMenuClick={() => setMobileMenuOpen(true)} />
         <main className="flex-1 overflow-y-auto">
           <div className="p-3">
