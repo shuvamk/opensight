@@ -4,6 +4,7 @@ export interface Brand {
   websiteUrl: string;
   industry?: string;
   isActive?: boolean;
+  pinned?: boolean;
   createdAt?: string;
   updatedAt?: string;
   latestVisibilityScore?: number;
@@ -27,6 +28,7 @@ export interface UpdateBrandPayload {
   name?: string;
   website_url?: string;
   industry?: string;
+  pinned?: boolean;
 }
 
 export interface RecentChange {

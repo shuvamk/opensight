@@ -4,10 +4,11 @@ import PageHeading from "@/components/marketing/PageHeading";
 import { Button } from "@/components/ui/button";
 import OsIcon from "@/components/ui/OsIcon";
 import { site } from "@/lib/site-config";
-import { BorderBeam } from "@/registry/magicui/border-beam";
-import { ArrowRight, ExternalLink } from "lucide-react";
-import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
+import { BorderBeam } from "@/registry/magicui/border-beam";
+import { ArrowRight, SquareArrowOutUpRight } from "lucide-react";
+import Link from "next/link";
+import { Badge } from "../ui/badge";
 
 export default function Hero() {
   return (
@@ -66,18 +67,20 @@ export default function Hero() {
             />
           </div>
 
-          {[...Array(6)].map((_, i) => (
-            <OsIcon key={i} className={cn(
-              "size-60 text-muted rotate-12 absolute top-[40%] -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 ease-out group-hover:rotate-24",
-              i === 0 && "rotate-36 left-[5%]",
-              i === 1 && "-rotate-24 left-[22%]",
-              i === 2 && "rotate-36 left-[39%]",
-              i === 3 && "-rotate-48 left-[56%]",
-              i === 4 && "rotate-60 left-[74%]",
-              i === 5 && "-rotate-36 left-[91%]",
-            )}
-            />
-          ))}
+          <div className="w-screen flex justify-between absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+            {[...Array(6)].map((_, i) => (
+              <OsIcon key={i} className={cn(
+                "size-60 text-muted transition-transform duration-500 ease-out group-hover:rotate-24",
+                i === 0 && "group-hover:rotate-36 md:block hidden",
+                i === 1 && "group-hover:-rotate-24",
+                i === 2 && "group-hover:rotate-36 md:block hidden",
+                i === 3 && "group-hover:-rotate-48 md:block hidden",
+                i === 4 && "group-hover:rotate-60",
+                i === 5 && "group-hover:-rotate-36 md:block hidden",
+              )}
+              />
+            ))}
+          </div>
 
           <PageHeading as="h1" size="lg" className="animate-slide-up">
             Watch how <span className="font-heading">AI talks</span> about
@@ -92,17 +95,15 @@ export default function Hero() {
           {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
           <div className="flex flex-col sm:flex-row gap-2 justify-center items-center pt-2 animate-slide-up">
             <GetStartedDialog>
-              <Button size="lg">
+              <Button size="lg" className="sm:w-fit w-full max-w-xs">
                 Start for free
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </GetStartedDialog>
-            <a href={site.links.repo} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="lg">
-                View on GitHub
-                <ExternalLink className="w-4 h-4" />
-              </Button>
-            </a>
+            <Button variant="outline" size="lg" render={<Link href={site.links.repo} target="_blank" rel="noopener noreferrer"></Link>} className="sm:w-fit w-full max-w-xs">
+              View on GitHub
+              <SquareArrowOutUpRight className="w-4 h-4" />
+            </Button>
           </div>
 
           {/* Trust indicators */}
@@ -179,6 +180,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 }

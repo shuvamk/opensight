@@ -20,15 +20,19 @@ interface RequestOptions extends RequestInit {
   headers?: Record<string, string>;
 }
 
+function getErrorMessage(body: Record<string, unknown>, fallback: string): string {
+  return (body.error as string) || (body.message as string) || fallback;
+}
+
 async function handleResponse(response: Response) {
   if (response.status === 401) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || "Unauthorized");
+    const error = await response.json().catch(() => ({})) as Record<string, unknown>;
+    throw new Error(getErrorMessage(error, "Unauthorized"));
   }
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || `HTTP ${response.status}`);
+    const error = await response.json().catch(() => ({})) as Record<string, unknown>;
+    throw new Error(getErrorMessage(error, `HTTP ${response.status}`));
   }
 
   const contentType = response.headers.get("content-type");

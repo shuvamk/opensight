@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { brandService } from '../services/brand.service.js';
 import { PLAN_LIMITS } from '@opensight/shared';
+import { env } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -25,13 +26,16 @@ export async function createBrand(req: Request, res: Response, next: NextFunctio
   try {
     const { name, website_url, industry } = req.body;
 
-    // Check plan limits
-    const planLimits = PLAN_LIMITS[req.user!.plan_id as keyof typeof PLAN_LIMITS];
+    // Check plan limits (or env override)
+    console.log('env.MAX_BRANDS_OVERRIDE', env.MAX_BRANDS_OVERRIDE);
+    const maxBrands =
+      env.MAX_BRANDS_OVERRIDE ??
+      PLAN_LIMITS[req.user!.plan_id as keyof typeof PLAN_LIMITS].brands;
     const currentCount = await brandService.getBrandCount(req.user!.id);
 
-    if (currentCount >= planLimits.brands) {
+    if (currentCount >= maxBrands) {
       res.status(403).json({
-        error: `You have reached the maximum number of brands (${planLimits.brands}) for your plan`,
+        error: `You have reached the maximum number of brands (${maxBrands}) for your plan`,
       });
       return;
     }
@@ -77,12 +81,13 @@ export async function getBrand(req: Request, res: Response, next: NextFunction):
 export async function updateBrand(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { id } = req.params as { id: string };
-    const { name, website_url, industry } = req.body;
+    const { name, website_url, industry, pinned } = req.body;
 
     const brand = await brandService.updateBrand(id, req.user!.id, {
       name,
       websiteUrl: website_url,
       industry,
+      pinned,
     });
 
     res.json({ brand });

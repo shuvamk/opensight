@@ -13,6 +13,7 @@ interface UpdateBrandInput {
   name?: string;
   websiteUrl?: string;
   industry?: string;
+  pinned?: boolean;
 }
 
 export class BrandService {
@@ -26,12 +27,13 @@ export class BrandService {
           websiteUrl: brands.websiteUrl,
           industry: brands.industry,
           isActive: brands.isActive,
+          pinned: brands.pinned,
           createdAt: brands.createdAt,
           updatedAt: brands.updatedAt,
         })
         .from(brands)
         .where(eq(brands.userId, userId))
-        .orderBy(desc(brands.createdAt));
+        .orderBy(desc(brands.pinned), desc(brands.createdAt));
 
       // For each brand, get the latest visibility snapshot
       const brandsWithScores = await Promise.all(
@@ -124,14 +126,21 @@ export class BrandService {
         throw new Error('Brand not found or you do not have access to it');
       }
 
+      const updates: Partial<{
+        name: string;
+        websiteUrl: string;
+        industry: string | null;
+        pinned: boolean;
+        updatedAt: Date;
+      }> = { updatedAt: new Date() };
+      if (input.name !== undefined) updates.name = input.name;
+      if (input.websiteUrl !== undefined) updates.websiteUrl = input.websiteUrl;
+      if (input.industry !== undefined) updates.industry = input.industry;
+      if (input.pinned !== undefined) updates.pinned = input.pinned;
+
       const result = await db
         .update(brands)
-        .set({
-          name: input.name,
-          websiteUrl: input.websiteUrl,
-          industry: input.industry,
-          updatedAt: new Date(),
-        })
+        .set(updates)
         .where(eq(brands.id, brandId))
         .returning();
 

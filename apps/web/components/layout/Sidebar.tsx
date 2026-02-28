@@ -18,6 +18,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { Button } from "../ui/button";
+import OsIcon from "../ui/OsIcon";
 import { BrandAvatar } from "./BrandAvatar";
 import BrandPopover from "./BrandPopover";
 import UserMenu from "./UserMenu";
@@ -64,18 +65,24 @@ export default function Sidebar({ collapsed, setCollapsed }: { collapsed: boolea
             brands={brands}
             activeBrand={activeBrand ?? null}
             onSelectBrand={(id) => setActiveBrand(id)}
+            onBrandDeleted={(deletedId) => {
+              if (deletedId === activeBrandId) {
+                const next = brands.find((b) => b.id !== deletedId);
+                setActiveBrand(next?.id ?? "");
+              }
+            }}
             collapsed={false}
           >
             <Button
               type="button"
               variant="ghost"
-              className={cn("px-1 font-sans text-left normal-case", collapsed && "group-hover:opacity-0")}
+              className={cn("px-1 font-sans gap-1.5 text-left normal-case w-[156px]", collapsed && "group-hover:opacity-0")}
             >
-              <BrandAvatar size={24} name={logoLabel} id={activeBrandId ?? ""} />
+              {logoLabel === "OpenSight" ? <OsIcon className="size-5 text-primary" aria-hidden /> : <BrandAvatar size={20} name={logoLabel} id={activeBrandId ?? ""} />}
               {!collapsed &&
                 <>
-                  <span className="font-medium truncate flex-1">{logoLabel}</span>
-                  <ChevronsUpDown className="size-4 ml-6" />
+                  <span className="w-full font-[450] text-foreground text-base truncate flex-1">{logoLabel}</span>
+                  <ChevronsUpDown className="size-4" />
                 </>
               }
             </Button>
@@ -94,7 +101,7 @@ export default function Sidebar({ collapsed, setCollapsed }: { collapsed: boolea
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-3">
+        <nav className="flex-1 space-y-1 overflow-y-auto p-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive =
@@ -103,26 +110,27 @@ export default function Sidebar({ collapsed, setCollapsed }: { collapsed: boolea
                 : pathname.startsWith(item.href);
 
             return (
-              <Link
+
+              <Button
                 key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-md py-1.5 text-sm font-medium transition-all duration-200",
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-soft"
-                    : "text-text-secondary hover:bg-surface hover:text-primary",
-                  collapsed ? "px-0" : "px-3"
-                )}
-                title={collapsed ? item.label : undefined}
-              >
-                <Icon className={cn("h-[18px] w-[18px] shrink-0", collapsed && "mx-auto")} />
-                {!collapsed && <span>{item.label}</span>}
-              </Link>
+                variant={isActive ? "primary-ghost" : "ghost"}
+                className={cn(collapsed ? "px-0" : "px-3", "w-full justify-start")}
+                render={
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    title={collapsed ? item.label : undefined}
+                  >
+                    <Icon className={cn("h-[18px] w-[18px] shrink-0", collapsed && "mx-auto")} />
+                    {!collapsed && <span>{item.label}</span>}
+                  </Link>
+                }
+              />
             );
           })}
         </nav>
 
-        <div className="border-t border-border p-3">
+        <div className="p-2">
           <UserMenu variant="sidebar" collapsed={collapsed} />
         </div>
       </div>

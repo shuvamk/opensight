@@ -174,6 +174,7 @@ export const brands = pgTable(
     websiteUrl: text('website_url').notNull(),
     industry: varchar('industry', { length: 100 }),
     isActive: boolean('is_active').default(true),
+    pinned: boolean('pinned').default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
   },

@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useFieldArray, type FieldValues, type Resolver } from "react-hook-form";
@@ -99,6 +100,7 @@ const SAMPLE_PROMPTS = [
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const setActiveBrand = useBrandStore((state) => state.setActiveBrand);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -218,6 +220,12 @@ export default function OnboardingPage() {
 
       const brandId = brand.id;
       setActiveBrand(brandId);
+
+      queryClient.setQueryData<Awaited<ReturnType<typeof brandsApi.listBrands>>>(
+        ["brands"],
+        (prev) => (prev ? [...prev, brand] : [brand])
+      );
+      queryClient.invalidateQueries({ queryKey: ["brands"] });
 
       // Bulk create prompts (API: POST /brands/:id/prompts with { prompts: [...] })
       const allPrompts = [

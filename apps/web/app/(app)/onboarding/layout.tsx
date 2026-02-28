@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useAuthProfile } from "@/hooks/useAuth";
+import OsIcon from "@/components/ui/OsIcon";
 
 export default function OnboardingLayout({
   children,
@@ -20,7 +21,7 @@ export default function OnboardingLayout({
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
-        <div>Loading...</div>
+        <OsIcon className="h-14 w-14 animate-spin text-primary" aria-hidden />
       </div>
     );
   }

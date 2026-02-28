@@ -2,6 +2,19 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import {
+  Settings,
+  Users,
+  BookOpen,
+  Sun,
+  Moon,
+  Monitor,
+  LogOut,
+  Plus,
+  SwatchBook,
+} from "lucide-react";
 import { useAuthProfile, useLogout } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -12,13 +25,162 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsList, TabsTab } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { site } from "@/lib/site-config";
+
+type User = { name: string; email: string } & { avatar_url?: string };
+
+function SidebarPopoverContent({
+  user,
+  userAvatarUrl,
+  initials,
+  onLogout,
+}: {
+  user: User;
+  userAvatarUrl: string;
+  initials: string;
+  onLogout: () => void;
+}) {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(t);
+  }, []);
+
+  const themeOptions = [
+    { value: "light" as const, icon: Sun, label: "Light" },
+    { value: "dark" as const, icon: Moon, label: "Dark" },
+    { value: "system" as const, icon: Monitor, label: "System" },
+  ] as const;
+
+  return (
+    <div className="flex flex-col">
+      {/* User block: avatar left, name + email right */}
+      <div className="flex items-center gap-1.5 p-1">
+        <Avatar className="h-11 w-11 shrink-0">
+          <AvatarImage src={userAvatarUrl} alt={user.name} />
+          <AvatarFallback className="bg-muted text-accent-foreground text-sm font-semibold">
+            {initials}
+          </AvatarFallback>
+        </Avatar>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-foreground">{user.name}</p>
+          <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+        </div>
+      </div>
+
+
+      <div className="px-1 pb-1">
+        <Button
+          size="xs"
+          render={
+            <Link href="/settings/billing" className="gap-2">
+              <Plus className="size-4" />
+              Increase Limit
+            </Link>
+          }
+          className="w-full"
+        />
+      </div>
+
+      <Separator />
+
+      <div className="flex flex-col p-1">
+        <Button
+          render={
+            <Link href="/settings">
+              <Settings className="size-4 shrink-0" />
+              Settings
+            </Link>
+          }
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start"
+        />
+        <Button
+          render={
+            <Link href="/settings/team">
+              <Users className="size-4 shrink-0" />
+              Invite members
+            </Link>
+          }
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start"
+        />
+        <Button
+          render={
+            <Link href={site.links.docs} target="_blank" rel="noopener noreferrer">
+              <BookOpen className="size-4 shrink-0" />
+              Documentation
+            </Link>
+          }
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start"
+        />
+      </div>
+
+      <Separator />
+
+      {/* Theme: label + tabs */}
+      <div className="w-full flex justify-between items-center p-1 pl-3.5">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <SwatchBook className="size-4 shrink-0" />
+          <span>Theme</span>
+        </div>
+        {mounted && (
+          <Tabs
+            value={theme ?? "system"}
+            onValueChange={(v) => setTheme(v as "light" | "dark" | "system")}
+          >
+            <TabsList>
+              {themeOptions.map(({ value, icon: Icon }) => (
+                <TabsTab
+                  key={value}
+                  value={value}
+                  aria-label={value}
+                  className="size-7! px-!"
+                >
+                  <Icon />
+                </TabsTab>
+              ))}
+            </TabsList>
+          </Tabs>
+        )}
+      </div>
+
+      <Separator />
+
+      {/* Logout */}
+      <div className="p-1">
+        <Button
+          type="button"
+          variant="destructive-ghost"
+          onClick={onLogout}
+          className="w-full justify-start"
+        >
+          <LogOut className="size-4 shrink-0" />
+          Logout
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 interface UserMenuProps {
-  /** When true, trigger shows avatar + name + email in a row (for sidebar) */
   variant?: "default" | "sidebar";
-  /** When true (sidebar collapsed), trigger is compact (avatar only) */
   collapsed?: boolean;
 }
 
@@ -53,27 +215,30 @@ export default function UserMenu({ variant = "default", collapsed }: UserMenuPro
   const userAvatarUrl = (user as { avatar_url?: string }).avatar_url ?? "";
   const triggerContent =
     isSidebar && !collapsed ? (
-      <button
+      <Button
         type="button"
-        className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left hover:bg-surface transition-colors"
+        variant="ghost"
+        className="w-full justify-start gap-1 font-sans normal-case font-medium text-foreground hover:bg-surface"
       >
-        <Avatar className="h-9 w-9 shrink-0">
+        <Avatar className="size-7 shrink-0">
           <AvatarImage src={userAvatarUrl} alt={user.name} />
           <AvatarFallback className="bg-muted text-accent-foreground text-xs font-semibold">
             {initials}
           </AvatarFallback>
         </Avatar>
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 text-left -space-y-0.5">
           <p className="truncate text-sm font-medium text-foreground">{user.name}</p>
           <p className="truncate text-xs text-muted-foreground">{user.email}</p>
         </div>
-      </button>
+      </Button>
     ) : (
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         className={cn(
-          "relative rounded-full ring-2 ring-transparent hover:ring-border transition-all",
-          isSidebar && "flex items-center justify-center w-full"
+          "rounded-full ring-2 ring-transparent hover:ring-border",
+          isSidebar && "w-full"
         )}
       >
         <Avatar className={cn("h-9 w-9", isSidebar && "h-8 w-8")}>
@@ -82,8 +247,24 @@ export default function UserMenu({ variant = "default", collapsed }: UserMenuPro
             {initials}
           </AvatarFallback>
         </Avatar>
-      </button>
+      </Button>
     );
+
+  if (isSidebar) {
+    return (
+      <Popover>
+        <PopoverTrigger render={triggerContent} />
+        <PopoverContent
+          side="right"
+          align="start"
+          sideOffset={8}
+          className="w-72 rounded-xl p-0"
+        >
+          <SidebarPopoverContent user={user} userAvatarUrl={userAvatarUrl} initials={initials} onLogout={handleLogout} />
+        </PopoverContent>
+      </Popover>
+    );
+  }
 
   return (
     <DropdownMenu>

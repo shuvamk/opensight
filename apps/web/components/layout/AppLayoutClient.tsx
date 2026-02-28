@@ -9,6 +9,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import OsIcon from "../ui/OsIcon";
 
 export default function AppLayoutClient({
   children,
@@ -47,10 +48,7 @@ export default function AppLayoutClient({
     return (
       <div className="flex h-screen items-center justify-center bg-surface">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center animate-pulse">
-            <span className="text-primary-foreground font-bold text-xs tracking-wider">OS</span>
-          </div>
-          <div className="text-sm text-text-secondary">Loading...</div>
+          <OsIcon className="h-14 w-14 animate-spin text-primary" aria-hidden />
         </div>
       </div>
     );

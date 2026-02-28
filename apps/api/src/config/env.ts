@@ -50,6 +50,8 @@ const envSchema = z.object({
   
   // OpenAI (for analyzer)
   OPENAI_API_KEY: z.string().optional(),
+
+  MAX_BRANDS_OVERRIDE: z.coerce.number().int().min(1).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -55,6 +55,7 @@ export const updateBrandSchema = z.object({
   name: z.string().min(1).max(255).optional(),
   website_url: z.string().url().optional(),
   industry: z.string().max(100).optional(),
+  pinned: z.boolean().optional(),
 });
 
 // Prompt validators

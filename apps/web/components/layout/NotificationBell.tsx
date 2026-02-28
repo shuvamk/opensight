@@ -11,7 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/menu";
+import OsIcon from "../ui/OsIcon";
 
 export default function NotificationBell() {
   const { data, isLoading } = useNotifications();
@@ -44,7 +45,7 @@ export default function NotificationBell() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {isLoading ? (
-          <DropdownMenuItem disabled>Loading...</DropdownMenuItem>
+          <DropdownMenuItem disabled><OsIcon className="h-14 w-14 animate-spin text-primary" aria-hidden /></DropdownMenuItem>
         ) : notifications.length === 0 ? (
           <div className="py-8 text-center">
             <Bell className="h-8 w-8 text-text-tertiary mx-auto mb-2" />
