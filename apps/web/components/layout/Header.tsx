@@ -5,7 +5,6 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import NotificationBell from "./NotificationBell";
-import UserMenu from "./UserMenu";
 
 interface HeaderProps {
   pageTitle?: string;
@@ -42,7 +41,6 @@ export default function Header({ pageTitle, onMenuClick }: HeaderProps) {
       <div className="flex items-center gap-2">
         <ThemeToggle />
         <NotificationBell />
-        <UserMenu />
       </div>
     </header>
   );

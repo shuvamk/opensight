@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useAuthProfile } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { useBrands } from "@/hooks/useBrand";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -13,20 +15,33 @@ export default function AppLayoutClient({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { data: user, isLoading } = useAuthProfile();
+  const pathname = usePathname();
+  const { data: user, isLoading: authLoading } = useAuthProfile();
+  const { data: brandsData, isLoading: brandsLoading } = useBrands();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/login");
-    }
-  }, [isLoading, user, router]);
+  const brands = useMemo(
+    () => (Array.isArray(brandsData) ? brandsData : []),
+    [brandsData]
+  );
+  const hasNoBrands = !brandsLoading && brands.length === 0;
+  const isOnboardingPage = pathname === "/onboarding" || pathname.startsWith("/onboarding/");
 
-  if (!isLoading && !user) {
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/login");
+      return;
+    }
+    if (user && hasNoBrands && !isOnboardingPage) {
+      router.replace("/onboarding");
+    }
+  }, [authLoading, user, hasNoBrands, isOnboardingPage, router]);
+
+  if (!authLoading && !user) {
     return null;
   }
 
-  if (isLoading) {
+  if (authLoading || (user && brandsLoading && !isOnboardingPage)) {
     return (
       <div className="flex h-screen items-center justify-center bg-surface">
         <div className="flex flex-col items-center gap-4">

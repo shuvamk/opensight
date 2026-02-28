@@ -16,6 +16,7 @@
     "@opensight/db": "workspace:^",
     "@opensight/shared": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
+    "boring-avatars": "^2.0.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
