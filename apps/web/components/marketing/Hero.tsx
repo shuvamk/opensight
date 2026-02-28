@@ -1,10 +1,13 @@
-import { Button } from "@/components/ui/button";
-import SectionHeading from "@/components/marketing/SectionHeading";
 import GetStartedDialog from "@/components/marketing/GetStartedDialog";
+import PageDescription from "@/components/marketing/PageDescription";
+import PageHeading from "@/components/marketing/PageHeading";
+import { Button } from "@/components/ui/button";
+import OsIcon from "@/components/ui/OsIcon";
 import { site } from "@/lib/site-config";
 import { BorderBeam } from "@/registry/magicui/border-beam";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
 
 export default function Hero() {
   return (
@@ -43,43 +46,51 @@ export default function Hero() {
       <div className="absolute bottom-28 right-[8%] w-28 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center space-y-8 max-w-4xl mx-auto">
+        <div className="group text-center space-y-8 max-w-4xl mx-auto">
           {/* Announcement badge — Firecrawl style pill with glowing underline */}
-          <div className="relative inline-block rounded-full">
+          <div className="relative inline-block rounded-sm">
             <Badge
               size="lg"
               variant="outline"
-              className="rounded-full border-primary-500/20 bg-white/80 px-4 py-4 text-sm font-medium text-primary-500 shadow-sm backdrop-blur-sm"
             >
               Open-source AI visibility platform
-              <ArrowRight className="h-3.5 w-3.5 text-primary-500/70" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </Badge>
             <BorderBeam
-              size={30}
-              duration={6}
-              borderWidth={1.5}
-              colorFrom="#ffaa40"
-              colorTo="#9c40ff"
+              size={12}
+              duration={4}
+              borderWidth={1}
+              colorFrom="#72727200"
+              colorTo="#378277"
               className="opacity-60"
             />
           </div>
 
-          <SectionHeading
-            lead="See how AI talks about"
-            highlight="your brand"
-            as="h1"
-            size="lg"
-            className="max-w-xl animate-slide-up"
-          />
+          {[...Array(6)].map((_, i) => (
+            <OsIcon key={i} className={cn(
+              "size-60 text-muted rotate-12 absolute top-[40%] -translate-x-1/2 -translate-y-1/2 transition-transform duration-500 ease-out group-hover:rotate-24",
+              i === 0 && "rotate-36 left-[5%]",
+              i === 1 && "-rotate-24 left-[22%]",
+              i === 2 && "rotate-36 left-[39%]",
+              i === 3 && "-rotate-48 left-[56%]",
+              i === 4 && "rotate-60 left-[74%]",
+              i === 5 && "-rotate-36 left-[91%]",
+            )}
+            />
+          ))}
 
-          {/* Subheading */}
-          <p className="max-w-2xl mx-auto text-base text-text-secondary leading-relaxed animate-slide-up">
+          <PageHeading as="h1" size="lg" className="animate-slide-up">
+            Watch how <span className="font-heading">AI talks</span> about
+            <span className="font-heading"> your brand</span>
+          </PageHeading>
+
+          <PageDescription className="animate-slide-up">
             Track your brand visibility across ChatGPT, Perplexity, and Google
             AI Overviews. Open-source analytics for the AI-first web.
-          </p>
+          </PageDescription>
 
           {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2 animate-slide-up">
+          <div className="flex flex-col sm:flex-row gap-2 justify-center items-center pt-2 animate-slide-up">
             <GetStartedDialog>
               <Button size="lg">
                 Start for free

@@ -30,14 +30,14 @@ export function BorderBeam({
 }: BorderBeamProps) {
   return (
     <div
-      className="pointer-events-none absolute inset-0 rounded-[inherit] border border-transparent [border-width:var(--border-beam-width)] [mask-clip:padding-box,border-box] mask-intersect mask-[linear-gradient(transparent,transparent),linear-gradient(#000,#000)]"
+      className="pointer-events-none absolute inset-0 rounded-sm border border-transparent [border-width:var(--border-beam-width)] [mask-clip:padding-box,border-box] mask-intersect mask-[linear-gradient(transparent,transparent),linear-gradient(#000,#000)]"
       style={
         { "--border-beam-width": `${borderWidth}px` } as React.CSSProperties
       }
     >
       {" "}
       <motion.div
-        className={cn("absolute rounded-full", className)}
+        className={cn("absolute rounded-sm", className)}
         style={
           {
             width: size,
