@@ -58,7 +58,7 @@ export function BulkAddDialog({
       <DialogTrigger
         render={
           <Button variant="outline">
-            <Upload className="w-4 h-4 mr-2" />
+            <Upload className="w-4 h-4" />
             Bulk Add
           </Button>
         }

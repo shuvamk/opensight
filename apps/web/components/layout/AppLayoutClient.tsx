@@ -57,20 +57,24 @@ export default function AppLayoutClient({
   return (
     <div className="flex h-screen bg-surface">
       <div className="hidden md:block">
-        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Sidebar collapsed={collapsed} />
       </div>
 
       <div className="md:hidden">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetContent side="left" className="p-0">
-            <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+          <SheetContent side="left" showCloseButton={false} className="p-0 flex w-fit">
+            <Sidebar collapsed={collapsed} />
           </SheetContent>
         </Sheet>
       </div>
 
-      <div className={cn("flex flex-1 flex-col", collapsed ? "md:ml-[56px]" : "md:ml-[200px]")}>
-        <Header onMenuClick={() => setMobileMenuOpen(true)} />
-        <main className="flex-1 overflow-y-auto">
+      <div className={cn("flex flex-1 flex-col", collapsed ? "mdml-[56px]" : "mdml-[200px]")}>
+        <Header
+          onMenuClick={() => setMobileMenuOpen(true)}
+          collapsed={collapsed}
+          onCollapsedToggle={() => setCollapsed(!collapsed)}
+        />
+        <main className="flex-1 overflow-y-auto bg-background">
           <div className="p-3">
             {children}
           </div>

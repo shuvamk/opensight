@@ -20,7 +20,7 @@ export default function DashboardPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-primary">Dashboard</h2>
+          <h2 className="text-2xl font-normal text-primary">Dashboard</h2>
           <p className="text-text-secondary text-sm mt-1">
             Your AI visibility overview
           </p>
@@ -51,12 +51,6 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-primary">Dashboard</h2>
-          <p className="text-text-secondary text-sm mt-1">
-            Your AI visibility overview
-          </p>
-        </div>
 
         {/* Metric Cards Skeleton */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -88,12 +82,6 @@ export default function DashboardPage() {
   if (!dashboardData) {
     return (
       <div className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-primary">Dashboard</h2>
-          <p className="text-text-secondary text-sm mt-1">
-            Your AI visibility overview
-          </p>
-        </div>
         <div className="flex items-center justify-center h-96 rounded-2xl border border-dashed border-border bg-card">
           <div className="text-center space-y-3">
             <div className="w-12 h-12 rounded-2xl bg-surface flex items-center justify-center mx-auto">
@@ -113,12 +101,6 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-primary">Dashboard</h2>
-        <p className="text-text-secondary text-sm mt-1">
-          Your AI visibility overview
-        </p>
-      </div>
 
       {/* Metric Cards */}
       {dashboardData && (

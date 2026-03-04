@@ -69,7 +69,7 @@ export function AddPromptDialog({
       <DialogTrigger
         render={
           <Button>
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="w-4 h-4" />
             Add Prompt
           </Button>
         }

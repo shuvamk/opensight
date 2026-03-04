@@ -4,19 +4,47 @@ import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
 
 import { cn } from "@/lib/utils";
 
+const LINES = 100;
+
 function Progress({
   className,
   children,
+  variant = "default",
   ...props
-}: ProgressPrimitive.Root.Props) {
+}: ProgressPrimitive.Root.Props & { variant?: "default" | "lines" }) {
+  const value = props.value ?? 0;
+  const filledCount = variant === "lines" ? Math.round((Number(value) / 100) * LINES) : undefined;
+
   return (
     <ProgressPrimitive.Root
       className={cn("flex w-full flex-col gap-2", className)}
       data-slot="progress"
+      data-variant={variant}
       {...props}
     >
       {children ? (
         children
+      ) : variant === "lines" ? (
+        <div
+          className={cn("flex h-full w-full gap-px overflow-hidden rounded-full bg-input",
+            variant == "lines" && "rounded-none gap-1 bg-transparent"
+          )}
+          data-slot="progress-track"
+          role="progressbar"
+          aria-valuenow={Number(value)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
+          {Array.from({ length: LINES }, (_, i) => (
+            <div
+              key={i}
+              className={cn(
+                "min-w-0 flex-1 rounded-xl transition-colors duration-300",
+                i < filledCount! ? "bg-primary" : "bg-input",
+              )}
+            />
+          ))}
+        </div>
       ) : (
         <ProgressTrack>
           <ProgressIndicator />

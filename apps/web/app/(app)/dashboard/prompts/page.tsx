@@ -11,9 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import * as promptsApi from "@/lib/api/prompts";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
 import { toast } from "@/lib/toast";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const TAGS = ["AI", "Search", "Content", "Brand", "Competitor", "Feature", "FAQ", "General"];
 const PROMPT_LIMIT = 100;
@@ -94,7 +96,7 @@ export default function PromptsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Prompts</h2>
+          <h2 className="text-3xl font-medium tracking-tight">Prompts</h2>
         </div>
         <div className="flex items-center justify-center h-96 rounded-lg border border-dashed">
           <div className="text-center">
@@ -113,7 +115,7 @@ export default function PromptsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Prompts</h2>
+          <h2 className="text-3xl font-medium tracking-tight">Prompts</h2>
         </div>
         <div className="flex gap-2">
           <AddPromptDialog
@@ -136,19 +138,19 @@ export default function PromptsPage() {
               {PROMPT_LIMIT - prompts.length} remaining
             </p>
           </div>
-          <Progress value={usagePercent} className="h-2" />
+          <Progress value={usagePercent} variant="lines" className="h-24" />
         </div>
       </Card>
 
       {/* Search and Filters */}
       <div className="space-y-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-text-secondary" />
+          <MagnifyingGlassIcon className="absolute z-1 left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search prompts..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-5"
           />
         </div>
 
@@ -164,11 +166,12 @@ export default function PromptsPage() {
                     : [...prev, tag]
                 );
               }}
-              className={`transition-colors ${
+              className={cn(
+                "border px-2.5 py-0.5 cursor-pointer rounded-lg text-sm transition-colors",
                 selectedTags.includes(tag)
-                  ? "bg-blue-100 text-blue-900 border-blue-300"
-                  : "bg-gray-100 text-gray-700 border-gray-300"
-              } border px-3 py-1 rounded-full text-sm`}
+                  ? "bg-primary/10 text-primary border-primary/30 hover:bg-primary/15"
+                  : "bg-muted text-muted-foreground border-border hover:bg-muted/80 hover:text-foreground",
+              )}
             >
               {tag}
               {selectedTags.includes(tag) && (

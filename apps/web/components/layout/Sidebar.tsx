@@ -4,16 +4,14 @@ import { useBrands } from "@/hooks/useBrand";
 import { cn } from "@/lib/utils";
 import { useBrandStore } from "@/stores/brand-store";
 import {
-  BarChart3,
-  Bell,
-  ChevronsUpDown,
-  LayoutDashboard,
-  Settings,
-  SidebarCloseIcon,
-  SidebarOpenIcon,
-  TrendingUp,
-  Zap
-} from "lucide-react";
+  ArrowTrendingUpIcon,
+  BellIcon,
+  BoltIcon,
+  ChartBarIcon,
+  ChevronUpDownIcon,
+  Cog6ToothIcon,
+  Squares2X2Icon,
+} from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
@@ -24,15 +22,15 @@ import BrandPopover from "./BrandPopover";
 import UserMenu from "./UserMenu";
 
 const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Prompts", href: "/dashboard/prompts", icon: Zap },
-  { label: "Competitors", href: "/dashboard/competitors", icon: TrendingUp },
-  { label: "Content Score", href: "/dashboard/content-score", icon: BarChart3 },
-  { label: "Alerts", href: "/dashboard/alerts", icon: Bell },
-  { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Dashboard", href: "/dashboard", icon: Squares2X2Icon },
+  { label: "Prompts", href: "/dashboard/prompts", icon: BoltIcon },
+  { label: "Competitors", href: "/dashboard/competitors", icon: ArrowTrendingUpIcon },
+  { label: "Content Score", href: "/dashboard/content-score", icon: ChartBarIcon },
+  { label: "Alerts", href: "/dashboard/alerts", icon: BellIcon },
+  { label: "Settings", href: "/settings", icon: Cog6ToothIcon },
 ];
 
-export default function Sidebar({ collapsed, setCollapsed }: { collapsed: boolean, setCollapsed: (collapsed: boolean) => void }) {
+export default function Sidebar({ collapsed }: { collapsed: boolean }) {
   const pathname = usePathname();
   const { data: brandsData } = useBrands();
   const { activeBrandId, setActiveBrand } = useBrandStore();
@@ -54,13 +52,13 @@ export default function Sidebar({ collapsed, setCollapsed }: { collapsed: boolea
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen border-r border-border bg-background transition-all duration-300",
+        "h-screen border-r border-border bg-background transition-all duration-300",
         collapsed ? "w-[56px]" : "w-[200px]"
       )}
     >
       <div className="flex h-full flex-col">
         {/* Logo / Brand (click opens brand popover) */}
-        <div className={cn("flex items-center border-b border-border px-1.5 h-10 group", collapsed ? "justify-center" : "justify-between")}>
+        <div className={cn("flex items-center border-b border-border px-0.5 h-10", collapsed ? "justify-center" : "justify-start")}>
           <BrandPopover
             brands={brands}
             activeBrand={activeBrand ?? null}
@@ -76,28 +74,17 @@ export default function Sidebar({ collapsed, setCollapsed }: { collapsed: boolea
             <Button
               type="button"
               variant="ghost"
-              className={cn("px-1 font-sans gap-1.5 text-left normal-case w-[156px]", collapsed && "group-hover:opacity-0")}
+              className={cn("px-1 font-sans gap-1.5 text-left normal-case w-full", collapsed && "w-9 justify-center")}
             >
               {logoLabel === "OpenSight" ? <OsIcon className="size-5 text-primary" aria-hidden /> : <BrandAvatar size={20} name={logoLabel} id={activeBrandId ?? ""} />}
-              {!collapsed &&
+              {!collapsed && (
                 <>
                   <span className="w-full font-[450] text-foreground text-base truncate flex-1">{logoLabel}</span>
-                  <ChevronsUpDown className="size-4" />
+                  <ChevronUpDownIcon className="size-4" />
                 </>
-              }
+              )}
             </Button>
           </BrandPopover>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setCollapsed(!collapsed)}
-            className={cn(
-              "rounded-lg p-1.5 group-hover:bg-surface text-text-secondary hover:text-primary transition-colors",
-              collapsed && "absolute group-hover:opacity-100 opacity-0"
-            )}
-          >            {collapsed ? <SidebarOpenIcon className="h-4 w-4" /> : <SidebarCloseIcon className="h-4 w-4" />}
-
-          </Button>
         </div>
 
         {/* Navigation */}

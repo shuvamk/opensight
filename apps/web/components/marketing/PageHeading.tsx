@@ -10,7 +10,7 @@ interface PageHeadingProps {
 const sizeClasses = {
   sm: "text-3xl sm:text-4xl font-normal",
   md: "text-4xl sm:text-5xl font-normal",
-  lg: "text-5xl sm:text-6xl font-normal",
+  lg: "text-4xl sm:text-6xl font-normal",
 };
 
 export default function PageHeading({

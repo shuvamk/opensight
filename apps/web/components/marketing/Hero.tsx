@@ -1,20 +1,28 @@
+"use client";
+
 import GetStartedDialog from "@/components/marketing/GetStartedDialog";
 import PageDescription from "@/components/marketing/PageDescription";
 import PageHeading from "@/components/marketing/PageHeading";
 import { Button } from "@/components/ui/button";
-import OsIcon from "@/components/ui/OsIcon";
 import { site } from "@/lib/site-config";
+import { useAuthProfile } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { BorderBeam } from "@/registry/magicui/border-beam";
 import { ArrowRight, SquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
+import OpenSightLogoAnimation from "../ui/logo-animation";
+import Image from "next/image";
+
+const APP_HOME = "/dashboard";
 
 export default function Hero() {
+  const { data: user } = useAuthProfile();
+  const isLoggedIn = !!user;
   return (
     <section className="relative overflow-hidden">
       {/* Firecrawl-style dot pattern background */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10 dark:opacity-20">
         <div
           className="absolute inset-0 opacity-[0.4]"
           style={{
@@ -46,9 +54,8 @@ export default function Hero() {
       <div className="absolute bottom-20 left-[5%] w-36 h-36 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
       <div className="absolute bottom-28 right-[8%] w-28 h-32 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="group text-center space-y-8 max-w-4xl mx-auto">
-          {/* Announcement badge — Firecrawl style pill with glowing underline */}
+      <div className="max-w-7xl z-0  mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="group z-10  text-center space-y-8 max-w-4xl mx-auto">
           <div className="relative inline-block rounded-sm">
             <Badge
               size="lg"
@@ -67,16 +74,16 @@ export default function Hero() {
             />
           </div>
 
-          <div className="w-screen flex justify-between absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+          <div className="w-screen flex justify-between absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none">
             {[...Array(6)].map((_, i) => (
-              <OsIcon key={i} className={cn(
+              <OpenSightLogoAnimation key={i} className={cn(
                 "size-60 text-muted transition-transform duration-500 ease-out group-hover:rotate-24",
-                i === 0 && "group-hover:rotate-36 md:block hidden",
-                i === 1 && "group-hover:-rotate-24",
-                i === 2 && "group-hover:rotate-36 md:block hidden",
-                i === 3 && "group-hover:-rotate-48 md:block hidden",
-                i === 4 && "group-hover:rotate-60",
-                i === 5 && "group-hover:-rotate-36 md:block hidden",
+                i === 0 && "group-hover:rotate-36 hover:rotate-12 md:block hidden duration-800",
+                i === 1 && "group-hover:-rotate-24 hover:rotate-12 duration-600",
+                i === 2 && "group-hover:rotate-36 hover:rotate-12 md:block hidden duration-400",
+                i === 3 && "group-hover:-rotate-48 hover:rotate-12 md:block hidden duration-700",
+                i === 4 && "group-hover:rotate-60 hover:rotate-12 duration-600",
+                i === 5 && "group-hover:-rotate-36 hover:rotate-12 md:block hidden duration-500",
               )}
               />
             ))}
@@ -94,90 +101,43 @@ export default function Hero() {
 
           {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
           <div className="flex flex-col sm:flex-row gap-2 justify-center items-center pt-2 animate-slide-up">
-            <GetStartedDialog>
-              <Button size="lg" className="sm:w-fit w-full max-w-xs">
-                Start for free
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </GetStartedDialog>
+            {isLoggedIn ? (
+              <Link href={APP_HOME} className="sm:w-fit w-full max-w-xs">
+                <Button size="lg" className="w-full">
+                  Launch app
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            ) : (
+              <GetStartedDialog>
+                <Button size="lg" className="sm:w-fit w-full max-w-xs">
+                  Start for free
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </GetStartedDialog>
+            )}
             <Button variant="outline" size="lg" render={<Link href={site.links.repo} target="_blank" rel="noopener noreferrer"></Link>} className="sm:w-fit w-full max-w-xs">
               View on GitHub
               <SquareArrowOutUpRight className="w-4 h-4" />
             </Button>
           </div>
-
-          {/* Trust indicators */}
-          <div className="flex items-center justify-center gap-8 pt-8 text-sm text-text-tertiary animate-fade-in">
-            <span className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-              No credit card required
-            </span>
-            <span className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-              Self-host available
-            </span>
-            <span className="hidden sm:flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-success" />3 AI
-              engines
-            </span>
-          </div>
         </div>
 
-        {/* Dashboard preview — Firecrawl-style browser mockup with dashed outlines */}
-        <div className="mt-20 mx-auto max-w-7xl animate-slide-up">
-          <div className="relative group">
-            {/* Screenshot container */}
-            <div className="relative bg-white rounded-2xl border shadow-large overflow-hidden">
-              {/* Browser chrome */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface/50">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-300/80" />
-                  <div className="w-3 h-3 rounded-full bg-amber-300/80" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-300/80" />
-                </div>
-                <div className="flex-1 mx-4">
-                  <div className="bg-white rounded-full border px-3 py-1.5 text-xs text-text-tertiary max-w-md mx-auto">
-                    {site.display.appDashboardUrl}
-                  </div>
-                </div>
-              </div>
-
-              {/* Dashboard mockup */}
-              <div className="p-6 bg-surface/30 aspect-[16/9]">
-                <div className="space-y-4">
-                  {/* Metric cards row */}
-                  <div className="grid grid-cols-4 gap-3">
-                    {[
-                      { label: "Visibility Score", value: "78.5%", color: "bg-primary-500/10" },
-                      { label: "Total Mentions", value: "1,247", color: "bg-emerald-50" },
-                      { label: "Sentiment", value: "92.1%", color: "bg-amber-50" },
-                      { label: "Active Prompts", value: "48", color: "bg-purple-50" },
-                    ].map((card, i) => (
-                      <div key={i} className="bg-white rounded-xl border border-border p-4">
-                        <div className="text-[10px] text-text-tertiary font-medium">{card.label}</div>
-                        <div className="text-lg font-bold text-primary-500 mt-1">{card.value}</div>
-                        <div className={`h-1 ${card.color} rounded-full mt-2 w-3/4`} />
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Chart area */}
-                  <div className="bg-white rounded-xl border border-border p-4 h-40">
-                    <div className="text-xs font-medium text-primary-500 mb-3">Visibility Over Time</div>
-                    <div className="h-24 flex items-end gap-1">
-                      {[40, 45, 42, 58, 55, 62, 68, 65, 72, 78, 75, 82, 85, 80, 88, 92].map((h, i) => (
-                        <div
-                          key={i}
-                          className="flex-1 bg-primary-500/15 rounded-t transition-all hover:bg-primary-500/25"
-                          style={{ height: `${h}%` }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="relative z-20 mt-8 border-6 border-border/30 rounded-xl mx-auto w-full min-w-[700px]">
+          <Image
+            src="/assets/dashboard-black.png"
+            alt="Dashboard preview"
+            width={1000}
+            height={1000}
+            className="rounded-xl overflow-hidden shadow-lg w-full h-full object-contain hidden dark:block"
+          />
+          <Image
+            src="/assets/dashboard-white.png"
+            alt="Dashboard preview"
+            width={1000}
+            height={1000}
+            className="rounded-xl overflow-hidden shadow-lg w-full h-full object-contain block dark:hidden"
+          />
         </div>
       </div>
     </section >

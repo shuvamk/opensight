@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={cn(geist.variable, geistMono.variable, geistPixelSquare.variable)} suppressHydrationWarning>
-      <body className={geist.className}>
+      <body className={cn(geist.className, "bg-background text-foreground")}>
         <ThemeProvider>
           <QueryProvider>
             <ToastProvider position="top-right">

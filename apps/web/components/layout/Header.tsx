@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import NotificationBell from "./NotificationBell";
 import {
@@ -35,9 +35,11 @@ function segmentToLabel(segment: string): string {
 interface HeaderProps {
   pageTitle?: string;
   onMenuClick?: () => void;
+  collapsed?: boolean;
+  onCollapsedToggle?: () => void;
 }
 
-export default function Header({ pageTitle, onMenuClick }: HeaderProps) {
+export default function Header({ pageTitle, onMenuClick, collapsed, onCollapsedToggle }: HeaderProps) {
   const pathname = usePathname();
 
   const segments = pathname.split("/").filter(Boolean);
@@ -49,15 +51,30 @@ export default function Header({ pageTitle, onMenuClick }: HeaderProps) {
   });
 
   return (
-    <header className="sticky top-0 z-30 flex h-10 items-center justify-between border-b border-border bg-background/80 backdrop-blur-xl px-6">
-      <div className="flex min-w-0 flex-1 items-center gap-4">
+    <header className="sticky top-0 z-30 flex h-10 items-center justify-between border-b border-border bg-background/90 backdrop-blur-xl pl-1 pr-3">
+      <div className="flex min-w-0 flex-1 items-center gap-2">
+        {/* Mobile: open sheet menu. Desktop: toggle sidebar collapse. Same line-in-box visual. */}
         <Button
           variant="ghost"
-          size="sm"
+          size="icon"
           onClick={onMenuClick}
-          className="md:hidden shrink-0"
+          className="md:hidden shrink-0 p-1 size-6.5 group"
+          aria-label="Open menu"
         >
-          <Menu className="h-4 w-4" />
+          <div className="border border-muted-foreground rounded-lg size-full p-px group-hover:border-foreground/70">
+            <div className="h-full w-1 bg-muted-foreground group-hover:bg-foreground/70 rounded-[calc(var(--radius-lg)-1px)] duration-150 ease-out transition-all" />
+          </div>
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onCollapsedToggle}
+          className="hidden md:flex shrink-0 p-1 size-6.5 group"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <div className="border border-muted-foreground rounded-lg size-full p-px group-hover:border-foreground/70">
+            <div className={cn("h-full bg-muted-foreground group-hover:bg-foreground/70 rounded-[calc(var(--radius-lg)-1px)] duration-150 ease-out transition-all", collapsed ? "w-0.5" : "w-1")} />
+          </div>
         </Button>
         <Breadcrumb className="min-w-0 flex-1">
           <BreadcrumbList>

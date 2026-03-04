@@ -257,7 +257,8 @@ export default function UserMenu({ variant = "default", collapsed }: UserMenuPro
         <PopoverContent
           side="right"
           align="start"
-          sideOffset={8}
+          sideOffset={4}
+          alignOffset={16}
           className="w-72 rounded-xl p-0"
         >
           <SidebarPopoverContent user={user} userAvatarUrl={userAvatarUrl} initials={initials} onLogout={handleLogout} />

@@ -68,7 +68,7 @@ export default function BrandPopover({
         <PopoverContent
           side={collapsed ? "right" : "bottom"}
           align="start"
-          sideOffset={12}
+          sideOffset={8}
           className="w-56 p-0"
         >
           <div className="flex flex-col">
@@ -101,7 +101,7 @@ export default function BrandPopover({
 
               {brands.length > 0 && (
                 <div className="relative mb-1.5">
-                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                  <Search className="absolute z-1 left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                   <Input
                     placeholder="Search brands"
                     size="sm"

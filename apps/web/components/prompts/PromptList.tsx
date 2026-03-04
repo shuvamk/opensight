@@ -1,19 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { DataTable, type DataTableColumn } from "@/components/ui/data-table";
 
 export interface PromptListItem {
   id: string;
@@ -30,149 +21,129 @@ interface PromptListProps {
   prompts: PromptListItem[];
   isLoading?: boolean;
   onRowClick?: (promptId: string) => void;
+  pageSize?: number;
 }
 
 export function PromptList({
   prompts,
   isLoading = false,
   onRowClick,
+  pageSize = 10,
 }: PromptListProps) {
   const router = useRouter();
-  const [sortBy, setSortBy] = useState<"chatgpt" | "perplexity" | "google">(
-    "chatgpt"
-  );
+  const [sortBy, setSortBy] = useState<"chatgpt" | "perplexity" | "google">("chatgpt");
+  const [page, setPage] = useState(1);
 
-  const handleRowClick = (promptId: string) => {
+  const handleRowClick = (prompt: PromptListItem) => {
     if (onRowClick) {
-      onRowClick(promptId);
+      onRowClick(prompt.id);
     } else {
-      router.push(`/dashboard/prompts/${promptId}`);
+      router.push(`/dashboard/prompts/${prompt.id}`);
     }
   };
 
-  const sortedPrompts = [...prompts].sort((a, b) => {
-    if (sortBy === "chatgpt") return b.chatgptScore - a.chatgptScore;
-    if (sortBy === "perplexity") return b.perplexityScore - a.perplexityScore;
-    return b.googleAIOScore - a.googleAIOScore;
-  });
+  const sortedPrompts = useMemo(
+    () =>
+      [...prompts].sort((a, b) => {
+        if (sortBy === "chatgpt") return b.chatgptScore - a.chatgptScore;
+        if (sortBy === "perplexity") return b.perplexityScore - a.perplexityScore;
+        return b.googleAIOScore - a.googleAIOScore;
+      }),
+    [prompts, sortBy],
+  );
 
-  if (isLoading) {
-    return (
-      <Card className="overflow-hidden">
-        <div className="border-b p-4">
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="space-y-2 p-4">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Skeleton key={i} className="h-12 w-full" />
+  const columns: DataTableColumn<PromptListItem>[] = [
+    {
+      id: "text",
+      header: "Prompt Text",
+      cell: (row) => (
+        <span className="truncate block font-normal max-w-xs">{row.text}</span>
+      ),
+    },
+    {
+      id: "tags",
+      header: "Tags",
+      cell: (row) => (
+        <div className="flex flex-wrap gap-1">
+          {row.tags.slice(0, 2).map((tag) => (
+            <Badge key={tag} variant="secondary" className="text-xs">
+              {tag}
+            </Badge>
           ))}
+          {row.tags.length > 2 && (
+            <Badge variant="outline" className="text-xs">
+              +{row.tags.length - 2}
+            </Badge>
+          )}
         </div>
-      </Card>
-    );
-  }
-
-  if (prompts.length === 0) {
-    return (
-      <Card className="flex items-center justify-center h-48">
-        <p className="text-text-secondary">No prompts yet</p>
-      </Card>
-    );
-  }
+      ),
+    },
+    {
+      id: "chatgpt",
+      header: "ChatGPT",
+      sortKey: "chatgpt",
+      align: "right",
+      cell: (row) => `${row.chatgptScore}%`,
+    },
+    {
+      id: "perplexity",
+      header: "Perplexity",
+      sortKey: "perplexity",
+      align: "right",
+      cell: (row) => `${row.perplexityScore}%`,
+    },
+    {
+      id: "google",
+      header: "Google AIO",
+      sortKey: "google",
+      align: "right",
+      cell: (row) => `${row.googleAIOScore}%`,
+    },
+    {
+      id: "trend",
+      header: "Trend",
+      align: "center",
+      cell: (row) =>
+        row.trend !== undefined ? (
+          <div className="flex items-center gap-1 justify-center">
+            {row.trend > 0 ? (
+              <ArrowUpIcon className="w-4 h-4 text-success" />
+            ) : (
+              <ArrowDownIcon className="w-4 h-4 text-destructive" />
+            )}
+            <span
+              className={`text-sm font-semibold ${row.trend > 0 ? "text-success" : "text-destructive"
+                }`}
+            >
+              {Math.abs(row.trend)}%
+            </span>
+          </div>
+        ) : null,
+    },
+    {
+      id: "lastChecked",
+      header: "Last Checked",
+      cell: (row) => (
+        <span className="text-sm text-muted-foreground">
+          {new Date(row.lastChecked).toLocaleDateString()}
+        </span>
+      ),
+    },
+  ];
 
   return (
-    <Card className="overflow-hidden">
-      <Table>
-        <TableHeader className="bg-gray-50">
-          <TableRow>
-            <TableHead>Prompt Text</TableHead>
-            <TableHead>Tags</TableHead>
-            <TableHead
-              className="cursor-pointer hover:bg-gray-100"
-              onClick={() => setSortBy("chatgpt")}
-            >
-              ChatGPT{" "}
-              {sortBy === "chatgpt" && (
-                <span className="ml-1 text-xs">↓</span>
-              )}
-            </TableHead>
-            <TableHead
-              className="cursor-pointer hover:bg-gray-100"
-              onClick={() => setSortBy("perplexity")}
-            >
-              Perplexity{" "}
-              {sortBy === "perplexity" && (
-                <span className="ml-1 text-xs">↓</span>
-              )}
-            </TableHead>
-            <TableHead
-              className="cursor-pointer hover:bg-gray-100"
-              onClick={() => setSortBy("google")}
-            >
-              Google AIO{" "}
-              {sortBy === "google" && (
-                <span className="ml-1 text-xs">↓</span>
-              )}
-            </TableHead>
-            <TableHead>Trend</TableHead>
-            <TableHead>Last Checked</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sortedPrompts.map((prompt) => (
-            <TableRow
-              key={prompt.id}
-              className="cursor-pointer hover:bg-gray-50"
-              onClick={() => handleRowClick(prompt.id)}
-            >
-              <TableCell className="font-medium max-w-xs">
-                <span className="truncate block">
-                  {prompt.text}
-                </span>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-wrap gap-1">
-                  {prompt.tags.slice(0, 2).map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                  {prompt.tags.length > 2 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{prompt.tags.length - 2}
-                    </Badge>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell className="text-right">{prompt.chatgptScore}%</TableCell>
-              <TableCell className="text-right">{prompt.perplexityScore}%</TableCell>
-              <TableCell className="text-right">{prompt.googleAIOScore}%</TableCell>
-              <TableCell>
-                {prompt.trend !== undefined && (
-                  <div className="flex items-center gap-1 justify-center">
-                    {prompt.trend > 0 ? (
-                      <ArrowUp className="w-4 h-4 text-green-600" />
-                    ) : (
-                      <ArrowDown className="w-4 h-4 text-red-600" />
-                    )}
-                    <span
-                      className={`text-sm font-semibold ${
-                        prompt.trend > 0
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {Math.abs(prompt.trend)}%
-                    </span>
-                  </div>
-                )}
-              </TableCell>
-              <TableCell className="text-sm text-text-secondary">
-                {new Date(prompt.lastChecked).toLocaleDateString()}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Card>
+    <DataTable<PromptListItem>
+      data={sortedPrompts}
+      columns={columns}
+      keyExtractor={(row) => row.id}
+      page={page}
+      pageSize={pageSize}
+      onPageChange={setPage}
+      sortBy={sortBy}
+      onSort={(key) => setSortBy(key as "chatgpt" | "perplexity" | "google")}
+      onRowClick={handleRowClick}
+      isLoading={isLoading}
+      emptyMessage="No prompts yet"
+    />
   );
 }

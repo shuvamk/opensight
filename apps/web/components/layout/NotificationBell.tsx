@@ -25,10 +25,9 @@ export default function NotificationBell() {
         render={
           <Button
             variant="ghost"
-            size="sm"
-            className="relative h-9 w-9 p-0 rounded-full"
+            size="icon-sm"
           >
-            <Bell className="h-[18px] w-[18px]" />
+            <Bell className="size-4" />
             {unreadCount > 0 && (
               <span className="absolute -right-0.5 -top-0.5 h-4 w-4 flex items-center justify-center rounded-full bg-primary-500 text-[10px] font-bold text-primary-foreground">
                 {unreadCount}
