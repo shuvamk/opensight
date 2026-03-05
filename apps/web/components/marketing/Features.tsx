@@ -1,5 +1,8 @@
+"use client";
+
 import SectionHeading from "@/components/marketing/SectionHeading";
 import SectionIndicator from "@/components/marketing/SectionIndicator";
+import ScrollReveal from "@/components/marketing/ScrollReveal";
 import { Search, Users, FileCheck, BarChart3, Bell, Zap } from "lucide-react";
 
 const features = [
@@ -60,50 +63,54 @@ export default function Features() {
       />
 
       <div className="max-w-6xl mx-auto flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-24">
-        <SectionIndicator number="01" total="06" label="Main Features" />
+        <ScrollReveal>
+          <SectionIndicator number="01" total="06" label="Main Features" />
+        </ScrollReveal>
 
         {/* Section heading */}
-        <div className="text-center mb-20 max-w-3xl mx-auto">
-          <SectionHeading
-            lead="Everything you need to"
-            highlight="own AI search"
-            size="md"
-            centered
-            className="mb-5"
-          />
-          <p className="text-lg text-text-secondary leading-relaxed">
-            Comprehensive tools to understand and optimize your presence across
-            all major AI search engines.
-          </p>
-        </div>
+        <ScrollReveal delay={0.1}>
+          <div className="text-center mb-20 max-w-3xl mx-auto">
+            <SectionHeading
+              lead="Everything you need to"
+              highlight="own AI search"
+              size="md"
+              centered
+              className="mb-5"
+            />
+            <p className="text-lg text-text-secondary leading-relaxed">
+              Comprehensive tools to understand and optimize your presence across
+              all major AI search engines.
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Features grid — Firecrawl-style 2-column cards with border separators */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border/50 border border-border rounded-2xl overflow-hidden">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div
+              <ScrollReveal
                 key={index}
-                className="bg-white p-8 lg:p-10 hover:bg-surface/50 transition-colors group"
+                delay={0.1 * index}
+                y={30}
               >
-                {/* Label tag */}
-                <div className="flex items-center gap-2 mb-4">
-                  <Icon className="w-4 h-4 text-primary-500" />
-                  <span className="text-xs font-mono uppercase tracking-wider text-text-tertiary">
-                    {feature.label}
-                  </span>
+                <div className="bg-white p-8 lg:p-10 hover:bg-surface/50 transition-colors group h-full">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Icon className="w-4 h-4 text-primary-500" />
+                    <span className="text-xs font-mono uppercase tracking-wider text-text-tertiary">
+                      {feature.label}
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl font-heading text-primary-500 mb-3">
+                    {feature.title}
+                  </h3>
+
+                  <p className="text-sm text-text-secondary leading-relaxed">
+                    {feature.description}
+                  </p>
                 </div>
-
-                {/* Title — bold first part, Firecrawl style */}
-                <h3 className="text-xl font-heading text-primary-500 mb-3">
-                  {feature.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm text-text-secondary leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
+              </ScrollReveal>
             );
           })}
         </div>

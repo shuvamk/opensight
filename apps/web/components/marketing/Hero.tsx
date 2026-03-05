@@ -8,6 +8,7 @@ import { site } from "@/lib/site-config";
 import { useAuthProfile } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { BorderBeam } from "@/registry/magicui/border-beam";
+import { motion } from "motion/react";
 import { ArrowRight, SquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
@@ -56,7 +57,12 @@ export default function Hero() {
 
       <div className="max-w-7xl z-0  mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="group z-10  text-center space-y-8 max-w-4xl mx-auto">
-          <div className="relative inline-block rounded-sm">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+            className="relative inline-block rounded-sm"
+          >
             <Badge
               size="lg"
               variant="outline"
@@ -72,7 +78,7 @@ export default function Hero() {
               colorTo="#378277"
               className="opacity-60"
             />
-          </div>
+          </motion.div>
 
           <div className="w-screen flex justify-between absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none">
             {[...Array(6)].map((_, i) => (
@@ -89,18 +95,35 @@ export default function Hero() {
             ))}
           </div>
 
-          <PageHeading as="h1" size="lg" className="animate-slide-up">
-            Watch how <span className="font-heading">AI talks</span> about
-            <span className="font-heading"> your brand</span>
-          </PageHeading>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <PageHeading as="h1" size="lg">
+              Watch how <span className="font-heading">AI talks</span> about
+              <span className="font-heading"> your brand</span>
+            </PageHeading>
+          </motion.div>
 
-          <PageDescription className="animate-slide-up">
-            Track your brand visibility across ChatGPT, Perplexity, and Google
-            AI Overviews. Open-source analytics for the AI-first web.
-          </PageDescription>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <PageDescription>
+              Track your brand visibility across ChatGPT, Perplexity, and Google
+              AI Overviews. Open-source analytics for the AI-first web.
+            </PageDescription>
+          </motion.div>
 
           {/* CTA Buttons — Firecrawl style: primary solid + secondary outline */}
-          <div className="flex flex-col sm:flex-row gap-2 justify-center items-center pt-2 animate-slide-up">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
+            className="flex flex-col sm:flex-row gap-2 justify-center items-center pt-2"
+          >
             {isLoggedIn ? (
               <Link href={APP_HOME} className="sm:w-fit w-full max-w-xs">
                 <Button size="lg" className="w-full">
@@ -120,10 +143,15 @@ export default function Hero() {
               View on GitHub
               <SquareArrowOutUpRight className="w-4 h-4" />
             </Button>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="relative z-20 mt-8 border-6 border-border/30 rounded-xl mx-auto w-full min-w-[700px]">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+          className="relative z-20 mt-8 border-6 border-border/30 rounded-xl mx-auto w-full min-w-[700px]"
+        >
           <Image
             src="/assets/dashboard-black.png"
             alt="Dashboard preview"
@@ -138,7 +166,7 @@ export default function Hero() {
             height={1000}
             className="rounded-xl overflow-hidden shadow-lg w-full h-full object-contain block dark:hidden"
           />
-        </div>
+        </motion.div>
       </div>
     </section >
   );

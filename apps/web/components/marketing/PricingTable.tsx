@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +12,7 @@ import {
 import SectionHeading from "@/components/marketing/SectionHeading";
 import SectionIndicator from "@/components/marketing/SectionIndicator";
 import GetStartedDialog from "@/components/marketing/GetStartedDialog";
+import ScrollReveal from "@/components/marketing/ScrollReveal";
 import { site } from "@/lib/site-config";
 import { Check, ArrowRight } from "lucide-react";
 
@@ -85,29 +88,37 @@ export default function PricingTable() {
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <SectionIndicator number="03" total="06" label="Pricing" className="justify-center" />
+        <ScrollReveal className="flex justify-center">
+          <SectionIndicator number="03" total="06" label="Pricing" className="justify-center" />
+        </ScrollReveal>
         {/* Section heading */}
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          <SectionHeading
-            lead="Simple, transparent"
-            highlight="pricing"
-            size="md"
-            centered
-            className="mb-5"
-          />
-          <p className="text-lg text-text-secondary leading-relaxed">
-            Start free. Scale as you grow. No credit card required.
-          </p>
-        </div>
+        <ScrollReveal delay={0.1}>
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <SectionHeading
+              lead="Simple, transparent"
+              highlight="pricing"
+              size="md"
+              centered
+              className="mb-5"
+            />
+            <p className="text-lg text-text-secondary leading-relaxed">
+              Start free. Scale as you grow. No credit card required.
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Pricing cards — Firecrawl-style clean cards with subtle borders */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border/50 border border-border rounded-2xl overflow-hidden mb-12">
           {plans.map((plan, index) => (
-            <div
+            <ScrollReveal
               key={index}
-              className={`bg-white p-7 flex flex-col ${plan.highlighted ? "relative" : ""
-                }`}
+              delay={0.15 * index}
+              y={30}
             >
+              <div
+                className={`bg-white p-7 flex flex-col h-full ${plan.highlighted ? "relative" : ""
+                  }`}
+              >
               {/* Recommended badge */}
               {plan.highlighted && (
                 <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-primary-500 to-accent-400" />
@@ -185,12 +196,13 @@ export default function PricingTable() {
                   ))}
                 </ul>
               </div>
-            </div>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
 
         {/* Self-host option */}
-        <div className="mt-12">
+        <ScrollReveal className="mt-12">
           <Card>
             <CardHeader className="gap-1.5">
               <CardTitle className="text-primary-500 font-heading">
@@ -214,7 +226,7 @@ export default function PricingTable() {
               </CardAction>
             </CardHeader>
           </Card>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

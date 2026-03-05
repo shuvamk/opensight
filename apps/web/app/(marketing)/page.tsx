@@ -5,6 +5,7 @@ import PricingTable from "@/components/marketing/PricingTable";
 import SectionHeading from "@/components/marketing/SectionHeading";
 import SectionIndicator from "@/components/marketing/SectionIndicator";
 import GetStartedDialog from "@/components/marketing/GetStartedDialog";
+import ScrollReveal from "@/components/marketing/ScrollReveal";
 import { site } from "@/lib/site-config";
 import { TrendingUp, Users, Zap, ArrowRight, Github } from "lucide-react";
 
@@ -42,64 +43,69 @@ export default function HomePage() {
           }}
         />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <SectionIndicator number="00" total="06" label="The Problem" />
+          <ScrollReveal>
+            <SectionIndicator number="00" total="06" label="The Problem" />
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Problem description */}
-            <div className="space-y-6">
-              <SectionHeading
-                lead="AI search is the new front door."
-                highlight="Are you invisible?"
-                size="sm"
-                highlightVariant="primary"
-                className="animate-slide-up"
-              />
-              <div className="space-y-4">
-                <p className="text-text-secondary leading-relaxed">
-                  ChatGPT, Perplexity, and Google AI are changing how people
-                  discover information. Your traditional SEO doesn&apos;t tell the
-                  full story.
-                </p>
-                <p className="text-text-secondary leading-relaxed">
-                  Without AI visibility data, you&apos;re flying blind. You need to know
-                  how often your content is cited, what recommendations AI engines
-                  make, and where competitors outrank you.
-                </p>
+            <ScrollReveal delay={0.1}>
+              <div className="space-y-6">
+                <SectionHeading
+                  lead="AI search is the new front door."
+                  highlight="Are you invisible?"
+                  size="sm"
+                  highlightVariant="primary"
+                />
+                <div className="space-y-4">
+                  <p className="text-text-secondary leading-relaxed">
+                    ChatGPT, Perplexity, and Google AI are changing how people
+                    discover information. Your traditional SEO doesn&apos;t tell the
+                    full story.
+                  </p>
+                  <p className="text-text-secondary leading-relaxed">
+                    Without AI visibility data, you&apos;re flying blind. You need to know
+                    how often your content is cited, what recommendations AI engines
+                    make, and where competitors outrank you.
+                  </p>
+                </div>
+                <GetStartedDialog>
+                  <Button>
+                    Start tracking for free
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </GetStartedDialog>
               </div>
-              <GetStartedDialog>
-                <Button>
-                  Start tracking for free
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </GetStartedDialog>
-            </div>
+            </ScrollReveal>
 
             {/* Right: Stats cards — Firecrawl-style bordered grid */}
-            <div className="grid grid-cols-1 gap-px bg-border/50 border border-border rounded-2xl overflow-hidden">
-              {stats.map((stat, index) => {
-                const Icon = stat.icon;
-                return (
-                  <div
-                    key={index}
-                    className="bg-white p-6 hover:bg-surface/50 transition-colors"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0">
-                        <Icon className="w-5 h-5 text-primary-500" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-primary-500 mb-1">
-                          {stat.label}
-                        </h3>
-                        <p className="text-sm text-text-secondary">
-                          {stat.description}
-                        </p>
+            <ScrollReveal delay={0.25}>
+              <div className="grid grid-cols-1 gap-px bg-border/50 border border-border rounded-2xl overflow-hidden">
+                {stats.map((stat, index) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div
+                      key={index}
+                      className="bg-white p-6 hover:bg-surface/50 transition-colors"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0">
+                          <Icon className="w-5 h-5 text-primary-500" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-primary-500 mb-1">
+                            {stat.label}
+                          </h3>
+                          <p className="text-sm text-text-secondary">
+                            {stat.description}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -121,38 +127,42 @@ export default function HomePage() {
         <div className="absolute bottom-12 right-[6%] w-36 h-28 border border-dashed border-border/30 rounded-2xl hidden lg:block" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <SectionIndicator number="02" total="06" label="Get started" className="mb-8 justify-center" />
+          <ScrollReveal className="flex justify-center">
+            <SectionIndicator number="02" total="06" label="Get started" className="mb-8 justify-center" />
+          </ScrollReveal>
 
-          <div className="max-w-2xl mx-auto text-center space-y-6">
-            <SectionHeading
-              lead="Ready to"
-              highlight="build?"
-              size="md"
-              centered
-              className="text-3xl sm:text-5xl"
-            />
-            <p className="text-lg text-text-secondary leading-relaxed">
-              OpenSight is open-source and community-driven. Start tracking for free
-              and scale seamlessly as your project expands.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
-              <GetStartedDialog>
-                <Button size="lg">
-                  Start for free
-                </Button>
-              </GetStartedDialog>
-              <a
-                href={site.links.repo}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="outline" size="lg">
-                  <Github className="w-4 h-4 mr-2" />
-                  View on GitHub
-                </Button>
-              </a>
+          <ScrollReveal delay={0.15}>
+            <div className="max-w-2xl mx-auto text-center space-y-6">
+              <SectionHeading
+                lead="Ready to"
+                highlight="build?"
+                size="md"
+                centered
+                className="text-3xl sm:text-5xl"
+              />
+              <p className="text-lg text-text-secondary leading-relaxed">
+                OpenSight is open-source and community-driven. Start tracking for free
+                and scale seamlessly as your project expands.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
+                <GetStartedDialog>
+                  <Button size="lg">
+                    Start for free
+                  </Button>
+                </GetStartedDialog>
+                <a
+                  href={site.links.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" size="lg">
+                    <Github className="w-4 h-4 mr-2" />
+                    View on GitHub
+                  </Button>
+                </a>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
